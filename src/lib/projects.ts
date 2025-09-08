@@ -89,7 +89,7 @@ export const projectsDatabase: ProjectData[] = [
 		},
 		subtitle: {
 			en: 'Little Things',
-			'pt-BR': 'Pequenas Coisas'
+			'pt-BR': 'Little Things'
 		},
 		description: {
 			en: 'A cozy exploration game where you live alongside exotic animals on your own island.',
@@ -175,6 +175,70 @@ export const projectsDatabase: ProjectData[] = [
 		category: 'unity',
 		bannerImage: '/assets/projects/asumi/banner2.png',
 		titleImage: '/assets/projects/asumi/title.png',
+	},
+	{
+		id: 'fungalore',
+		title: {
+			en: 'Fungalore',
+			'pt-BR': 'Fungalore'
+		},
+		subtitle: {
+			en: 'Tower Defense',
+			'pt-BR': 'Tower Defense'
+		},
+		description: {
+			en: 'A Mobile Tower Defense game with wacky mushrooms that follow the light and fight with grit.',
+			'pt-BR': 'Um jogo de Tower Defense com cogumelos atrapalhados que seguem a luz e lutam com determinação.'
+		},
+		longDescription: {
+			en: 'Fungalore is a mobile Tower Defense game, inspired by classics like Bloons TD and Kingdom Rush. Defend your hero from waves of crazed monsters with your quirky mushrooms using strategic thinking and clever tactics.',
+			'pt-BR': 'Fungalore é um jogo de Tower Defense mobile, inspirado em clássicos como Bloons TD e Kingdom Rush. Defenda seu herói de ondas de monstros enfurecidos com seus cogumelos atrapalhados, usando pensamento estratégico e táticas inteligentes.'
+		},
+		platform: ['Android', 'iOS'],
+		platformMessages: {
+			android: {
+				en: 'To be determined',
+				'pt-BR': 'A definir'
+			},
+			ios: {
+				en: 'To be determined',
+				'pt-BR': 'A definir'
+			}
+		},
+		status: 'development',
+		releaseDate: 'TBD',
+		teamSize: 4,
+		projectType: 'studio',
+		features: {
+			en: [
+				'A build system with 20+ unique mushrooms and towers',
+				'Distinct archetypes inspired by classics like MTG',
+				'Challenge Stages that permanently unlock new towers and heroes',
+				'Modifiers that reward experienced players with new ways to play'
+			],
+			'pt-BR': [
+				'Variedade com mais de 20 cogumelos e torres únicas',
+				'Arquétipos distintos inspirados por clássicos como MTG',
+				'Fases de Desafio que desbloqueiam torres e heróis permanentemente',
+				'Modificadores que recompensam jogadores com novas formas de jogar'
+			]
+		},
+		images: [
+			{
+				src: '/assets/projects/fungalore/fungalore-1.png',
+				type: 'both',
+				position: 'center',
+				caption: {
+					en: 'Flying enemy',
+					'pt-BR': 'Inimigo voador'
+				}
+			},
+		],
+		cycleDuration: 2.2,
+		featured: true,
+		hide: true,
+		year: 2025,
+		category: 'unity'
 	},
 	{
 		id: 'phora',

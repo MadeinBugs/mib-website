@@ -141,7 +141,7 @@ export default function ProjectThumbnail({ project, locale, className = '' }: Pr
 				{project.featured && (
 					<div className="absolute top-3 left-3">
 						<div className="bg-yellow-400 text-yellow-900 px-2 py-1 text-xs font-bold shadow-lg">
-							⭐ Featured!
+							{locale === 'pt-BR' ? '⭐ Novidade!' : '⭐ Featured!'}
 						</div>
 					</div>
 				)}

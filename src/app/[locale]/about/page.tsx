@@ -2,7 +2,9 @@ import { getTranslations, normalizeLocale } from '../../../lib/i18n';
 import ContentLayout from '../../../components/ContentLayout';
 import TeamCarousel from '../../../components/TeamCarousel';
 import JobListing from '../../../components/JobListing';
+import PetsGallery from '../../../components/PetsGallery';
 import teamData from '../../../data/team.json';
+import petsData from '../../../data/pets.json';
 import { getActiveJobs } from '../../../lib/jobs';
 import Image from 'next/image';
 import { getImagePath } from '../../../lib/imagePaths';
@@ -137,16 +139,7 @@ export default async function AboutPage({ params }: Props) {
 							}
 						</h3>
 
-						{/* TODO: Add pets gallery component here */}
-						<div className="text-center text-gray-500 py-8 bg-gray-50 rounded-lg">
-							<div className="text-4xl mb-2">📸</div>
-							<p className="font-body">
-								{locale === 'en'
-									? 'Pet gallery coming soon...'
-									: 'Galeria de pets em breve...'
-								}
-							</p>
-						</div>
+						<PetsGallery pets={petsData.pets} locale={locale as 'en' | 'pt-BR'} />
 					</div>
 				</div>
 
@@ -157,8 +150,8 @@ export default async function AboutPage({ params }: Props) {
 							{locale === 'en' ? 'Join Our Team' : 'Junte-se ao Nosso Time'}
 						</h2>
 						<div className="space-y-4">
-							{activeJobs.map((job) => (
-								<JobListing key={job.id} job={job} locale={locale as 'en' | 'pt-BR'} />
+							{activeJobs.map((job, index) => (
+								<JobListing key={job.id} job={job} locale={locale as 'en' | 'pt-BR'} isEven={index % 2 === 1} />
 							))}
 						</div>
 					</div>

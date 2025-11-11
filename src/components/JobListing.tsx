@@ -8,20 +8,21 @@ import type { JobData } from '../lib/jobs';
 interface JobListingProps {
 	job: JobData;
 	locale: 'en' | 'pt-BR';
+	isEven?: boolean;
 }
 
-export default function JobListing({ job, locale }: JobListingProps) {
+export default function JobListing({ job, locale, isEven = false }: JobListingProps) {
 	const [isExpanded, setIsExpanded] = useState(false);
 
 	const title = job.title[locale];
 	const description = job.description[locale];
 
 	return (
-		<div className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow">
+		<div className={`border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow ${isEven ? 'bg-gray-50' : 'bg-white'}`}>
 			{/* Collapsible Header */}
 			<button
 				onClick={() => setIsExpanded(!isExpanded)}
-				className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+				className={`w-full px-6 py-4 flex items-center justify-between text-left transition-colors ${isEven ? 'hover:bg-gray-100' : 'hover:bg-gray-50'}`}
 			>
 				<div className="flex-1">
 					<h3 className="text-xl font-bold text-gray-900 mb-1">{title}</h3>

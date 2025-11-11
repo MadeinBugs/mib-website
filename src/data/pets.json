@@ -1,0 +1,44 @@
+{
+	"pets": [
+		{
+			"id": 1,
+			"name": "Ovo Frito",
+			"description": {
+				"en": "Fell from the nest, now free in Ibirapuera park",
+				"pt-BR": "Caiu do ninho, hoje está livre no parque Ibirapuera"
+			},
+			"image": "/assets/pets/ovo-frito.jpg",
+			"active": false
+		},
+		{
+			"id": 2,
+			"name": "Suspiro",
+			"description": {
+				"en": "Rescued from the streets. PS: He drools while sleeping",
+				"pt-BR": "Regatado das ruas. PS: Ele baba enquanto dorme"
+			},
+			"image": "/assets/pets/suspiro.jpg",
+			"active": false
+		},
+		{
+			"id": 3,
+			"name": "Ameixa",
+			"description": {
+				"en": "Loves to complain about everything and everyone",
+				"pt-BR": "Adora reclamar de tudo e todos"
+			},
+			"image": "/assets/pets/ameixa.jpg",
+			"active": false
+		},
+		{
+			"id": 4,
+			"name": "Ovo Cozido e Ovo Mexido",
+			"description": {
+				"en": "Street rescues, now free in Ibirapuera park",
+				"pt-BR": "Resgates da rua, hoje estão livres no parque Ibirapuera"
+			},
+			"image": "/assets/pets/ovo-cozido-e-ovo-mexido.jpg",
+			"active": false
+		}
+	]
+}

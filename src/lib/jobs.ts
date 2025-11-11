@@ -94,8 +94,8 @@ export const jobsDatabase: JobData[] = [
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdKTooQgHmSkTd1fEnVLB4Bj8LEWubNDsj_SkTz3HbLiUolpg/viewform?usp=header',
 		active: true,
 		jobDetails: {
-			en: ['Remote', 'Freelance', 'Portuguese'],
-			'pt-BR': ['Remoto', 'Freelance', 'Português']
+			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week'],
+			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana']
 		},
 		postedDate: '2024-11-11'
 	},
@@ -154,8 +154,8 @@ export const jobsDatabase: JobData[] = [
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLScYc1D_2kSwoWFkEUpGkycmzxf1xHl5YgRUVFSjU1aU9uUU8A/viewform?usp=header',
 		active: true,
 		jobDetails: {
-			en: ['Remote', 'Freelance', 'Portuguese'],
-			'pt-BR': ['Remoto', 'Freelance', 'Português']
+			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week'],
+			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana']
 		},
 		postedDate: '2024-11-11'
 	},
@@ -220,8 +220,8 @@ export const jobsDatabase: JobData[] = [
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSe0h7Ik5dlPiNPwW2eUIdXNMswwaJ9TZSjVk3gSDwi7wUV0vA/viewform?usp=header',
 		active: true,
 		jobDetails: {
-			en: ['Remote', 'Freelance', 'Portuguese'],
-			'pt-BR': ['Remoto', 'Freelance', 'Português']
+			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week'],
+			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana']
 		},
 		postedDate: '2024-11-11'
 	},
@@ -280,7 +280,6 @@ export const jobsDatabase: JobData[] = [
 				'Knowledge of LOD creation',
 				'Knowledge of rendering optimizations like texture batching',
 				'Experience with modular asset creation for environments',
-				'Sculpting skills (ZBrush, Blender Sculpt, etc.)'
 			],
 			'pt-BR': [
 				'Experiência em rigging/animação de quadrúpedes ou criaturas',
@@ -290,14 +289,13 @@ export const jobsDatabase: JobData[] = [
 				'Conhecimento em criação de LODs',
 				'Conhecimento de otimizações de rendering como texture batching',
 				'Experiência com criação de assets modulares para ambientes',
-				'Habilidades em sculpting (ZBrush, Blender Sculpt, etc.)'
 			]
 		},
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeTKlssXrDeb2q1aty44BjPcnVbCU79zOJef-QUzZkW-hxSQQ/viewform?usp=header',
 		active: true,
 		jobDetails: {
-			en: ['Remote', 'Freelance', 'Portuguese'],
-			'pt-BR': ['Remoto', 'Freelance', 'Português']
+			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week'],
+			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana']
 		},
 		postedDate: '2024-11-11'
 	}

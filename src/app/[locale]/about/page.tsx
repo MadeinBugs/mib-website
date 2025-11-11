@@ -1,7 +1,9 @@
 import { getTranslations, normalizeLocale } from '../../../lib/i18n';
 import ContentLayout from '../../../components/ContentLayout';
 import TeamCarousel from '../../../components/TeamCarousel';
+import JobListing from '../../../components/JobListing';
 import teamData from '../../../data/team.json';
+import { getActiveJobs } from '../../../lib/jobs';
 import Image from 'next/image';
 import { getImagePath } from '../../../lib/imagePaths';
 
@@ -15,6 +17,9 @@ export default async function AboutPage({ params }: Props) {
 
 	// Load translations
 	const t = await getTranslations(locale);
+
+	// Load active jobs
+	const activeJobs = getActiveJobs();
 
 	return (
 		<ContentLayout translations={t} locale={locale}>
@@ -145,32 +150,19 @@ export default async function AboutPage({ params }: Props) {
 					</div>
 				</div>
 
-				{/* Call to Action */}
-				<div className="content-card text-center bg-gradient-to-br from-purple-50 to-blue-50">
-					<h2 className="font-h2 text-2xl font-bold mb-4">
-						{locale === 'en' ? 'Ready to Create Something Amazing?' : 'Pronto para Criar Algo Incrível?'}
-					</h2>
-					<p className="font-body text-lg text-gray-600 mb-6">
-						{locale === 'en'
-							? 'We\'re always looking for passionate people to join our creative journey.'
-							: 'Estamos sempre procurando pessoas apaixonadas para se juntar à nossa jornada criativa.'
-						}
-					</p>
-					<div className="flex flex-col sm:flex-row gap-4 justify-center">
-						<a
-							href={`/${locale}/contact`}
-							className="inline-block bg-purple-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-purple-700 transition-colors"
-						>
-							{locale === 'en' ? 'Work With Us' : 'Trabalhe Conosco'}
-						</a>
-						<a
-							href={`/${locale}/portfolio`}
-							className="inline-block border border-purple-600 text-purple-600 px-6 py-3 rounded-lg font-medium hover:bg-purple-50 transition-colors"
-						>
-							{locale === 'en' ? 'See Our Games' : 'Veja Nossos Jogos'}
-						</a>
+				{/* Join Our Team Section */}
+				{activeJobs.length > 0 && (
+					<div className="content-card">
+						<h2 className="font-h2 text-3xl font-bold mb-8 text-center">
+							{locale === 'en' ? 'Join Our Team' : 'Junte-se ao Nosso Time'}
+						</h2>
+						<div className="space-y-4">
+							{activeJobs.map((job) => (
+								<JobListing key={job.id} job={job} locale={locale as 'en' | 'pt-BR'} />
+							))}
+						</div>
 					</div>
-				</div>
+				)}
 			</div>
 		</ContentLayout>
 	);

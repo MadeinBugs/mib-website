@@ -91,13 +91,13 @@ export const jobsDatabase: JobData[] = [
 				'Experiência com efeitos visuais (VFX)'
 			]
 		},
-		applyLink: 'mailto:jobs@madeinbugs.com.br?subject=Vaga Programador(a) de Gameplay',
+		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdKTooQgHmSkTd1fEnVLB4Bj8LEWubNDsj_SkTz3HbLiUolpg/viewform?usp=header',
 		active: true,
 		jobDetails: {
 			en: ['Remote', 'Freelance', 'Portuguese'],
 			'pt-BR': ['Remoto', 'Freelance', 'Português']
 		},
-		postedDate: '2025-11-11'
+		postedDate: '2024-11-11'
 	},
 	{
 		id: 'tech-artist-unity',
@@ -148,16 +148,16 @@ export const jobsDatabase: JobData[] = [
 			'pt-BR': [
 				'Experiência com programação C# (pode ser necessário para ferramentas de editor)',
 				'Experiência, mesmo que breve, com Blender',
-				'Experiência com iluminação e pós-processamento.'
+				'Experiência com iluminação e pós-processamento'
 			]
 		},
-		applyLink: 'mailto:jobs@madeinbugs.com.br?subject=Vaga Artista Técnico',
+		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLScYc1D_2kSwoWFkEUpGkycmzxf1xHl5YgRUVFSjU1aU9uUU8A/viewform?usp=header',
 		active: true,
 		jobDetails: {
 			en: ['Remote', 'Freelance', 'Portuguese'],
 			'pt-BR': ['Remoto', 'Freelance', 'Português']
 		},
-		postedDate: '2025-11-11'
+		postedDate: '2024-11-11'
 	},
 	{
 		id: 'level-designer',
@@ -166,123 +166,140 @@ export const jobsDatabase: JobData[] = [
 			'pt-BR': 'Level Designer'
 		},
 		description: {
-			en: 'We are looking for a creative Level Designer who loves building worlds, from the prototype phase (grayboxing) to the assets that make up the environment.',
-			'pt-BR': 'Buscamos um(a) Level Designer criativo(a) que ame construir mundos, desde a fase de protótipo (grayboxing) até os assets que compõem o cenário.'
+			en: 'We are looking for a creative Level Designer to design engaging level layouts, focusing on gameplay flow, pacing, and player experience using prototyping and existing assets.',
+			'pt-BR': 'Buscamos um(a) Level Designer criativo(a) para projetar layouts de fases envolventes, focando no fluxo de gameplay, ritmo e experiência do jogador usando prototipação e assets existentes.'
 		},
 		responsibilities: {
 			en: [
 				'Design and prototype level layouts (grayboxing) within Unity, working closely with the Game Designer',
-				'Build and detail environments using assets',
-				'Model low-poly 3D environment assets',
-				'Work closely with the 2D art team to translate concept art into 3D levels',
+				'Define gameplay flow, pacing, encounter placement, and level progression',
+				'Build and detail environments using existing 3D assets from our library',
+				'Work closely with the 2D art team to translate concept art into 3D level layouts',
+				'Test and iterate on levels to ensure fun and balanced gameplay'
 			],
 			'pt-BR': [
 				'Projetar e prototipar layouts de níveis (grayboxing) dentro da Unity, trabalhando junto ao Game Designer',
-				'Construir e detalhar os cenários utilizando assets',
-				'Modelar assets 3D low-poly de cenário',
-				'Trabalhar próximo ao time de arte 2D para traduzir os concept-arts das fases para o 3D'
+				'Definir o fluxo de gameplay, ritmo, posicionamento de encontros e progressão do nível',
+				'Construir e detalhar os cenários utilizando assets 3D existentes da nossa biblioteca',
+				'Trabalhar próximo ao time de arte 2D para traduzir os concept-arts das fases em layouts 3D',
+				'Testar e iterar sobre os níveis para garantir gameplay divertido e balanceado'
 			]
 		},
 		requirements: {
 			en: [
-				'Experience as a Level Designer',
-				'Brief experience in Unity for scene building (ProBuilder recommended)',
-				'Ability to create grayblocking and rapid, iterative prototyping',
-				'Experience with Blender for creating environment assets',
+				'Proven experience as a Level Designer',
+				'Strong understanding of level design principles (flow, pacing, player guidance)',
+				'Experience with Unity for scene building (ProBuilder or similar tools)',
+				'Ability to create grayboxing and rapid, iterative prototyping',
+				'Portfolio showcasing level design work'
 			],
 			'pt-BR': [
-				'Experiência como Level Designer',
-				'Experiência, mesmo que breve, em Unity, na parte de construção de cenas (ProBuilder é recomendado)',
-				'Capacidade de fazer "grayblocking" e prototipação rápida e iterativa',
-				'Experiência com Blender na construção de assets para cenário'
+				'Experiência comprovada como Level Designer',
+				'Forte compreensão de princípios de level design (fluxo, ritmo, guia do jogador)',
+				'Experiência com Unity na construção de cenas (ProBuilder ou ferramentas similares)',
+				'Capacidade de fazer grayboxing e prototipação rápida e iterativa',
+				'Portfólio demonstrando trabalhos de level design'
 			]
 		},
 		niceToHaves: {
 			en: [
 				'Knowledge of lighting and composition in Unity',
 				'Experience with level design tools',
-				'Experience with version control (Git) (we use it for asset versioning)',
+				'Experience with version control (Git)',
+				'Basic 3D modeling skills for quick prototyping',
+				'Understanding of game balancing and difficulty curves'
 			],
 			'pt-BR': [
 				'Conhecimento de iluminação e composição em Unity',
 				'Experiência com ferramentas de level design',
-				'Experiência com controle de versão (Git) (utilizamos para versionamento dos assets)'
+				'Experiência com controle de versão (Git)',
+				'Habilidades básicas de modelagem 3D para prototipação rápida',
+				'Compreensão de balanceamento de jogo e curvas de dificuldade'
 			]
 		},
-		applyLink: 'mailto:jobs@madeinbugs.com.br?subject=Vaga Level Designer',
+		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSe0h7Ik5dlPiNPwW2eUIdXNMswwaJ9TZSjVk3gSDwi7wUV0vA/viewform?usp=header',
 		active: true,
 		jobDetails: {
 			en: ['Remote', 'Freelance', 'Portuguese'],
 			'pt-BR': ['Remoto', 'Freelance', 'Português']
 		},
-		postedDate: '2025-11-11'
-
+		postedDate: '2024-11-11'
 	},
 	{
-		id: '3d-artist-characters',
+		id: '3d-artist-generalist',
 		title: {
-			en: '3D Artist (Characters)',
-			'pt-BR': 'Artista 3D (Personagens)'
+			en: 'Generalist 3D Artist',
+			'pt-BR': 'Artista 3D Generalista'
 		},
 		description: {
-			en: 'We are looking for a 3D Artist to model, texture, rig, and animate the animals, characters, and items that bring our game to life.',
-			'pt-BR': 'Procuramos um(a) Artista 3D para modelar, texturizar, riggar e animar os animais, personagens e itens que dão vida ao nosso jogo.'
+			en: 'We are looking for a versatile Generalist 3D Artist to create all the visual assets for our game, from creatures and characters to environment props and level decoration.',
+			'pt-BR': 'Procuramos um(a) Artista 3D Generalista versátil para criar todos os assets visuais do nosso jogo, desde criaturas e personagens até props de cenário e decoração de níveis.'
 		},
 		responsibilities: {
 			en: [
-				'Modeling and texturing (high-poly and low-poly) creatures, characters, and items',
-				'Creating Rigs (skeletons) and skinning for models',
-				'Animation of movement cycles (walk, run, sleep, etc.)',
-				'Work with the technical team to ensure assets work correctly in the game',
+				'Model and texture characters, creatures, and items (high-poly and low-poly)',
+				'Model and texture environment assets and props for level decoration',
+				'Create rigs (skeletons) and skinning for characters and creatures',
+				'Animate movement cycles (walk, run, sleep, etc.) and character actions',
+				'Work with the technical team to ensure assets are optimized and work correctly in-game',
+				'Collaborate with the Level Designer to provide assets needed for level construction'
 			],
 			'pt-BR': [
-				'Modelagem e texturização (high-poly e low-poly) de criaturas, personagens e itens',
-				'Criação de Rigs (esqueletos) e skinning para os modelos',
-				'Animação de ciclos de movimento (andar, correr, dormir, etc.)',
-				'Trabalhar com a equipe técnica para garantir que os assets funcionem corretamente no jogo'
+				'Modelar e texturizar personagens, criaturas e itens (high-poly e low-poly)',
+				'Modelar e texturizar assets de cenário e props para decoração de níveis',
+				'Criar rigs (esqueletos) e skinning para personagens e criaturas',
+				'Animar ciclos de movimento (andar, correr, dormir, etc.) e ações de personagens',
+				'Trabalhar com a equipe técnica para garantir que os assets estejam otimizados e funcionem corretamente no jogo',
+				'Colaborar com o Level Designer para fornecer assets necessários para construção de níveis'
 			]
 		},
 		requirements: {
 			en: [
-				'Strong portfolio in 3D modeling',
-				'Experience in Rigging',
-				'Solid 3D Animation skills (preferably familiar with animation principles)',
-				'Knowledge of texturing (preferably Substance Painter)',
+				'Strong and diverse portfolio demonstrating character, creature, and environment modeling',
+				'Solid experience in 3D modeling and texturing (Blender, Maya, or similar)',
+				'Experience in rigging and skinning',
+				'Solid 3D animation skills (preferably familiar with animation principles)',
+				'Knowledge of texturing (preferably Substance Painter or similar)',
+				'Understanding of game asset optimization (poly count, texture resolution, etc.)'
 			],
 			'pt-BR': [
-				'Portfólio forte em modelagem 3D',
-				'Experiência em Rigging',
-				'Habilidade sólida em Animação 3D (preferência por conhecer os princípios de animação)',
-				'Conhecimento em texturização (preferência por Substance Painter)'
+				'Portfólio forte e diverso demonstrando modelagem de personagens, criaturas e cenários',
+				'Experiência sólida em modelagem 3D e texturização (Blender, Maya ou similar)',
+				'Experiência em rigging e skinning',
+				'Habilidade sólida em animação 3D (preferência por conhecer os princípios de animação)',
+				'Conhecimento em texturização (preferência por Substance Painter ou similar)',
+				'Compreensão de otimização de assets para jogos (contagem de polígonos, resolução de texturas, etc.)'
 			]
 		},
 		niceToHaves: {
 			en: [
-				'Experience with game modeling',
 				'Experience rigging/animating quadrupeds or creatures',
 				'Knowledge of Unity\'s export/import pipeline',
-				'Experience with version control (Git) (we use it for asset versioning)',
+				'Experience with version control (Git)',
 				'Knowledge of asset retopology for games',
 				'Knowledge of LOD creation',
 				'Knowledge of rendering optimizations like texture batching',
+				'Experience with modular asset creation for environments',
+				'Sculpting skills (ZBrush, Blender Sculpt, etc.)'
 			],
 			'pt-BR': [
-				'Experiência com modelagem para jogos',
 				'Experiência em rigging/animação de quadrúpedes ou criaturas',
 				'Conhecimento do pipeline de exportação/importação na Unity',
-				'Experiência com controle de versão (Git) (utilizamos para versionamento dos assets)',
+				'Experiência com controle de versão (Git)',
 				'Conhecimento em retopologia de assets para jogos',
 				'Conhecimento em criação de LODs',
 				'Conhecimento de otimizações de rendering como texture batching',
+				'Experiência com criação de assets modulares para ambientes',
+				'Habilidades em sculpting (ZBrush, Blender Sculpt, etc.)'
 			]
 		},
-		applyLink: 'mailto:jobs@madeinbugs.com.br?subject=Vaga Artista 3D (Criaturas)',
+		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeTKlssXrDeb2q1aty44BjPcnVbCU79zOJef-QUzZkW-hxSQQ/viewform?usp=header',
 		active: true,
 		jobDetails: {
 			en: ['Remote', 'Freelance', 'Portuguese'],
 			'pt-BR': ['Remoto', 'Freelance', 'Português']
 		},
-		postedDate: '2025-11-11'
+		postedDate: '2024-11-11'
 	}
 ];
 

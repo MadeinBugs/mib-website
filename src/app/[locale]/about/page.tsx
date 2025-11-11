@@ -81,14 +81,20 @@ export default async function AboutPage({ params }: Props) {
 						</div>
 					</div>
 
-					<div className="text-center flex items-center justify-center pb-20">
-						<h3 className="font-h2 text-2xl font-bold">
-							{locale === 'en' ? (
-								<span>Received <span className="text-green-600">R$30,000</span> Investment!</span>
-							) : (
-								<span>Recebemos <span className="text-green-600">R$30.000</span> de Investimento!</span>
-							)}
-						</h3>
+					<div className="text-center relative group pb-20">
+						<div className="rounded-lg overflow-hidden h-48 flex items-center justify-center cursor-pointer">
+							<Image
+								src={getImagePath('/assets/about-us/sampa-games.png')}
+								alt={locale === 'en' ? 'Received R$30,000 Investment' : 'Recebemos R$30.000 de Investimento'}
+								width={400}
+								height={300}
+								className="w-full h-full object-contain"
+							/>
+							{/* Tooltip */}
+							<div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-black text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+								{locale === 'en' ? 'Received R$30,000 Investment' : 'Recebemos R$30.000 de Investimento'}
+							</div>
+						</div>
 					</div>
 
 					<div className="text-center relative group">

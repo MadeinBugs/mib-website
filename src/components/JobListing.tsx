@@ -18,11 +18,11 @@ export default function JobListing({ job, locale, isEven = false }: JobListingPr
 	const description = job.description[locale];
 
 	return (
-		<div className={`border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow ${isEven ? 'bg-gray-50' : 'bg-white'}`}>
+		<div className={`border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow ${isEven ? 'bg-gray-100' : 'bg-white'}`}>
 			{/* Collapsible Header */}
 			<button
 				onClick={() => setIsExpanded(!isExpanded)}
-				className={`w-full px-6 py-4 flex items-center justify-between text-left transition-colors ${isEven ? 'hover:bg-gray-100' : 'hover:bg-gray-50'}`}
+				className={`w-full px-6 py-4 flex items-center justify-between text-left transition-colors ${isEven ? 'hover:bg-gray-200' : 'hover:bg-gray-100'}`}
 			>
 				<div className="flex-1">
 					<h3 className="text-xl font-bold text-gray-900 mb-1">{title}</h3>

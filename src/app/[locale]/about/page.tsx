@@ -56,8 +56,8 @@ export default async function AboutPage({ params }: Props) {
 					<div className="max-w-4xl mx-auto">
 						<p className="text-xl md:text-2xl text-gray-600 font-medium">
 							{locale === 'en'
-								? "With just one year of existence..."
-								: 'Com apenas um ano de existência...'
+								? "Just some of the programs that have endorsed us!"
+								: 'Alguns dos editais e programas que atestam nossa qualidade!'
 							}
 						</p>
 					</div>

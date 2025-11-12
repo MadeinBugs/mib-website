@@ -38,7 +38,7 @@ export default async function ContactPage({ params }: Props) {
 									🦋
 								</div>
 								<h2 className="text-xl md:text-2xl font-bold text-gray-800">
-									{locale === 'en' ? 'Say Hello!' : 'Diga Olá!'}
+									{locale === 'en' ? 'Say Hello' : 'Diga Olá'}
 								</h2>
 								<p className="text-sm md:text-base text-gray-600">
 									{locale === 'en' ? 'Send us some insect pics!' : 'Nos mande fotos de insetos!'}
@@ -59,10 +59,16 @@ export default async function ContactPage({ params }: Props) {
 									🐞
 								</div>
 								<h2 className="text-xl md:text-2xl font-bold text-gray-800">
-									{locale === 'en' ? 'Work With Us!' : 'Trabalhe Conosco!'}
+									{locale === 'en' ? 'Work With Us' : 'Trabalhe Conosco'}
 								</h2>
 								<p className="text-sm md:text-base text-gray-600">
-									{locale === 'en' ? 'Ready to make some bugs... I mean, games?' : 'Hora de fazer alguns bugs... digo, jogos?'}
+									{locale === 'en' ? (
+										<>Time to make <span className="line-through">bugs</span> games!</>
+									) : (
+										<>
+											Hora de fazer <span className="line-through">bugs</span> jogos!
+										</>
+									)}
 								</p>
 								<a
 									href="mailto:hello@madeinbugs.com.br"

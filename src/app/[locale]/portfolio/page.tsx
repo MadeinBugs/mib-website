@@ -20,6 +20,13 @@ export default async function PortfolioPage({ params }: Props) {
 	return (
 		<ContentLayout translations={t} locale={locale}>
 			<div className="space-y-8">
+				{/* Page Header */}
+				<div className="text-center space-y-6">
+					<h1 className="heading-crayon">
+						{locale === 'en' ? 'Our Work' : 'Nosso Trabalho'}
+					</h1>
+				</div>
+
 				{/* Projects Grid - Irregular widths, consistent row heights */}
 				<div className="space-y-6">
 					{/* Group projects into rows with different layouts */}

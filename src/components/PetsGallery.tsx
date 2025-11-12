@@ -30,11 +30,10 @@ export default function PetsGallery({ pets, locale }: PetsGalleryProps) {
 	if (activePets.length === 0) {
 		return (
 			<div className="text-center text-gray-500 py-8 bg-gray-50 rounded-lg">
-				<div className="text-4xl mb-2">📸</div>
-				<p className="font-body">
+				<p className="font-body text-lg">
 					{locale === 'en'
-						? 'Pet gallery coming soon...'
-						: 'Galeria de pets em breve...'
+						? 'No pet photos currently 😥'
+						: 'Nenhuma foto de pet no momento 😥'
 					}
 				</p>
 			</div>

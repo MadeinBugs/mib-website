@@ -127,29 +127,20 @@ export default async function AboutPage({ params }: Props) {
 						/>
 					</div>
 					<h2 className="font-h2 text-2xl font-bold mb-4">
-						{locale === 'en' ? 'Love for Nature' : 'Amor pela Natureza'}
+						{locale === 'en' ? 'Pet Gallery' : 'Galeria de Pets'}
 					</h2>
 					<p className="font-body text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
 						{locale === 'en'
-							? 'Our studio was born from our love for animals, especially insects and their incredible diversity.'
-							: 'Nosso estúdio nasceu do nosso amor pelos animais, especialmente insetos e sua incrível diversidade.'
+							? 'Every pet owned by our studio members'
+							: 'Todos os pets dos membros do nosso estúdio'
 						}
 					</p>
 
 					{/* Pets Gallery Section */}
 					<div className="space-y-6">
-						<h3 className="font-h2 text-lg font-semibold">
-							{locale === 'en'
-								? 'To all the pets and rescues that guided us'
-								: 'A todos os pets e resgates que nos guiaram'
-							}
-						</h3>
-
 						<PetsGallery pets={petsData.pets} locale={locale as 'en' | 'pt-BR'} />
 					</div>
-				</div>
-
-				{/* Join Our Team Section */}
+				</div>				{/* Join Our Team Section */}
 				{activeJobs.length > 0 && (
 					<div className="content-card">
 						<h2 className="font-h2 text-3xl font-bold mb-8 text-center">

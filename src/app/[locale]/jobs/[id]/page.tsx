@@ -35,7 +35,7 @@ export default async function JobDetailPage({ params }: Props) {
 				{/* Back Button */}
 				<Link
 					href={`/${locale}/about#jobs`}
-					className="inline-flex items-center text-purple-600 hover:text-purple-700 mb-6 transition-colors"
+					className="inline-flex items-center text-gray-600 hover:text-purple-700 mb-6 transition-colors"
 				>
 					<svg
 						className="w-5 h-5 mr-2"
@@ -56,7 +56,7 @@ export default async function JobDetailPage({ params }: Props) {
 				{/* Job Header */}
 				<div className="content-card mb-8">
 					<div className="text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Nunito', fontWeight: 700 }}>{title}</div>
-					<p className="text-lg text-gray-700 leading-relaxed">{description}</p>
+					<p className="text-gray-700">{description}</p>
 				</div>
 
 				{/* Job Details */}
@@ -102,7 +102,7 @@ export default async function JobDetailPage({ params }: Props) {
 						<ul className="space-y-3">
 							{requirements.map((item: string, index: number) => (
 								<li key={index} className="flex items-start">
-									<span className="text-purple-600 mr-3 mt-1">✓</span>
+									<span className="text-purple-600 mr-3 mt-1">•</span>
 									<span className="text-gray-700">{item}</span>
 								</li>
 							))}

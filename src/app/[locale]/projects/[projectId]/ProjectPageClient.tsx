@@ -283,7 +283,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 														rel="noopener noreferrer"
 														className="flex items-center justify-between w-full px-3 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
 													>
-														<span className="flex items-center gap-2 text-sm font-medium text-gray-800">
+														<span className="flex items-center gap-2 text-sm font-medium text-blue-700">
 															<Icon className="text-base flex-shrink-0 text-blue-600" />
 															{platform}
 														</span>
@@ -373,7 +373,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 													rel="noopener noreferrer"
 													className="flex items-center justify-between w-full px-3 py-2 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg transition-all duration-200 hover:shadow-md group"
 												>
-													<span className="flex items-center gap-2 text-sm font-medium text-gray-800">
+													<span className="flex items-center gap-2 text-sm font-medium text-purple-700">
 														<Icon className="text-base flex-shrink-0 text-purple-600" />
 														{getLinkLabel(linkType)}
 													</span>

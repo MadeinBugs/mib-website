@@ -405,21 +405,25 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 			en: 'A game inspired by retro puzzle games with modern mobile gameplay mechanics.',
 			'pt-BR': 'Um jogo inspirado em quebra-cabeças retrô com mecânicas modernas para mobile.'
 		},
-		features: {
-			en: [
-				'Online multiplayer',
-				'Cosmetics system',
-				'Five challenging story levels',
-				'Extra puzzle levels',
-				'Endless mode'
-			],
-			'pt-BR': [
-				'Multijogador online',
-				'Sistema de cosméticos',
-				'Cinco níveis de história desafiadores',
-				'Níveis puzzle extras',
-				'Modo infinito'
-			]
+		longDescription: {
+			en:
+				`
+### Features
+- Online multiplayer
+- Cosmetics system
+- Five challenging story levels
+- Extra puzzle levels
+- Endless mode
+		`,
+			'pt-BR':
+				`
+### Características
+- Multijogador online
+- Sistema de cosméticos
+- Cinco níveis de história desafiadores
+- Níveis puzzle extras
+- Modo infinito
+		`
 		},
 		images: [
 			{
@@ -430,6 +434,16 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 			{
 				src: '/assets/projects/animunch/animunch-6.png',
 				type: 'thumbnail',
+				position: '50% 20%'
+			},
+			{
+				src: '/assets/projects/animunch/animunch-7.png',
+				type: 'topGallery',
+				position: '50% 20%'
+			},
+			{
+				src: '/assets/projects/animunch/animunch-6.png',
+				type: 'topGallery',
 				position: '50% 20%'
 			},
 			{
@@ -476,21 +490,25 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 			en: 'An adventure game where you collect Elemantors, battle using dice, and explore the world of Ellion.',
 			'pt-BR': 'Um jogo de aventura onde você coleta Elemantors, batalha usando dados, e explora o mundo de Ellion.'
 		},
-		features: {
-			en: [
-				'Pokémon-like battles with dice mechanics',
-				'Fishing and planting activities',
-				'Epic story quest for the Time Elixir',
-				'60+ Elemantors of varying rarity to catch',
-				'20+ areas to explore, some hidden'
-			],
-			'pt-BR': [
-				'Batalhas estilo Pokémon com mecânicas de dados',
-				'Atividades de pesca e plantio',
-				'Missão épica pelo Elixir do Tempo',
-				'60+ Elemantors de raridade variada para capturar',
-				'20+ áreas para explorar, algumas escondidas'
-			]
+		longDescription: {
+			en:
+				`
+### Features
+- Pokémon-like battles with dice mechanics
+- Fishing and planting activities
+- Epic story quest for the Time Elixir
+- 60+ Elemantors of varying rarity to catch
+- 20+ areas to explore, some hidden
+		`,
+			'pt-BR':
+				`
+### Características
+- Batalhas estilo Pokémon com mecânicas de dados
+- Atividades de pesca e plantio
+- Missão épica pelo Elixir do Tempo
+- 60+ Elemantors de raridade variada para capturar
+- 20+ áreas para explorar, algumas escondidas
+		`
 		},
 		images: [
 			{
@@ -500,7 +518,7 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 			},
 			{
 				src: '/assets/projects/elementales/elementales-1.jpg',
-				type: 'gallery',
+				type: 'topGallery',
 				position: 'center'
 			},
 			{
@@ -510,7 +528,7 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 			},
 			{
 				src: '/assets/projects/elementales/elementales-3.jpg',
-				type: 'gallery',
+				type: 'topGallery',
 				position: 'center'
 			},
 			{
@@ -520,7 +538,7 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 			},
 			{
 				src: '/assets/projects/elementales/elementales-5.png',
-				type: 'gallery',
+				type: 'topGallery',
 				position: '30% 50%'
 			},
 			{

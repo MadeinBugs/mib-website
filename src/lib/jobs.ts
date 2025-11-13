@@ -94,8 +94,8 @@ export const jobsDatabase: JobData[] = [
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdKTooQgHmSkTd1fEnVLB4Bj8LEWubNDsj_SkTz3HbLiUolpg/viewform?usp=header',
 		active: true,
 		jobDetails: {
-			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week'],
-			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana']
+			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week', 'Project: [Asumi](https://www.madeinbugs.com.br/en/projects/asumi/)'],
+			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana', 'Projeto: [Asumi](https://www.madeinbugs.com.br/pt-BR/projects/asumi/)']
 		},
 		postedDate: '2024-11-11'
 	},
@@ -154,8 +154,8 @@ export const jobsDatabase: JobData[] = [
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLScYc1D_2kSwoWFkEUpGkycmzxf1xHl5YgRUVFSjU1aU9uUU8A/viewform?usp=header',
 		active: true,
 		jobDetails: {
-			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week'],
-			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana']
+			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week', 'Project: [Asumi](https://www.madeinbugs.com.br/en/projects/asumi/)'],
+			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana', 'Projeto: [Asumi](https://www.madeinbugs.com.br/pt-BR/projects/asumi/)']
 		},
 		postedDate: '2024-11-11'
 	},
@@ -220,8 +220,8 @@ export const jobsDatabase: JobData[] = [
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSe0h7Ik5dlPiNPwW2eUIdXNMswwaJ9TZSjVk3gSDwi7wUV0vA/viewform?usp=header',
 		active: true,
 		jobDetails: {
-			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week'],
-			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana']
+			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Half-time or consultation', 'Project: [Asumi](https://www.madeinbugs.com.br/en/projects/asumi/)'],
+			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Meio-período ou consultorias', 'Projeto: [Asumi](https://www.madeinbugs.com.br/pt-BR/projects/asumi/)']
 		},
 		postedDate: '2024-11-11'
 	},
@@ -294,8 +294,8 @@ export const jobsDatabase: JobData[] = [
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeTKlssXrDeb2q1aty44BjPcnVbCU79zOJef-QUzZkW-hxSQQ/viewform?usp=header',
 		active: true,
 		jobDetails: {
-			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week'],
-			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana']
+			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week', 'Project: [Asumi](https://www.madeinbugs.com.br/en/projects/asumi/)'],
+			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana', 'Projeto: [Asumi](https://www.madeinbugs.com.br/pt-BR/projects/asumi/)']
 		},
 		postedDate: '2024-11-11'
 	}

@@ -3,6 +3,7 @@ import ContentLayout from '../../../../components/ContentLayout';
 import { getJobById, getAllJobs } from '../../../../lib/jobs';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import MarkdownContent from '../../../../components/MarkdownContent';
 
 interface Props {
 	params: Promise<{ locale: string; id: string }>;
@@ -56,7 +57,9 @@ export default async function JobDetailPage({ params }: Props) {
 				{/* Job Header */}
 				<div className="content-card mb-8">
 					<div className="text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Nunito', fontWeight: 700 }}>{title}</div>
-					<p className="text-gray-700">{description}</p>
+					<div className="text-gray-700">
+						<MarkdownContent content={description} />
+					</div>
 				</div>
 
 				{/* Job Details */}
@@ -69,7 +72,7 @@ export default async function JobDetailPage({ params }: Props) {
 							{jobDetails.map((detail, index) => (
 								<li key={index} className="flex items-start">
 									<span className="text-purple-600 mr-3 mt-1">•</span>
-									<span className="text-gray-700">{detail}</span>
+									<MarkdownContent content={detail} />
 								</li>
 							))}
 						</ul>
@@ -86,7 +89,7 @@ export default async function JobDetailPage({ params }: Props) {
 							{responsibilities.map((item: string, index: number) => (
 								<li key={index} className="flex items-start">
 									<span className="text-purple-600 mr-3 mt-1">•</span>
-									<span className="text-gray-700">{item}</span>
+									<MarkdownContent content={item} />
 								</li>
 							))}
 						</ul>
@@ -103,7 +106,7 @@ export default async function JobDetailPage({ params }: Props) {
 							{requirements.map((item: string, index: number) => (
 								<li key={index} className="flex items-start">
 									<span className="text-purple-600 mr-3 mt-1">•</span>
-									<span className="text-gray-700">{item}</span>
+									<MarkdownContent content={item} />
 								</li>
 							))}
 						</ul>
@@ -120,7 +123,7 @@ export default async function JobDetailPage({ params }: Props) {
 							{niceToHaves.map((item: string, index: number) => (
 								<li key={index} className="flex items-start">
 									<span className="text-gray-400 mr-3 mt-1">+</span>
-									<span className="text-gray-700">{item}</span>
+									<MarkdownContent content={item} />
 								</li>
 							))}
 						</ul>

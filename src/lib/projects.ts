@@ -110,7 +110,7 @@ Explore this deep island, traversing forests, jungles, beaches and caverns. Find
 
 Use your trusty homemade Camera to register important moments and discover more about how the environment works. As you take pictures, you gain precious knowledge.
 
-[asumi-1.png]
+[asumi-taking-pictures.jpg]
 
 ## Complete the Tome
 
@@ -139,7 +139,7 @@ Explore esta ilha profunda, atravessando florestas, selvas, praias e cavernas. D
 
 Use sua câmera caseira para registrar momentos incríveis e descobrir mais sobre como o ecossistema funciona. Conforme você tira fotos, ganha conhecimento precioso para avançar.
 
-[asumi-1.png]
+[asumi-taking-pictures.jpg]
 
 ## Complete o Tomo
 

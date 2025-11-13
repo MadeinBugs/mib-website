@@ -1,7 +1,7 @@
 // Project data structure and management
 interface ProjectImage {
 	src: string;
-	type: 'thumbnail' | 'gallery' | 'both';
+	type: 'thumbnail' | 'gallery' | 'both' | 'topGallery';
 	position?: string; // CSS object-position value (e.g., "center", "top", "25% 75%")
 	caption?: {
 		en: string;
@@ -161,7 +161,7 @@ export const projectsDatabase: ProjectData[] = [
 			},
 			{
 				src: '/assets/projects/asumi/asumi-tome-flip.gif',
-				type: 'gallery',
+				type: 'topGallery',
 				position: 'center',
 				caption: {
 					en: 'The tome that holds all of the player\'s knowledge',
@@ -170,11 +170,20 @@ export const projectsDatabase: ProjectData[] = [
 			},
 			{
 				src: '/assets/projects/asumi/capivara-interactions.gif',
-				type: 'gallery',
+				type: 'topGallery',
 				position: 'center',
 				caption: {
 					en: 'Player attempting to feed the Capybara',
 					'pt-BR': 'Jogador tentando alimentar a Capivara'
+				}
+			},
+			{
+				src: '/assets/projects/asumi/animal-models.gif',
+				type: 'topGallery',
+				position: 'center',
+				caption: {
+					en: '3D models of some of the animals in the game',
+					'pt-BR': 'Modelos 3D de alguns dos animais no jogo'
 				}
 			},
 			{
@@ -532,6 +541,10 @@ export function getThumbnailImages(project: ProjectData): ProjectImage[] {
 
 export function getGalleryImages(project: ProjectData): ProjectImage[] {
 	return project.images.filter(img => img.type === 'gallery' || img.type === 'both');
+}
+
+export function getTopGalleryImages(project: ProjectData): ProjectImage[] {
+	return project.images.filter(img => img.type === 'topGallery');
 }
 
 // Legacy compatibility - get image sources as strings for existing components

@@ -6,7 +6,7 @@ import Image from 'next/image';
 import ProjectLinks from '../../../../components/ProjectLinks';
 import PlatformTags from '../../../../components/PlatformTags';
 import ProjectImageVisualization from '../../../../components/ProjectImageVisualization';
-import { getGalleryImages } from '../../../../lib/projects';
+import { getGalleryImages, getTopGalleryImages } from '../../../../lib/projects';
 import { getImagePath } from '../../../../lib/imagePaths';
 import type { ProjectData } from '../../../../lib/projects';
 
@@ -102,14 +102,14 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 						</div>
 					)}
 
-					{/* Gallery - Shows all gallery-type images (moved to top) */}
+					{/* Top Gallery - Shows topGallery-type images */}
 					{(() => {
-						const galleryImages = getGalleryImages(project);
+						const topGalleryImages = getTopGalleryImages(project);
 
-						return galleryImages.length > 0 && (
+						return topGalleryImages.length > 0 && (
 							<div className="space-y-4">
 								<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-									{galleryImages.map((image, index) => (
+									{topGalleryImages.map((image, index) => (
 										<button
 											key={index}
 											onClick={() => setSelectedImage({
@@ -146,19 +146,8 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 					<div className="grid md:grid-cols-[70%_30%] gap-8">
 						{/* Left Column - Description */}
 						<div className="space-y-6">
-							{project.description && (
-								<div className="content-card-sm">
-									<h3 className="font-h2 text-xl font-bold mb-3">
-										{locale === 'en' ? 'About' : 'Sobre'}
-									</h3>
-									<p className="font-body text-gray-600 leading-relaxed">
-										{project.description[locale as 'en' | 'pt-BR']}
-									</p>
-								</div>
-							)}
-
 							{project.longDescription && (
-								<div className="content-card-sm">
+								<div>
 									<h3 className="font-h2 text-xl font-bold mb-3">
 										{locale === 'en' ? 'Detailed Description' : 'Descrição Detalhada'}
 									</h3>
@@ -169,7 +158,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 							)}
 
 							{project.features && project.features[locale as 'en' | 'pt-BR']?.length > 0 && (
-								<div className="content-card-sm">
+								<div>
 									<h3 className="text-xl font-bold mb-3">
 										{locale === 'en' ? 'Features' : 'Características'}
 									</h3>
@@ -187,12 +176,21 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 
 						{/* Right Column - Technical Info */}
 						<div className="space-y-6">
-							{/* Only show Project Info if there's meaningful content */}
+							{/* Project name and description */}
+							<div className="content-card-sm">
+								<h3 className="font-h2 text-xl font-bold mb-3">
+									{localizedTitle}
+								</h3>
+								{project.description && (
+									<p className="font-body text-gray-600 leading-relaxed">
+										{project.description[locale as 'en' | 'pt-BR']}
+									</p>
+								)}
+							</div>
+
+							{/* Project Info without title */}
 							{(project.status || project.releaseDate || project.teamSize || project.projectType) && (
 								<div className="content-card-sm">
-									<h3 className="font-h2 text-xl font-bold mb-4">
-										{locale === 'en' ? 'Project Info' : 'Informações do Projeto'}
-									</h3>
 									<div className="space-y-3">
 										{project.projectType && (
 											<div className="flex justify-between">
@@ -265,6 +263,46 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 							)}
 						</div>
 					</div>
+
+					{/* Bottom Gallery - Shows regular gallery-type images */}
+					{(() => {
+						const galleryImages = getGalleryImages(project);
+
+						return galleryImages.length > 0 && (
+							<div className="space-y-4">
+								<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+									{galleryImages.map((image, index) => (
+										<button
+											key={index}
+											onClick={() => setSelectedImage({
+												src: image.src,
+												caption: image.caption?.[locale as 'en' | 'pt-BR']
+											})}
+											className="aspect-[4/3] relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
+										>
+											<Image
+												src={getImagePath(image.src)}
+												alt={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
+												fill
+												className="object-cover group-hover:scale-105 transition-transform duration-300"
+												style={{ objectPosition: image.position || 'center' }}
+												sizes="(max-width: 768px) 100vw, 33vw"
+												unoptimized={image.src.endsWith('.gif')}
+											/>
+											{/* Hover overlay */}
+											<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+												<div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
+													<svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+													</svg>
+												</div>
+											</div>
+										</button>
+									))}
+								</div>
+							</div>
+						);
+					})()}
 				</div>
 			</ContentLayout>
 

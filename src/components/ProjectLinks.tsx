@@ -118,7 +118,7 @@ const linkConfig = {
 	},
 	figma: {
 		icon: FaFigma,
-		label: { en: 'Figma', 'pt-BR': 'Figma' },
+		label: { en: 'Art Bible', 'pt-BR': 'Art Bible' },
 		color: 'text-purple-600',
 		bgColor: 'bg-purple-100',
 		borderColor: 'border-purple-200',

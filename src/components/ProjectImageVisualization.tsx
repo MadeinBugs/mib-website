@@ -103,6 +103,7 @@ export default function ProjectImageVisualization({
 								${imageLoaded ? 'opacity-100' : 'opacity-0'}
 							`}
 							onLoad={() => setImageLoaded(true)}
+							unoptimized={imageSrc.endsWith('.gif')}
 							priority
 						/>
 

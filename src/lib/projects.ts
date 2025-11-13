@@ -160,6 +160,24 @@ export const projectsDatabase: ProjectData[] = [
 				}
 			},
 			{
+				src: '/assets/projects/asumi/asumi-tome-flip.gif',
+				type: 'gallery',
+				position: 'center',
+				caption: {
+					en: 'The tome that holds all of the player\'s knowledge',
+					'pt-BR': 'O tomo que guarda todo o conhecimento do jogador'
+				}
+			},
+			{
+				src: '/assets/projects/asumi/capivara-interactions.gif',
+				type: 'gallery',
+				position: 'center',
+				caption: {
+					en: 'Player attempting to feed the Capybara',
+					'pt-BR': 'Jogador tentando alimentar a Capivara'
+				}
+			},
+			{
 				src: '/assets/projects/asumi/gallery-1.png',
 				type: 'gallery',
 				position: 'center',

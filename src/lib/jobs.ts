@@ -228,25 +228,25 @@ export const jobsDatabase: JobData[] = [
 	{
 		id: '3d-artist-generalist',
 		title: {
-			en: 'Generalist 3D Artist',
-			'pt-BR': 'Artista 3D Generalista'
+			en: 'Generalist 3D Artist (Stylized Low-Poly)',
+			'pt-BR': 'Artista 3D Generalista (Estilizado Low-Poly)'
 		},
 		description: {
-			en: 'We are looking for a versatile Generalist 3D Artist to create all the visual assets for our game, from creatures and characters to environment props and level decoration.',
-			'pt-BR': 'Procuramos um(a) Artista 3D Generalista versátil para criar todos os assets visuais do nosso jogo, desde criaturas e personagens até props de cenário e decoração de níveis.'
+			en: 'We are looking for a versatile Generalist 3D Artist to create stylized, low-poly visual assets for our game, from creatures and characters to environment props and level decoration. We\'re aiming for a charming, stylized aesthetic rather than photorealistic visuals.',
+			'pt-BR': 'Procuramos um(a) Artista 3D Generalista versátil para criar assets visuais estilizados e low-poly para o nosso jogo, desde criaturas e personagens até props de cenário e decoração de níveis. Buscamos uma estética estilizada e charmosa, não realista.'
 		},
 		responsibilities: {
 			en: [
-				'Model and texture characters, creatures, and items (high-poly and low-poly)',
-				'Model and texture environment assets and props for level decoration',
+				'Model and texture stylized low-poly characters, creatures, and items',
+				'Model and texture stylized low-poly environment assets and props for level decoration',
 				'Create rigs (skeletons) and skinning for characters and creatures',
 				'Animate movement cycles (walk, run, sleep, etc.) and character actions',
 				'Work with the technical team to ensure assets are optimized and work correctly in-game',
 				'Collaborate with the Level Designer to provide assets needed for level construction'
 			],
 			'pt-BR': [
-				'Modelar e texturizar personagens, criaturas e itens (high-poly e low-poly)',
-				'Modelar e texturizar assets de cenário e props para decoração de níveis',
+				'Modelar e texturizar personagens, criaturas e itens estilizados low-poly',
+				'Modelar e texturizar assets de cenário e props estilizados low-poly para decoração de níveis',
 				'Criar rigs (esqueletos) e skinning para personagens e criaturas',
 				'Animar ciclos de movimento (andar, correr, dormir, etc.) e ações de personagens',
 				'Trabalhar com a equipe técnica para garantir que os assets estejam otimizados e funcionem corretamente no jogo',
@@ -255,20 +255,20 @@ export const jobsDatabase: JobData[] = [
 		},
 		requirements: {
 			en: [
-				'Strong and diverse portfolio demonstrating character, creature, and environment modeling',
-				'Solid experience in 3D modeling and texturing (Blender, Maya, or similar)',
+				'Strong and diverse portfolio demonstrating stylized low-poly character, creature, and environment modeling',
+				'Solid experience in low-poly 3D modeling and texturing (Blender, Maya, or similar)',
 				'Experience in rigging and skinning',
 				'Solid 3D animation skills (preferably familiar with animation principles)',
-				'Knowledge of texturing (preferably Substance Painter or similar)',
-				'Understanding of game asset optimization (poly count, texture resolution, etc.)'
+				'Knowledge of texturing for stylized assets (preferably Substance Painter or similar)',
+				'Understanding of game asset optimization (poly count, texture resolution, draw calls, etc.)'
 			],
 			'pt-BR': [
-				'Portfólio forte e diverso demonstrando modelagem de personagens, criaturas e cenários',
-				'Experiência sólida em modelagem 3D e texturização (Blender, Maya ou similar)',
+				'Portfólio forte e diverso demonstrando modelagem estilizada low-poly de personagens, criaturas e cenários',
+				'Experiência sólida em modelagem 3D low-poly e texturização (Blender, Maya ou similar)',
 				'Experiência em rigging e skinning',
 				'Habilidade sólida em animação 3D (preferência por conhecer os princípios de animação)',
-				'Conhecimento em texturização (preferência por Substance Painter ou similar)',
-				'Compreensão de otimização de assets para jogos (contagem de polígonos, resolução de texturas, etc.)'
+				'Conhecimento em texturização para assets estilizados (preferência por Substance Painter ou similar)',
+				'Compreensão de otimização de assets para jogos (contagem de polígonos, resolução de texturas, draw calls, etc.)'
 			]
 		},
 		niceToHaves: {

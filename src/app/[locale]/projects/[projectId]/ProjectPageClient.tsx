@@ -3,12 +3,26 @@
 import { useState } from 'react';
 import ContentLayout from '../../../../components/ContentLayout';
 import Image from 'next/image';
-import ProjectLinks from '../../../../components/ProjectLinks';
-import PlatformTags from '../../../../components/PlatformTags';
 import ProjectImageVisualization from '../../../../components/ProjectImageVisualization';
+import MarkdownDescription from '../../../../components/MarkdownDescription';
 import { getGalleryImages, getTopGalleryImages } from '../../../../lib/projects';
 import { getImagePath } from '../../../../lib/imagePaths';
 import type { ProjectData } from '../../../../lib/projects';
+import {
+	FaGlobe,
+	FaGithub,
+	FaSteam,
+	FaAppStore,
+	FaGooglePlay,
+	FaYoutube,
+	FaTwitter,
+	FaDiscord,
+	FaLinkedin,
+	FaFigma,
+	FaBook,
+	FaAndroid
+} from 'react-icons/fa';
+import { SiItchdotio, SiRoblox, SiIos } from 'react-icons/si';
 
 interface ProjectPageClientProps {
 	project: ProjectData;
@@ -18,6 +32,7 @@ interface ProjectPageClientProps {
 
 export default function ProjectPageClient({ project, locale, translations }: ProjectPageClientProps) {
 	const [selectedImage, setSelectedImage] = useState<{ src: string; caption?: string } | null>(null);
+	const [hoveredPlatform, setHoveredPlatform] = useState<string | null>(null);
 
 	const localizedTitle = project.title[locale as 'en' | 'pt-BR'];
 	const localizedSubtitle = project.subtitle[locale as 'en' | 'pt-BR'];
@@ -148,28 +163,10 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 						<div className="space-y-6">
 							{project.longDescription && (
 								<div>
-									<h3 className="font-h2 text-xl font-bold mb-3">
-										{locale === 'en' ? 'Detailed Description' : 'Descrição Detalhada'}
-									</h3>
-									<div className="font-body text-gray-600 leading-relaxed whitespace-pre-line">
-										{project.longDescription[locale as 'en' | 'pt-BR']}
-									</div>
-								</div>
-							)}
-
-							{project.features && project.features[locale as 'en' | 'pt-BR']?.length > 0 && (
-								<div>
-									<h3 className="text-xl font-bold mb-3">
-										{locale === 'en' ? 'Features' : 'Características'}
-									</h3>
-									<ul className="space-y-2">
-										{project.features[locale as 'en' | 'pt-BR'].map((feature: string, index: number) => (
-											<li key={index} className="flex items-start">
-												<span className="text-blue-500 mr-2">•</span>
-												<span className="text-gray-600">{feature}</span>
-											</li>
-										))}
-									</ul>
+									<MarkdownDescription
+										content={project.longDescription[locale as 'en' | 'pt-BR']}
+										projectId={project.id}
+									/>
 								</div>
 							)}
 						</div>
@@ -249,17 +246,145 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 								</div>
 							)}
 
-							{project.platform && project.platform.length > 0 && (
-								<PlatformTags
-									platforms={project.platform}
-									platformLinks={project.platformLinks}
-									platformMessages={project.platformMessages}
-									locale={locale}
-								/>
-							)}
+							{/* Consolidated Links Section */}
+							{((project.platform && project.platform.length > 0) || (project.links && Object.keys(project.links).length > 0)) && (
+								<div className="content-card-sm">
+									<h3 className="font-h2 text-xl font-bold mb-4">
+										{locale === 'en' ? 'Links' : 'Links'}
+									</h3>
+									<div className="space-y-2">
+										{/* Platform Links */}
+										{project.platform && project.platform.map((platform, index) => {
+											const normalizedPlatform = platform.toLowerCase().replace(/\s+/g, '');
+											const platformLink = project.platformLinks?.[normalizedPlatform];
+											const platformMessage = project.platformMessages?.[normalizedPlatform];
 
-							{project.links && Object.keys(project.links).length > 0 && (
-								<ProjectLinks links={project.links} locale={locale} />
+											// Platform icon config
+											const getPlatformIcon = (p: string) => {
+												const pl = p.toLowerCase();
+												if (pl.includes('android')) return FaAndroid;
+												if (pl.includes('ios')) return SiIos;
+												if (pl.includes('windows')) return FaGlobe;
+												if (pl.includes('mac')) return FaGlobe;
+												if (pl.includes('linux')) return FaGlobe;
+												if (pl.includes('web')) return FaGlobe;
+												if (pl.includes('roblox')) return SiRoblox;
+												return FaGlobe;
+											};
+
+											const Icon = getPlatformIcon(platform);
+
+											if (platformLink) {
+												return (
+													<a
+														key={`platform-${index}`}
+														href={platformLink}
+														target="_blank"
+														rel="noopener noreferrer"
+														className="flex items-center justify-between w-full px-3 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+													>
+														<span className="flex items-center gap-2 text-sm font-medium text-gray-800">
+															<Icon className="text-base flex-shrink-0 text-blue-600" />
+															{platform}
+														</span>
+														<svg className="w-3 h-3 text-blue-600 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+														</svg>
+													</a>
+												);
+											} else {
+												const message = platformMessage?.[locale as 'en' | 'pt-BR'] || (locale === 'en' ? 'Coming soon' : 'Em breve');
+												const isHovered = hoveredPlatform === normalizedPlatform;
+												return (
+													<div
+														key={`platform-${index}`}
+														className="relative"
+														onMouseEnter={() => setHoveredPlatform(normalizedPlatform)}
+														onMouseLeave={() => setHoveredPlatform(null)}
+													>
+														<div className="flex items-center justify-between w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg opacity-60 cursor-default">
+															<span className="flex items-center gap-2 text-sm font-medium text-gray-600">
+																<Icon className="text-base flex-shrink-0 opacity-60" />
+																{platform}
+															</span>
+														</div>
+														{isHovered && (
+															<div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 z-50">
+																<div className="bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+																	{message}
+																	<div className="absolute top-full left-1/2 transform -translate-x-1/2">
+																		<div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[4px] border-transparent border-t-gray-800"></div>
+																	</div>
+																</div>
+															</div>
+														)}
+													</div>
+												);
+											}
+										})}
+
+										{/* Project Links */}
+										{project.links && Object.entries(project.links).filter(([_, url]) => url && url.trim() !== '').map(([linkType, url]) => {
+											const getLinkIcon = (type: string) => {
+												switch (type) {
+													case 'website': return FaGlobe;
+													case 'github': return FaGithub;
+													case 'steam': return FaSteam;
+													case 'itchio': return SiItchdotio;
+													case 'playStore': return FaGooglePlay;
+													case 'appStore': return FaAppStore;
+													case 'youtube': return FaYoutube;
+													case 'twitter': return FaTwitter;
+													case 'discord': return FaDiscord;
+													case 'linkedin': return FaLinkedin;
+													case 'figma': return FaFigma;
+													case 'roblox': return SiRoblox;
+													case 'wiki': return FaBook;
+													default: return FaGlobe;
+												}
+											};
+
+											const getLinkLabel = (type: string) => {
+												switch (type) {
+													case 'website': return locale === 'en' ? 'Website' : 'Website';
+													case 'github': return 'GitHub';
+													case 'steam': return 'Steam';
+													case 'itchio': return 'itch.io';
+													case 'playStore': return 'Google Play';
+													case 'appStore': return 'App Store';
+													case 'youtube': return 'YouTube';
+													case 'twitter': return 'Twitter';
+													case 'discord': return 'Discord';
+													case 'linkedin': return 'LinkedIn';
+													case 'figma': return 'Art Bible';
+													case 'roblox': return 'Roblox';
+													case 'wiki': return 'Wiki';
+													default: return type;
+												}
+											};
+
+											const Icon = getLinkIcon(linkType);
+
+											return (
+												<a
+													key={`link-${linkType}`}
+													href={url}
+													target="_blank"
+													rel="noopener noreferrer"
+													className="flex items-center justify-between w-full px-3 py-2 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+												>
+													<span className="flex items-center gap-2 text-sm font-medium text-gray-800">
+														<Icon className="text-base flex-shrink-0 text-purple-600" />
+														{getLinkLabel(linkType)}
+													</span>
+													<svg className="w-3 h-3 text-purple-600 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+													</svg>
+												</a>
+											);
+										})}
+									</div>
+								</div>
 							)}
 						</div>
 					</div>

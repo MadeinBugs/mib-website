@@ -96,8 +96,64 @@ export const projectsDatabase: ProjectData[] = [
 			'pt-BR': 'Um jogo de exploração cozy onde você convive com os animais exóticos da sua própria ilha.'
 		},
 		longDescription: {
-			en: 'Asumi is a cozy mobile-first exploration and social game, designed to be fun on both PC and mobile devices. Explore your own island filled with Brazilian fauna animals, make friendships, play music, interact with your friends, take memorable photos, and customize your character.',
-			'pt-BR': 'Asumi é um jogo "cozy" mobile-first de exploração e convivência, criado para ser divertido tanto no PC quanto em celulares e tablets. Explore sua própria ilha cheia de animais da fauna brasileira, faça amizades, toque música, interaja com seus amigos, tire fotos memoráveis e customize seu personagem.'
+			en:
+
+				`## Befriend the Inhabitants of the Island
+
+As a spirit of the forest just awoken from a deep slumber, you see yourself in an island full of birds, insects, and all kinds of animals.
+
+Explore this deep island, traversing forests, jungles, beaches and caverns. Find out more about your new home as you also make friends and grow as a little spirit.
+
+[asumi-3.jpg]
+
+## Register Everything
+
+Use your trusty homemade Camera to register important moments and discover more about how the environment works. As you take pictures, you gain precious knowledge.
+
+[asumi-1.png]
+
+## Complete the Tome
+
+You have your trusty tome, your diary, your adventurer's journal, and it is your duty to complete the descriptions of all of the animals on the island, to earn their badges and their trust.
+
+[asumi-2.png]
+
+### Features
+
+- 20+ original animals, complete with animation and a complex routine system
+- 15+ collectible items that help players get closer for the perfect photo
+- Exploration tools like camera, flute, and flashlight
+- Photo sharing with friends
+`,
+			'pt-BR':
+
+				`## Faça Amizade com os Habitantes da Ilha
+
+Como espírito da floresta recém-desperto, você se encontra em uma ilha cheia de pássaros, insetos e todo tipo de animal.
+
+Explore esta ilha profunda, atravessando florestas, selvas, praias e cavernas. Descubra mais sobre sua nova casa enquanto também faz amizades e cresce como um pequeno espírito.
+
+[asumi-3.jpg]
+
+## Registre Tudo
+
+Use sua câmera caseira para registrar momentos incríveis e descobrir mais sobre como o ecossistema funciona. Conforme você tira fotos, ganha conhecimento precioso para avançar.
+
+[asumi-1.png]
+
+## Complete o Tomo
+
+Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu dever completar as descrições de todos os animais da ilha, para ganhar seus emblemas e sua confiança.
+
+[asumi-2.png]
+
+### Características
+
+- 20+ animais originais, completos com animação e um sistema complexo de rotina
+- 15+ itens coletáveis que ajudam o player a se aproximar para tirar a foto perfeita
+- Ferramentas de exploração, como a câmera, a flauta e a lanterna
+- Compartilhamento de fotos com os amigos
+`
 		},
 		platform: ['Android', 'iOS'],
 		platformMessages: {
@@ -111,7 +167,7 @@ export const projectsDatabase: ProjectData[] = [
 			}
 		},
 		status: 'development',
-		releaseDate: '2025 Q3',
+		releaseDate: 'TBD',
 		teamSize: 6,
 		projectType: 'studio',
 		links: {

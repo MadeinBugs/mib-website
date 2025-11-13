@@ -352,7 +352,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 													case 'itchio': return 'itch.io';
 													case 'playStore': return 'Google Play';
 													case 'appStore': return 'App Store';
-													case 'youtube': return 'YouTube';
+													case 'youtube': return 'Trailer';
 													case 'twitter': return 'Twitter';
 													case 'discord': return 'Discord';
 													case 'linkedin': return 'LinkedIn';
@@ -363,7 +363,31 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 												}
 											};
 
+											const getLinkColors = (type: string) => {
+												switch (type) {
+													case 'youtube':
+														return {
+															bg: 'bg-red-50',
+															hoverBg: 'hover:bg-red-100',
+															border: 'border-red-200',
+															text: 'text-red-700',
+															icon: 'text-red-600',
+															arrow: 'text-red-600'
+														};
+													default:
+														return {
+															bg: 'bg-purple-50',
+															hoverBg: 'hover:bg-purple-100',
+															border: 'border-purple-200',
+															text: 'text-purple-700',
+															icon: 'text-purple-600',
+															arrow: 'text-purple-600'
+														};
+												}
+											};
+
 											const Icon = getLinkIcon(linkType);
+											const colors = getLinkColors(linkType);
 
 											return (
 												<a
@@ -371,13 +395,13 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 													href={url}
 													target="_blank"
 													rel="noopener noreferrer"
-													className="flex items-center justify-between w-full px-3 py-2 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg transition-all duration-200 hover:shadow-md group"
+													className={`flex items-center justify-between w-full px-3 py-2 ${colors.bg} ${colors.hoverBg} border ${colors.border} rounded-lg transition-all duration-200 hover:shadow-md group`}
 												>
-													<span className="flex items-center gap-2 text-sm font-medium text-purple-700">
-														<Icon className="text-base flex-shrink-0 text-purple-600" />
+													<span className={`flex items-center gap-2 text-sm font-medium ${colors.text}`}>
+														<Icon className={`text-base flex-shrink-0 ${colors.icon}`} />
 														{getLinkLabel(linkType)}
 													</span>
-													<svg className="w-3 h-3 text-purple-600 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<svg className={`w-3 h-3 ${colors.arrow} group-hover:translate-x-1 transition-transform`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
 														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
 													</svg>
 												</a>

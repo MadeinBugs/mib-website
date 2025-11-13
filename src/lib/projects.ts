@@ -555,7 +555,8 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 			android: 'https://play.google.com/store/apps/details?id=com.P3TGaming.Elementales&hl=pt_BR'
 		},
 		links: {
-			wiki: 'https://cyber-father-c4f.notion.site/Elementales-Wiki-76245a98df0b4e8485e88a166c985e03'
+			wiki: 'https://cyber-father-c4f.notion.site/Elementales-Wiki-76245a98df0b4e8485e88a166c985e03',
+			youtube: 'https://youtu.be/hgqBdjWYWuM?si=bORz4uAQiXIQmfY5'
 		},
 		teamSize: 3,
 		projectType: 'client',

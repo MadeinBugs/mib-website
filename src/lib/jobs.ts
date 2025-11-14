@@ -228,12 +228,12 @@ export const jobsDatabase: JobData[] = [
 	{
 		id: '3d-artist-generalist',
 		title: {
-			en: 'Generalist 3D Artist (Stylized Low-Poly)',
-			'pt-BR': 'Artista 3D Generalista (Estilizado Low-Poly)'
+			en: 'Generalist 3D Blender Artist (Stylized Low-Poly)',
+			'pt-BR': 'Artista 3D Blender Generalista (Estilizado Low-Poly)'
 		},
 		description: {
-			en: 'We are looking for a versatile Generalist 3D Artist to create stylized, low-poly visual assets for our game, from creatures and characters to environment props and level decoration. We\'re aiming for a charming, stylized aesthetic rather than photorealistic visuals.',
-			'pt-BR': 'Procuramos um(a) Artista 3D Generalista versátil para criar assets visuais estilizados e low-poly para o nosso jogo, desde criaturas e personagens até props de cenário e decoração de níveis. Buscamos uma estética estilizada e charmosa, não realista.'
+			en: 'We are looking for a versatile Generalist 3D Blender Artist to create stylized low-poly visual assets for our game, from creatures and characters to environment props and level decoration. We\'re aiming for a charming, stylized aesthetic rather than photorealistic visuals.',
+			'pt-BR': 'Procuramos um(a) Artista 3D Blender Generalista versátil para criar assets visuais estilizados low-poly no Blender para o nosso jogo, desde criaturas e personagens até props de cenário e decoração de níveis. Buscamos uma estética estilizada e charmosa, não realista.'
 		},
 		responsibilities: {
 			en: [
@@ -255,18 +255,18 @@ export const jobsDatabase: JobData[] = [
 		},
 		requirements: {
 			en: [
-				'Strong and diverse portfolio demonstrating stylized low-poly character, creature, and environment modeling',
-				'Solid experience in low-poly 3D modeling and texturing (Blender, Maya, or similar)',
-				'Experience in rigging and skinning',
-				'Solid 3D animation skills (preferably familiar with animation principles)',
+				'Diverse portfolio (mainly artists leaning towards stylized art)',
+				'Solid experience in 3D modeling with Blender',
+				'Experience with rigging',
+				'Experience with animation in Blender (knowing animation principles is a plus)',
 				'Knowledge of texturing for stylized assets (preferably Substance Painter or similar)',
 				'Understanding of game asset optimization (poly count, texture resolution, draw calls, etc.)'
 			],
 			'pt-BR': [
-				'Portfólio forte e diverso demonstrando modelagem estilizada low-poly de personagens, criaturas e cenários',
-				'Experiência sólida em modelagem 3D low-poly e texturização (Blender, Maya ou similar)',
-				'Experiência em rigging e skinning',
-				'Habilidade sólida em animação 3D (preferência por conhecer os princípios de animação)',
+				'Portfólio diverso (buscamos principalmente artistas pendendo mais para arte estilizada)',
+				'Experiência sólida em modelagem 3D com Blender',
+				'Experiência com rigging',
+				'Experiência com animação no Blender (conhecer os princípios de animação é um plus)',
 				'Conhecimento em texturização para assets estilizados (preferência por Substance Painter ou similar)',
 				'Compreensão de otimização de assets para jogos (contagem de polígonos, resolução de texturas, draw calls, etc.)'
 			]
@@ -277,7 +277,6 @@ export const jobsDatabase: JobData[] = [
 				'Knowledge of Unity\'s export/import pipeline',
 				'Experience with version control (Git)',
 				'Knowledge of asset retopology for games',
-				'Knowledge of LOD creation',
 				'Knowledge of rendering optimizations like texture batching',
 				'Experience with modular asset creation for environments',
 			],
@@ -286,7 +285,6 @@ export const jobsDatabase: JobData[] = [
 				'Conhecimento do pipeline de exportação/importação na Unity',
 				'Experiência com controle de versão (Git)',
 				'Conhecimento em retopologia de assets para jogos',
-				'Conhecimento em criação de LODs',
 				'Conhecimento de otimizações de rendering como texture batching',
 				'Experiência com criação de assets modulares para ambientes',
 			]

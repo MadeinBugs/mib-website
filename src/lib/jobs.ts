@@ -92,7 +92,7 @@ export const jobsDatabase: JobData[] = [
 			]
 		},
 		applyLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdKTooQgHmSkTd1fEnVLB4Bj8LEWubNDsj_SkTz3HbLiUolpg/viewform?usp=header',
-		active: true,
+		active: false,
 		jobDetails: {
 			en: ['Remote', 'Freelance', 'Portuguese', 'Estimated Time: Fulltime 40h/week', 'Project: [Asumi](https://www.madeinbugs.com.br/en/projects/asumi/)'],
 			'pt-BR': ['Remoto', 'Contrato PJ', 'Português', 'Tempo Estimado: Fulltime 40h/semana', 'Projeto: [Asumi](https://www.madeinbugs.com.br/pt-BR/projects/asumi/)']

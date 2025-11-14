@@ -171,7 +171,8 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 		teamSize: 6,
 		projectType: 'studio',
 		links: {
-			figma: 'https://www.figma.com/design/Pk52yH6ZwmdJxX6CwUtRb1/Asumi-%7C-Portf%C3%B3lio?node-id=0-1&p=f&t=2UqtblEiXyFUiK3E-0'
+			figma: 'https://www.figma.com/design/Pk52yH6ZwmdJxX6CwUtRb1/Asumi-%7C-Portf%C3%B3lio?node-id=0-1&p=f&t=2UqtblEiXyFUiK3E-0',
+			discord: 'https://discord.gg/YX9aDaYwnx'
 		},
 		features: {
 			en: [

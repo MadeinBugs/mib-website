@@ -100,17 +100,19 @@ export const projectsDatabase: ProjectData[] = [
 
 				`## Befriend the Inhabitants of the Island
 
-As a spirit of the forest just awoken from a deep slumber, you see yourself in an island full of birds, insects, and all kinds of animals.
+As a spirit of the forest just awoken from a deep slumber, you find yourself on an island full of birds, insects, and all kinds of animals.
 
-Explore this deep island, traversing forests, jungles, beaches and caverns. Find out more about your new home as you also make friends and grow as a little spirit.
+Explore this deep island, traversing forests, jungles, beaches and caverns. Discover more about your new home as you make friends and grow as a little spirit.
 
-[asumi-3.jpg]
+[asumi-6.png]
+[asumi-7.png]
 
 ## Register Everything
 
-Use your trusty homemade Camera to register important moments and discover more about how the environment works. As you take pictures, you gain precious knowledge.
+Use your trusty homemade Camera to register important moments and discover more about how the ecosystem works. As you take pictures, you gain precious knowledge to progress.
 
 [asumi-taking-pictures.jpg]
+[asumi-8.png]
 
 ## Complete the Tome
 
@@ -124,6 +126,8 @@ You have your trusty tome, your diary, your adventurer's journal, and it is your
 - 15+ collectible items that help players get closer for the perfect photo
 - Exploration tools like camera, flute, and flashlight
 - Photo sharing with friends
+
+[asumi-11.png]
 `,
 			'pt-BR':
 

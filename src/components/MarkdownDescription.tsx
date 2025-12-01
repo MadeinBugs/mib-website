@@ -65,7 +65,7 @@ export default function MarkdownDescription({ content, projectId }: MarkdownDesc
 						if (!src || typeof src !== 'string') return null;
 
 						return (
-							<div className="my-6 rounded-lg overflow-hidden shadow-lg">
+							<span className="block my-6 rounded-lg overflow-hidden shadow-lg">
 								<Image
 									src={getImagePath(src)}
 									alt={alt || 'Project image'}
@@ -74,7 +74,7 @@ export default function MarkdownDescription({ content, projectId }: MarkdownDesc
 									className="w-full h-auto object-cover"
 									unoptimized={src.endsWith('.gif')}
 								/>
-							</div>
+							</span>
 						);
 					},
 					code: ({ children }) => (

@@ -133,13 +133,15 @@ Como espírito da floresta recém-desperto, você se encontra em uma ilha cheia 
 
 Explore esta ilha profunda, atravessando florestas, selvas, praias e cavernas. Descubra mais sobre sua nova casa enquanto também faz amizades e cresce como um pequeno espírito.
 
-[asumi-3.jpg]
+[asumi-6.png]
+[asumi-7.png]
 
 ## Registre Tudo
 
 Use sua câmera caseira para registrar momentos incríveis e descobrir mais sobre como o ecossistema funciona. Conforme você tira fotos, ganha conhecimento precioso para avançar.
 
 [asumi-taking-pictures.jpg]
+[asumi-8.png]
 
 ## Complete o Tomo
 
@@ -153,6 +155,8 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 - 15+ itens coletáveis que ajudam o player a se aproximar para tirar a foto perfeita
 - Ferramentas de exploração, como a câmera, a flauta e a lanterna
 - Compartilhamento de fotos com os amigos
+
+[asumi-11.png]
 `
 		},
 		platform: ['Android', 'iOS'],
@@ -190,30 +194,30 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 		},
 		images: [
 			{
-				src: '/assets/projects/asumi/asumi-1.png',
+				src: '/assets/projects/asumi/asumi-4.png',
 				type: 'both',
 				position: 'center',
 				caption: {
-					en: 'Player exploring their inventory at night',
-					'pt-BR': 'Jogador explorando seu inventário à noite'
+					en: 'Player going through their inventory',
+					'pt-BR': 'Jogador navegando pelo inventário'
 				}
 			},
 			{
-				src: '/assets/projects/asumi/asumi-2.png',
+				src: '/assets/projects/asumi/asumi-5.png',
 				type: 'both',
 				position: '25% 25%',
 				caption: {
-					en: 'Player reading the Green Mantis\'s page',
-					'pt-BR': 'Jogador lendo a página do Louva-a-Deus Verde'
+					en: 'Player feeding the animals on the island',
+					'pt-BR': 'Jogador alimentando os animais na ilha'
 				}
 			},
 			{
-				src: '/assets/projects/asumi/asumi-3.jpg',
+				src: '/assets/projects/asumi/asumi-12.png',
 				type: 'both',
 				position: '75% 50%',
 				caption: {
-					en: 'Concept idea that includes taking care of a pet',
-					'pt-BR': 'Conceito que inclui cuidar de um animal de estimação'
+					en: 'Player feeding a Capybara',
+					'pt-BR': 'Jogador alimentando uma Capivara'
 				}
 			},
 			{
@@ -244,12 +248,12 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 				}
 			},
 			{
-				src: '/assets/projects/asumi/gallery-1.png',
+				src: '/assets/projects/asumi/asumi-9.png',
 				type: 'gallery',
 				position: 'center',
 				caption: {
-					en: 'The mystical tome that holds all of Asumi\'s collected knowledge and spells',
-					'pt-BR': 'O tomo místico que guarda todo o conhecimento e magias coletados por Asumi'
+					en: 'Player taking a picture of a cat',
+					'pt-BR': 'Jogador tirando uma foto de um gato'
 				}
 			}
 		],

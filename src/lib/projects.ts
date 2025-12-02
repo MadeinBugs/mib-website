@@ -104,8 +104,7 @@ As a spirit of the forest just awoken from a deep slumber, you find yourself on 
 
 Explore this deep island, traversing forests, jungles, beaches and caverns. Discover more about your new home as you make friends and grow as a little spirit.
 
-[asumi-6.png]
-[asumi-7.png]
+[asumi-6.png | asumi-7.png]
 
 ## Register Everything
 
@@ -137,8 +136,7 @@ Como espírito da floresta recém-desperto, você se encontra em uma ilha cheia 
 
 Explore esta ilha profunda, atravessando florestas, selvas, praias e cavernas. Descubra mais sobre sua nova casa enquanto também faz amizades e cresce como um pequeno espírito.
 
-[asumi-6.png]
-[asumi-7.png]
+[asumi-6.png | asumi-7.png]
 
 ## Registre Tudo
 

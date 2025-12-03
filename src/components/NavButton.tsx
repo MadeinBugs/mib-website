@@ -48,12 +48,11 @@ export default function NavButton({
         cursor: 'pointer'
       }}
     >
-      {/* Temporary: using regular img instead of Next.js Image */}
-      <img
+      <Image
         src={getImagePath(isHovered ? hoverImageSrc : imageSrc)}
         alt={labelTextKey}
-        width={150} // Increased from 120
-        height={150} // Increased from 120
+        width={150}
+        height={150}
         style={{
           display: 'block',
           width: '100%',

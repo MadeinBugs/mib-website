@@ -380,7 +380,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 													case 'figma': return 'Art Bible';
 													case 'roblox': return 'Roblox';
 													case 'wiki': return 'Wiki';
-													case 'build': return locale === 'en' ? 'Alpha Build' : 'Build Alpha';
+													case 'build': return locale === 'en' ? 'Vertical Slice Build' : 'Vertical Slice Build';
 													default: return type;
 												}
 											};

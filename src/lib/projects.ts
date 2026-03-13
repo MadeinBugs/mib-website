@@ -181,7 +181,6 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 			youtube: 'https://youtu.be/6QbVCweByhw',
 			figma: 'https://www.figma.com/design/Pk52yH6ZwmdJxX6CwUtRb1/Asumi-%7C-Portf%C3%B3lio?node-id=0-1&p=f&t=2UqtblEiXyFUiK3E-0',
 			discord: 'https://discord.gg/YX9aDaYwnx',
-			build: 'https://drive.google.com/drive/folders/1Tsry9Qw7GuEvOCrDyeYwoagVOfSzLF3Q?usp=sharing'
 		},
 		videos: ['https://youtu.be/6QbVCweByhw'],
 		features: {

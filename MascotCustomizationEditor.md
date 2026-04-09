@@ -227,7 +227,7 @@ Curated by the art director. Users can still manually pick any hex code — the 
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│ ■ Sisyphus.bmp - Paint                          [—][□][×]│  ← Title bar (decorative)
+│ ■ Sisifo.bmp - Paint                          [—][□][×]│  ← Title bar (decorative)
 ├──────────────────────────────────────────────────────────┤
 │ File  Edit  View  Help                                   │  ← Menu bar (mostly decorative/minimal)
 ├────────┬─────────────────────────────────────────────────┤

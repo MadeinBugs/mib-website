@@ -225,7 +225,7 @@ export default function MascotEditor({
 				overflow: 'hidden',
 			}}
 		>
-			<XPTitleBar title={`Sisyphus.bmp - Paint`} />
+			<XPTitleBar title={`Sisifo.bmp - Paint`} />
 			<XPMenuBar />
 
 			{/* Editor body: toolbar + canvas */}

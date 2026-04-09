@@ -79,7 +79,7 @@ export const DEFAULT_LAYERS: LayerData[] = [
 export const MASCOT_ASSETS = {
 	body: '/assets/mascot/sisyphus-body.png',
 	back: '/assets/mascot/sisyphus-back.png',
-	eyes: '/assets/mascot/sisyphus-eyes.png',
+	eyes: '/assets/mascot/sisyphus-eye.png',
 	outlines: '/assets/mascot/sisyphus-outlines.png',
 	silhouette: '/assets/mascot/sisyphus-silhouette.png',
 } as const;

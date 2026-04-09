@@ -1,14 +1,27 @@
 'use client';
 
 import { xp, raisedStyle, sunkenStyle } from './xpStyles';
-import type { Tool, SaveStatus } from './types';
+import type { Tool, SaveStatus, LayerData } from './types';
 
 interface XPToolbarProps {
 	activeTool: Tool;
 	onToolChange: (tool: Tool) => void;
 	brushSize: number;
 	onBrushSizeChange: (size: number) => void;
+	brushOpacity: number;
+	onBrushOpacityChange: (opacity: number) => void;
+	brushColor: string;
+	onBrushColorChange: (color: string) => void;
 	onRandomize: () => void;
+	onUndo: () => void;
+	onRedo: () => void;
+	canUndo: boolean;
+	canRedo: boolean;
+	layers: LayerData[];
+	activeLayerId: number;
+	onActiveLayerChange: (id: number) => void;
+	onToggleLayerVisibility: (id: number) => void;
+	onCycleMaskMode: (id: number) => void;
 	saveStatus: SaveStatus;
 	saveLabel: string;
 }
@@ -17,24 +30,42 @@ interface ToolButton {
 	tool: Tool;
 	icon: string;
 	label: string;
-	disabled?: boolean;
 }
+
+const MASK_LABELS: Record<string, string> = {
+	unmasked: 'None',
+	'mask-in': 'In',
+	'mask-out': 'Out',
+};
 
 export default function XPToolbar({
 	activeTool,
 	onToolChange,
 	brushSize,
 	onBrushSizeChange,
+	brushOpacity,
+	onBrushOpacityChange,
+	brushColor,
+	onBrushColorChange,
 	onRandomize,
+	onUndo,
+	onRedo,
+	canUndo,
+	canRedo,
+	layers,
+	activeLayerId,
+	onActiveLayerChange,
+	onToggleLayerVisibility,
+	onCycleMaskMode,
 	saveStatus,
 	saveLabel,
 }: XPToolbarProps) {
 	const tools: ToolButton[] = [
-		{ tool: 'brush', icon: '✏️', label: 'Brush', disabled: true },
-		{ tool: 'eraser', icon: '🧽', label: 'Eraser', disabled: true },
-		{ tool: 'picker', icon: '💉', label: 'Color Picker', disabled: true },
-		{ tool: 'stamp', icon: '⬟', label: 'Stamp', disabled: true },
-		{ tool: 'text', icon: 'A', label: 'Text', disabled: true },
+		{ tool: 'brush', icon: '✏️', label: 'Brush' },
+		{ tool: 'eraser', icon: '🧽', label: 'Eraser' },
+		{ tool: 'picker', icon: '💉', label: 'Color Picker' },
+		{ tool: 'stamp', icon: '⬟', label: 'Stamp' },
+		{ tool: 'text', icon: 'A', label: 'Text' },
 	];
 
 	const statusColor =
@@ -46,12 +77,14 @@ export default function XPToolbar({
 					? '#c62828'
 					: '#666';
 
+	const activeLayer = layers.find((l) => l.id === activeLayerId);
+
 	return (
 		<div
 			style={{
 				background: xp.bg,
-				width: '72px',
-				minWidth: '72px',
+				width: '82px',
+				minWidth: '82px',
 				display: 'flex',
 				flexDirection: 'column',
 				gap: '4px',
@@ -60,18 +93,11 @@ export default function XPToolbar({
 				fontFamily: xp.font,
 				fontSize: '10px',
 				userSelect: 'none',
+				overflowY: 'auto',
 			}}
 		>
 			{/* Tools label */}
-			<div
-				style={{
-					textAlign: 'center',
-					fontSize: '10px',
-					color: '#444',
-					fontWeight: 'bold',
-					marginBottom: '2px',
-				}}
-			>
+			<div style={{ textAlign: 'center', fontSize: '10px', color: '#444', fontWeight: 'bold', marginBottom: '2px' }}>
 				Tools
 			</div>
 
@@ -86,31 +112,24 @@ export default function XPToolbar({
 					background: xp.bgLight,
 				}}
 			>
-				{tools.map(({ tool, icon, label, disabled }) => (
+				{tools.map(({ tool, icon, label }) => (
 					<button
 						key={tool}
 						title={label}
-						disabled={disabled}
-						onClick={() => !disabled && onToolChange(tool)}
+						onClick={() => onToolChange(tool)}
 						style={{
 							width: '28px',
 							height: '28px',
 							display: 'flex',
 							alignItems: 'center',
 							justifyContent: 'center',
-							cursor: disabled ? 'default' : 'pointer',
+							cursor: 'pointer',
 							border: 'none',
 							fontSize: tool === 'text' ? '14px' : '16px',
 							fontWeight: tool === 'text' ? 'bold' : 'normal',
 							fontFamily: tool === 'text' ? 'serif' : 'inherit',
-							background:
-								activeTool === tool && !disabled
-									? xp.activeToolBg
-									: 'transparent',
-							opacity: disabled ? 0.4 : 1,
-							...(activeTool === tool && !disabled
-								? sunkenStyle()
-								: raisedStyle()),
+							background: activeTool === tool ? xp.activeToolBg : 'transparent',
+							...(activeTool === tool ? sunkenStyle() : raisedStyle()),
 						}}
 					>
 						{icon}
@@ -118,40 +137,126 @@ export default function XPToolbar({
 				))}
 			</div>
 
+			{/* Undo / Redo */}
+			<div style={{ display: 'flex', gap: '2px', justifyContent: 'center' }}>
+				<button
+					title="Undo (Ctrl+Z)"
+					onClick={onUndo}
+					disabled={!canUndo}
+					style={{
+						width: '32px', height: '22px', cursor: canUndo ? 'pointer' : 'default',
+						border: 'none', fontSize: '14px', background: xp.bg, opacity: canUndo ? 1 : 0.35,
+						...raisedStyle(),
+					}}
+				>↩</button>
+				<button
+					title="Redo (Ctrl+Y)"
+					onClick={onRedo}
+					disabled={!canRedo}
+					style={{
+						width: '32px', height: '22px', cursor: canRedo ? 'pointer' : 'default',
+						border: 'none', fontSize: '14px', background: xp.bg, opacity: canRedo ? 1 : 0.35,
+						...raisedStyle(),
+					}}
+				>↪</button>
+			</div>
+
 			{/* Randomize button */}
 			<button
 				title="Randomize Colors"
 				onClick={onRandomize}
 				style={{
-					width: '100%',
-					height: '28px',
-					display: 'flex',
-					alignItems: 'center',
-					justifyContent: 'center',
-					gap: '4px',
-					cursor: 'pointer',
-					border: 'none',
-					fontSize: '12px',
-					background: xp.bg,
-					...raisedStyle(),
+					width: '100%', height: '24px', display: 'flex', alignItems: 'center',
+					justifyContent: 'center', cursor: 'pointer', border: 'none', fontSize: '12px',
+					background: xp.bg, ...raisedStyle(),
 				}}
-			>
-				🎲
-			</button>
+			>🎲</button>
+
+			{/* Brush color (visible for brush/stamp/text) */}
+			{(activeTool === 'brush' || activeTool === 'stamp' || activeTool === 'text') && (
+				<div>
+					<div style={{ fontSize: '9px', color: '#444', marginBottom: '2px' }}>Color</div>
+					<input
+						type="color"
+						value={brushColor}
+						onChange={(e) => onBrushColorChange(e.target.value)}
+						style={{ width: '100%', height: '20px', padding: 0, border: '1px solid #808080', cursor: 'pointer' }}
+					/>
+				</div>
+			)}
+
+			{/* Size slider */}
+			<div>
+				<div style={{ fontSize: '9px', color: '#444' }}>Size: {brushSize}px</div>
+				<input
+					type="range" min={1} max={50} value={brushSize}
+					onChange={(e) => onBrushSizeChange(parseInt(e.target.value))}
+					style={{ width: '100%', accentColor: xp.titleGradientEnd }}
+				/>
+			</div>
+
+			{/* Opacity slider (for brush/stamp/text) */}
+			{activeTool !== 'picker' && (
+				<div>
+					<div style={{ fontSize: '9px', color: '#444' }}>Opacity: {Math.round(brushOpacity * 100)}%</div>
+					<input
+						type="range" min={5} max={100} value={Math.round(brushOpacity * 100)}
+						onChange={(e) => onBrushOpacityChange(parseInt(e.target.value) / 100)}
+						style={{ width: '100%', accentColor: xp.titleGradientEnd }}
+					/>
+				</div>
+			)}
+
+			{/* Layers panel */}
+			<div style={{ marginTop: '4px' }}>
+				<div style={{ fontSize: '9px', color: '#444', fontWeight: 'bold', marginBottom: '2px' }}>Layers</div>
+				<div style={{ ...sunkenStyle(), padding: '2px', background: xp.bgLight }}>
+					{layers.map((layer) => (
+						<div
+							key={layer.id}
+							onClick={() => onActiveLayerChange(layer.id)}
+							style={{
+								display: 'flex', alignItems: 'center', gap: '2px',
+								padding: '1px 2px', cursor: 'pointer',
+								background: layer.id === activeLayerId ? xp.activeToolBg : 'transparent',
+								fontSize: '10px',
+							}}
+						>
+							<button
+								title={layer.visible ? 'Hide layer' : 'Show layer'}
+								onClick={(e) => { e.stopPropagation(); onToggleLayerVisibility(layer.id); }}
+								style={{
+									width: '16px', height: '16px', border: 'none', cursor: 'pointer',
+									background: 'transparent', fontSize: '10px', padding: 0,
+								}}
+							>{layer.visible ? '👁' : '—'}</button>
+							<span>L{layer.id}</span>
+						</div>
+					))}
+				</div>
+			</div>
+
+			{/* Mask mode for active layer */}
+			{activeLayer && (
+				<div>
+					<div style={{ fontSize: '9px', color: '#444' }}>Mask:</div>
+					<button
+						title="Cycle mask mode: None → In → Out"
+						onClick={() => onCycleMaskMode(activeLayerId)}
+						style={{
+							width: '100%', height: '20px', fontSize: '9px',
+							cursor: 'pointer', border: 'none', background: xp.bg,
+							fontFamily: xp.font, ...raisedStyle(),
+						}}
+					>{MASK_LABELS[activeLayer.maskMode]}</button>
+				</div>
+			)}
 
 			{/* Spacer */}
 			<div style={{ flex: 1 }} />
 
 			{/* Save status */}
-			<div
-				style={{
-					textAlign: 'center',
-					fontSize: '9px',
-					color: statusColor,
-					padding: '4px 2px',
-					wordBreak: 'break-word',
-				}}
-			>
+			<div style={{ textAlign: 'center', fontSize: '9px', color: statusColor, padding: '4px 2px', wordBreak: 'break-word' }}>
 				{saveLabel}
 			</div>
 		</div>

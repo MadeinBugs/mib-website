@@ -96,4 +96,10 @@ export const mascotTranslations = {
 } as const;
 
 export type MascotLocale = keyof typeof mascotTranslations;
-export type MascotTranslations = typeof mascotTranslations['en'];
+
+// Use a structural type so pt-BR and en are both assignable
+export type MascotTranslations = {
+	[K in keyof typeof mascotTranslations['en']]: (typeof mascotTranslations['en'])[K] extends (...args: infer A) => infer R
+	? (...args: A) => R
+	: string;
+};

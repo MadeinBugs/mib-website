@@ -1,36 +1,70 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useMascotLocale } from './MascotLocaleContext';
+import type {
+	RegionsData,
+	BodyRegion,
+	EyesRegion,
+	CustomizationData,
+	Tool,
+	SaveStatus,
+} from './editor/types';
+import {
+	DEFAULT_REGIONS,
+	DEFAULT_LAYERS,
+	APPROVED_COLORS,
+} from './editor/types';
+import { xp, sunkenStyle } from './editor/xpStyles';
+import XPTitleBar from './editor/XPTitleBar';
+import XPMenuBar from './editor/XPMenuBar';
+import XPToolbar from './editor/XPToolbar';
+import XPColorPalette from './editor/XPColorPalette';
+import RegionControls from './editor/RegionControls';
+import XPStatusBar from './editor/XPStatusBar';
+import MascotCanvas from './editor/MascotCanvas';
 
-interface MascotCustomizationData {
-	// Placeholder structure — will be expanded when designing the editor
-	[key: string]: unknown;
-}
+type RegionKey = 'body' | 'back' | 'eyes';
 
 interface MascotEditorProps {
 	userId: string;
 	year: number;
-	initialData: MascotCustomizationData | null;
+	initialData: CustomizationData | null;
 	displayName: string | null;
 }
-
-type SaveStatus = 'saved' | 'saving' | 'error' | 'idle';
 
 const LOCAL_STORAGE_KEY = (userId: string, year: number) =>
 	`mascot_${userId}_${year}`;
 
-export default function MascotEditor({ userId, year, initialData, displayName }: MascotEditorProps) {
-	const [data, setData] = useState<MascotCustomizationData>(initialData ?? {});
+function buildInitialData(raw: CustomizationData | null): CustomizationData {
+	if (raw && raw.regions) return raw;
+	return { regions: { ...DEFAULT_REGIONS }, layers: [...DEFAULT_LAYERS] };
+}
+
+export default function MascotEditor({
+	userId,
+	year,
+	initialData,
+	displayName,
+}: MascotEditorProps) {
+	const [data, setData] = useState<CustomizationData>(() =>
+		buildInitialData(initialData)
+	);
 	const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+	const [activeTool, setActiveTool] = useState<Tool>('brush');
+	const [brushSize, setBrushSize] = useState(8);
+	const [activeRegion, setActiveRegion] = useState<RegionKey>('body');
+	const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
 	const { t } = useMascotLocale();
+
+	// Track whether any change has happened since mount (skip initial save)
+	const hasChangedRef = useRef(false);
 
 	// Load: Supabase is source of truth, localStorage is fallback
 	useEffect(() => {
-		if (initialData) {
+		if (initialData && initialData.regions) {
 			setData(initialData);
-			// Mirror server data to local cache
 			try {
 				localStorage.setItem(
 					LOCAL_STORAGE_KEY(userId, year),
@@ -38,11 +72,11 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 				);
 			} catch { /* localStorage unavailable */ }
 		} else {
-			// No server data — try localStorage fallback
 			try {
 				const cached = localStorage.getItem(LOCAL_STORAGE_KEY(userId, year));
 				if (cached) {
-					setData(JSON.parse(cached));
+					const parsed = JSON.parse(cached) as CustomizationData;
+					if (parsed.regions) setData(parsed);
 				}
 			} catch { /* localStorage unavailable */ }
 		}
@@ -50,7 +84,7 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 
 	// Debounced save to Supabase
 	const saveToSupabase = useCallback(
-		async (newData: MascotCustomizationData) => {
+		async (newData: CustomizationData) => {
 			setSaveStatus('saving');
 			const supabase = createClient();
 
@@ -68,7 +102,6 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 
 			if (error) {
 				setSaveStatus('error');
-				// Fallback: save to localStorage only
 				try {
 					localStorage.setItem(
 						LOCAL_STORAGE_KEY(userId, year),
@@ -78,7 +111,6 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 				return;
 			}
 
-			// On success, mirror to localStorage
 			try {
 				localStorage.setItem(
 					LOCAL_STORAGE_KEY(userId, year),
@@ -93,8 +125,7 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 
 	// Debounce: save 2 seconds after last change
 	useEffect(() => {
-		// Don't save on initial mount
-		if (Object.keys(data).length === 0) return;
+		if (!hasChangedRef.current) return;
 
 		const timeout = setTimeout(() => {
 			saveToSupabase(data);
@@ -103,58 +134,177 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 		return () => clearTimeout(timeout);
 	}, [data, saveToSupabase]);
 
-	// Update handler for child components to call
-	const updateData = useCallback((updates: Partial<MascotCustomizationData>) => {
-		setData((prev) => ({ ...prev, ...updates }));
+	// Region update handler
+	const handleRegionUpdate = useCallback(
+		(region: RegionKey, updates: Partial<BodyRegion> | Partial<EyesRegion>) => {
+			hasChangedRef.current = true;
+			setData((prev) => ({
+				...prev,
+				regions: {
+					...prev.regions,
+					[region]: { ...prev.regions[region], ...updates },
+				},
+			}));
+			setSaveStatus('idle');
+		},
+		[]
+	);
+
+	// Palette swatch click → update active region color
+	const handlePaletteColor = useCallback(
+		(color: string) => {
+			handleRegionUpdate(activeRegion, { color });
+		},
+		[activeRegion, handleRegionUpdate]
+	);
+
+	// Randomize
+	const handleRandomize = useCallback(() => {
+		hasChangedRef.current = true;
+		const pick = () =>
+			APPROVED_COLORS[Math.floor(Math.random() * APPROVED_COLORS.length)];
+		const randomPattern = (): BodyRegion['pattern'] => {
+			if (Math.random() < 0.5) {
+				return { type: 'none', color: '#000000', opacity: 1.0, rotation: 0 };
+			}
+			const types = ['squiggly', 'stripes', 'dots', 'stars'] as const;
+			return {
+				type: types[Math.floor(Math.random() * types.length)],
+				color: pick(),
+				opacity: 0.8 + Math.random() * 0.2,
+				rotation: Math.floor(Math.random() * 360),
+			};
+		};
+
+		setData((prev) => ({
+			...prev,
+			regions: {
+				body: {
+					color: pick(),
+					opacity: 1.0,
+					pattern: randomPattern(),
+				},
+				back: {
+					color: pick(),
+					opacity: 1.0,
+					pattern: randomPattern(),
+				},
+				eyes: {
+					color: pick(),
+					opacity: 1.0,
+				},
+			},
+		}));
 		setSaveStatus('idle');
 	}, []);
 
+	const handleCursorMove = useCallback((x: number, y: number) => {
+		setCursorPos({ x, y });
+	}, []);
+
+	// Save status label
+	const saveLabel =
+		saveStatus === 'saved'
+			? t.saved
+			: saveStatus === 'saving'
+				? t.saving
+				: saveStatus === 'error'
+					? t.saveError
+					: t.ready;
+
 	return (
-		<div className="p-6 max-w-4xl mx-auto space-y-6">
-			{/* Header */}
-			<div className="text-center mb-8">
-				<h2 className="font-h2 text-2xl font-bold text-neutral-800 mb-2">
-					{t.editorTitle}
-				</h2>
-				<p className="text-neutral-600 font-body">
-					{displayName ? t.editorWelcome(displayName) : t.editorWelcomeAnon}{' '}
-					{t.editorSubtitle(year)}
-				</p>
-			</div>
+		<div
+			style={{
+				display: 'flex',
+				flexDirection: 'column',
+				border: `2px solid ${xp.border}`,
+				background: xp.bg,
+				maxWidth: '900px',
+				margin: '0 auto',
+				boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
+				overflow: 'hidden',
+			}}
+		>
+			<XPTitleBar title={`Sisyphus.bmp - Paint`} />
+			<XPMenuBar />
 
-			{/* Save status indicator */}
-			<div className="flex justify-end">
-				<span
-					className={`text-sm font-body px-3 py-1 rounded-full ${saveStatus === 'saved'
-						? 'bg-green-100 text-green-700'
-						: saveStatus === 'saving'
-							? 'bg-yellow-100 text-yellow-700'
-							: saveStatus === 'error'
-								? 'bg-red-100 text-red-700'
-								: 'bg-neutral-100 text-neutral-500'
-						}`}
+			{/* Editor body: toolbar + canvas */}
+			<div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+				<XPToolbar
+					activeTool={activeTool}
+					onToolChange={setActiveTool}
+					brushSize={brushSize}
+					onBrushSizeChange={setBrushSize}
+					onRandomize={handleRandomize}
+					saveStatus={saveStatus}
+					saveLabel={saveLabel}
+				/>
+
+				{/* Canvas area with sunken border */}
+				<div
+					style={{
+						flex: 1,
+						padding: '4px',
+						display: 'flex',
+						flexDirection: 'column',
+					}}
 				>
-					{saveStatus === 'saved' && t.saved}
-					{saveStatus === 'saving' && t.saving}
-					{saveStatus === 'error' && t.saveError}
-					{saveStatus === 'idle' && t.ready}
-				</span>
+					<div
+						style={{
+							flex: 1,
+							...sunkenStyle(),
+							padding: '2px',
+							background: '#C0C0C0',
+							display: 'flex',
+							minHeight: '400px',
+							maxHeight: '620px',
+						}}
+					>
+						<MascotCanvas
+							regions={data.regions}
+							onCursorMove={handleCursorMove}
+						/>
+					</div>
+				</div>
 			</div>
 
-			{/* Editor placeholder — will be replaced with actual mascot customization UI */}
-			<div className="bg-white rounded-crayon border-2 border-amber-200 p-8 text-center">
-				<p className="text-neutral-500 font-body text-lg">
-					{t.editorPlaceholder}
-				</p>
-				<p className="text-neutral-400 font-body text-sm mt-2">
-					{t.editorPlaceholderSub}
-				</p>
-
-				{/* Temporary: show raw data for debugging */}
-				<pre className="mt-4 text-left bg-neutral-50 p-4 rounded-lg text-xs overflow-auto max-h-40">
-					{JSON.stringify(data, null, 2)}
-				</pre>
+			{/* Bottom bar: palette + region controls */}
+			<div
+				style={{
+					display: 'flex',
+					alignItems: 'center',
+					gap: '16px',
+					padding: '4px 8px',
+					borderTop: `1px solid ${xp.border}`,
+					background: xp.bg,
+					flexWrap: 'wrap',
+				}}
+			>
+				<XPColorPalette
+					selectedColor={data.regions[activeRegion].color}
+					onColorSelect={handlePaletteColor}
+				/>
+				<div
+					style={{
+						width: '1px',
+						height: '28px',
+						background: xp.border,
+					}}
+				/>
+				<RegionControls
+					regions={data.regions}
+					activeRegion={activeRegion}
+					onActiveRegionChange={setActiveRegion}
+					onRegionUpdate={handleRegionUpdate}
+				/>
 			</div>
+
+			<XPStatusBar
+				cursorX={cursorPos.x}
+				cursorY={cursorPos.y}
+				activeLayer={2}
+				activeTool={activeTool.charAt(0).toUpperCase() + activeTool.slice(1)}
+			/>
 		</div>
 	);
 }

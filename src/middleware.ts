@@ -32,18 +32,23 @@ export async function middleware(request: NextRequest) {
 
 	const pathname = request.nextUrl.pathname;
 
-	// Allow unauthenticated access to login and register pages
-	const isAuthPage =
+	// Allow unauthenticated access to login, register, and registration API routes
+	const isPublicRoute =
 		pathname.startsWith('/mascot/login') ||
-		pathname.startsWith('/mascot/register');
+		pathname.startsWith('/mascot/register') ||
+		pathname.startsWith('/mascot/api/validate-invite') ||
+		pathname.startsWith('/mascot/api/consume-invite');
 
-	if (!user && !isAuthPage) {
+	if (!user && !isPublicRoute) {
 		const url = request.nextUrl.clone();
 		url.pathname = '/mascot/login';
 		return NextResponse.redirect(url);
 	}
 
-	// Redirect authenticated users away from auth pages
+	// Redirect authenticated users away from auth pages (not API routes)
+	const isAuthPage =
+		pathname.startsWith('/mascot/login') ||
+		pathname.startsWith('/mascot/register');
 	if (user && isAuthPage) {
 		const url = request.nextUrl.clone();
 		url.pathname = '/mascot';

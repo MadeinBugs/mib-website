@@ -28,22 +28,11 @@ export default async function MascotPage() {
 		.single();
 
 	return (
-		<div className="p-6 max-w-4xl mx-auto">
-			<div className="text-center mb-8">
-				<h1 className="mb-2" style={{ fontSize: '2.5rem' }}>
-					Customize Your Sisyphus
-				</h1>
-				<p className="text-neutral-600 font-body">
-					{profile?.display_name ? `Welcome, ${profile.display_name}!` : 'Welcome!'}{' '}
-					Create your unique version of Sisyphus for the {CURRENT_YEAR} team poster.
-				</p>
-			</div>
-
-			<MascotEditor
-				userId={user.id}
-				year={CURRENT_YEAR}
-				initialData={customization?.customization_data ?? null}
-			/>
-		</div>
+		<MascotEditor
+			userId={user.id}
+			year={CURRENT_YEAR}
+			initialData={customization?.customization_data ?? null}
+			displayName={profile?.display_name ?? null}
+		/>
 	);
 }

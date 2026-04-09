@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { useMascotLocale } from './MascotLocaleContext';
 
 interface MascotCustomizationData {
 	// Placeholder structure — will be expanded when designing the editor
@@ -12,6 +13,7 @@ interface MascotEditorProps {
 	userId: string;
 	year: number;
 	initialData: MascotCustomizationData | null;
+	displayName: string | null;
 }
 
 type SaveStatus = 'saved' | 'saving' | 'error' | 'idle';
@@ -19,9 +21,10 @@ type SaveStatus = 'saved' | 'saving' | 'error' | 'idle';
 const LOCAL_STORAGE_KEY = (userId: string, year: number) =>
 	`mascot_${userId}_${year}`;
 
-export default function MascotEditor({ userId, year, initialData }: MascotEditorProps) {
+export default function MascotEditor({ userId, year, initialData, displayName }: MascotEditorProps) {
 	const [data, setData] = useState<MascotCustomizationData>(initialData ?? {});
 	const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+	const { t } = useMascotLocale();
 
 	// Load: Supabase is source of truth, localStorage is fallback
 	useEffect(() => {
@@ -107,33 +110,44 @@ export default function MascotEditor({ userId, year, initialData }: MascotEditor
 	}, []);
 
 	return (
-		<div className="space-y-6">
+		<div className="p-6 max-w-4xl mx-auto space-y-6">
+			{/* Header */}
+			<div className="text-center mb-8">
+				<h2 className="font-h2 text-2xl font-bold text-neutral-800 mb-2">
+					{t.editorTitle}
+				</h2>
+				<p className="text-neutral-600 font-body">
+					{displayName ? t.editorWelcome(displayName) : t.editorWelcomeAnon}{' '}
+					{t.editorSubtitle(year)}
+				</p>
+			</div>
+
 			{/* Save status indicator */}
 			<div className="flex justify-end">
 				<span
 					className={`text-sm font-body px-3 py-1 rounded-full ${saveStatus === 'saved'
-							? 'bg-green-100 text-green-700'
-							: saveStatus === 'saving'
-								? 'bg-yellow-100 text-yellow-700'
-								: saveStatus === 'error'
-									? 'bg-red-100 text-red-700'
-									: 'bg-neutral-100 text-neutral-500'
+						? 'bg-green-100 text-green-700'
+						: saveStatus === 'saving'
+							? 'bg-yellow-100 text-yellow-700'
+							: saveStatus === 'error'
+								? 'bg-red-100 text-red-700'
+								: 'bg-neutral-100 text-neutral-500'
 						}`}
 				>
-					{saveStatus === 'saved' && '✓ Saved'}
-					{saveStatus === 'saving' && 'Saving...'}
-					{saveStatus === 'error' && '⚠ Save failed — stored locally'}
-					{saveStatus === 'idle' && 'Ready'}
+					{saveStatus === 'saved' && t.saved}
+					{saveStatus === 'saving' && t.saving}
+					{saveStatus === 'error' && t.saveError}
+					{saveStatus === 'idle' && t.ready}
 				</span>
 			</div>
 
 			{/* Editor placeholder — will be replaced with actual mascot customization UI */}
 			<div className="bg-white rounded-crayon border-2 border-amber-200 p-8 text-center">
 				<p className="text-neutral-500 font-body text-lg">
-					🎨 Mascot editor coming soon!
+					{t.editorPlaceholder}
 				</p>
 				<p className="text-neutral-400 font-body text-sm mt-2">
-					Customization tools will appear here.
+					{t.editorPlaceholderSub}
 				</p>
 
 				{/* Temporary: show raw data for debugging */}

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import { useMascotLocale } from '@/components/mascot/MascotLocaleContext';
 
 export default function LoginPage() {
 	const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ export default function LoginPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
+	const { t } = useMascotLocale();
 
 	async function handleLogin(e: React.FormEvent) {
 		e.preventDefault();
@@ -33,19 +35,19 @@ export default function LoginPage() {
 	}
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50 p-4">
+		<div className="min-h-screen flex items-center justify-center p-4">
 			<div className="w-full max-w-md bg-white rounded-crayon border-2 border-amber-300 shadow-xl p-8">
-				<h1 className="text-center mb-2" style={{ fontSize: '3rem' }}>
-					Sisyphus Studio
-				</h1>
+				<h2 className="font-h2 text-2xl font-bold text-center text-neutral-800 mb-2">
+					{t.loginTitle}
+				</h2>
 				<p className="text-center text-neutral-500 font-body mb-8">
-					Sign in to customize your mascot
+					{t.loginSubtitle}
 				</p>
 
 				<form onSubmit={handleLogin} className="space-y-5">
 					<div>
 						<label htmlFor="email" className="block text-sm font-semibold text-neutral-700 mb-1">
-							Email
+							{t.emailLabel}
 						</label>
 						<input
 							id="email"
@@ -54,13 +56,13 @@ export default function LoginPage() {
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:border-primary-400 focus:outline-none transition-colors font-body"
-							placeholder="you@madeinbugs.com"
+							placeholder={t.emailPlaceholder}
 						/>
 					</div>
 
 					<div>
 						<label htmlFor="password" className="block text-sm font-semibold text-neutral-700 mb-1">
-							Password
+							{t.passwordLabel}
 						</label>
 						<input
 							id="password"
@@ -69,7 +71,7 @@ export default function LoginPage() {
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:border-primary-400 focus:outline-none transition-colors font-body"
-							placeholder="••••••••"
+							placeholder={t.passwordPlaceholder}
 						/>
 					</div>
 
@@ -82,16 +84,16 @@ export default function LoginPage() {
 					<button
 						type="submit"
 						disabled={loading}
-						className="w-full btn-crayon disabled:opacity-50 disabled:cursor-not-allowed"
+						className="w-full inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 hover:scale-105 transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
 					>
-						{loading ? 'Signing in...' : 'Sign In'}
+						{loading ? t.signingIn : t.signIn}
 					</button>
 				</form>
 
 				<p className="text-center text-sm text-neutral-500 mt-6 font-body">
-					Don&apos;t have an account?{' '}
+					{t.noAccount}{' '}
 					<a href="/mascot/register" className="text-primary-500 hover:text-primary-600 font-semibold">
-						Register with invite code
+						{t.registerLink}
 					</a>
 				</p>
 			</div>

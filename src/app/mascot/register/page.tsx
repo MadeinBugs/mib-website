@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
+import { useMascotLocale } from '@/components/mascot/MascotLocaleContext';
 
 export default function RegisterPage() {
 	const [displayName, setDisplayName] = useState('');
@@ -12,6 +13,7 @@ export default function RegisterPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
+	const { t } = useMascotLocale();
 
 	async function handleRegister(e: React.FormEvent) {
 		e.preventDefault();
@@ -27,8 +29,8 @@ export default function RegisterPage() {
 			});
 
 			if (!validateRes.ok) {
-				const data = await validateRes.json();
-				setError(data.error || 'Invalid invite code');
+				const data = await validateRes.json().catch(() => ({}));
+				setError(data.error || t.invalidInviteCode);
 				setLoading(false);
 				return;
 			}
@@ -66,34 +68,35 @@ export default function RegisterPage() {
 			});
 
 			if (!consumeRes.ok) {
-				const data = await consumeRes.json();
-				setError(data.error || 'Registration failed');
+				const data = await consumeRes.json().catch(() => ({}));
+				setError(data.error || t.registrationFailed);
 				setLoading(false);
 				return;
 			}
 
 			router.push('/mascot');
 			router.refresh();
-		} catch {
-			setError('An unexpected error occurred');
+		} catch (err) {
+			console.error('Registration error:', err);
+			setError(t.unexpectedError);
 			setLoading(false);
 		}
 	}
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-amber-50 p-4">
+		<div className="min-h-screen flex items-center justify-center p-4">
 			<div className="w-full max-w-md bg-white rounded-crayon border-2 border-amber-300 shadow-xl p-8">
-				<h1 className="text-center mb-2" style={{ fontSize: '3rem' }}>
-					Join the Team
-				</h1>
+				<h2 className="font-h2 text-2xl font-bold text-center text-neutral-800 mb-2">
+					{t.registerTitle}
+				</h2>
 				<p className="text-center text-neutral-500 font-body mb-8">
-					Create your account with an invite code
+					{t.registerSubtitle}
 				</p>
 
 				<form onSubmit={handleRegister} className="space-y-5">
 					<div>
 						<label htmlFor="inviteCode" className="block text-sm font-semibold text-neutral-700 mb-1">
-							Invite Code
+							{t.inviteCodeLabel}
 						</label>
 						<input
 							id="inviteCode"
@@ -102,13 +105,13 @@ export default function RegisterPage() {
 							value={inviteCode}
 							onChange={(e) => setInviteCode(e.target.value)}
 							className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:border-primary-400 focus:outline-none transition-colors font-body font-mono tracking-wider"
-							placeholder="XXXX-XXXX-XXXX"
+							placeholder={t.inviteCodePlaceholder}
 						/>
 					</div>
 
 					<div>
 						<label htmlFor="displayName" className="block text-sm font-semibold text-neutral-700 mb-1">
-							Display Name
+							{t.displayNameLabel}
 						</label>
 						<input
 							id="displayName"
@@ -117,13 +120,13 @@ export default function RegisterPage() {
 							value={displayName}
 							onChange={(e) => setDisplayName(e.target.value)}
 							className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:border-primary-400 focus:outline-none transition-colors font-body"
-							placeholder="Your name"
+							placeholder={t.displayNamePlaceholder}
 						/>
 					</div>
 
 					<div>
 						<label htmlFor="email" className="block text-sm font-semibold text-neutral-700 mb-1">
-							Email
+							{t.emailLabel}
 						</label>
 						<input
 							id="email"
@@ -132,13 +135,13 @@ export default function RegisterPage() {
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
 							className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:border-primary-400 focus:outline-none transition-colors font-body"
-							placeholder="you@madeinbugs.com"
+							placeholder={t.emailPlaceholder}
 						/>
 					</div>
 
 					<div>
 						<label htmlFor="password" className="block text-sm font-semibold text-neutral-700 mb-1">
-							Password
+							{t.passwordLabel}
 						</label>
 						<input
 							id="password"
@@ -148,7 +151,7 @@ export default function RegisterPage() {
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:border-primary-400 focus:outline-none transition-colors font-body"
-							placeholder="At least 6 characters"
+							placeholder={t.passwordMinLength}
 						/>
 					</div>
 
@@ -161,16 +164,16 @@ export default function RegisterPage() {
 					<button
 						type="submit"
 						disabled={loading}
-						className="w-full btn-crayon disabled:opacity-50 disabled:cursor-not-allowed"
+						className="w-full inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 hover:scale-105 transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
 					>
-						{loading ? 'Creating account...' : 'Create Account'}
+						{loading ? t.creatingAccount : t.createAccount}
 					</button>
 				</form>
 
 				<p className="text-center text-sm text-neutral-500 mt-6 font-body">
-					Already have an account?{' '}
+					{t.hasAccount}{' '}
 					<a href="/mascot/login" className="text-primary-500 hover:text-primary-600 font-semibold">
-						Sign in
+						{t.signInLink}
 					</a>
 				</p>
 			</div>

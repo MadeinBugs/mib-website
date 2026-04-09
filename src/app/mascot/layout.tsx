@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import '../globals.css';
+import MascotLayoutClient from '@/components/mascot/MascotLayoutClient';
 
 export const metadata = {
 	title: 'Sisyphus Studio — Made in Bugs',
@@ -25,28 +26,8 @@ export default async function MascotLayout({
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
-			{user && (
-				<header className="flex items-center justify-between px-6 py-3 bg-white/80 backdrop-blur-sm border-b-2 border-amber-200">
-					<div className="flex items-center gap-3">
-						<h2 className="font-logo text-lg text-neutral-800">
-							Sisyphus Studio
-						</h2>
-					</div>
-					<div className="flex items-center gap-4">
-						<span className="text-sm font-body text-neutral-600">
-							{displayName}
-						</span>
-						<a
-							href="/mascot/logout"
-							className="text-sm font-body text-primary-500 hover:text-primary-600 font-semibold transition-colors"
-						>
-							Sign out
-						</a>
-					</div>
-				</header>
-			)}
-			<main>{children}</main>
-		</div>
+		<MascotLayoutClient isLoggedIn={!!user} displayName={displayName}>
+			{children}
+		</MascotLayoutClient>
 	);
 }

@@ -302,7 +302,7 @@ export default function MascotEditor({
 			<XPStatusBar
 				cursorX={cursorPos.x}
 				cursorY={cursorPos.y}
-				activeLayer={2}
+				activeLayer={4}
 				activeTool={activeTool.charAt(0).toUpperCase() + activeTool.slice(1)}
 			/>
 		</div>

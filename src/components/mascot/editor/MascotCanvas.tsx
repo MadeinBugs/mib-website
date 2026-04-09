@@ -1,13 +1,66 @@
 'use client';
 
-import { useRef, useEffect, useState, useCallback } from 'react';
-import { Stage, Layer, Ellipse, Rect, Circle, Line, Group } from 'react-konva';
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
+import { Stage, Layer, Image as KonvaImage, Ellipse, Circle, Line, Group, Rect, Text } from 'react-konva';
 import type { RegionsData } from './types';
-import { CANVAS_SIZE } from './types';
+import { CANVAS_SIZE, MASCOT_ASSETS } from './types';
 
 interface MascotCanvasProps {
 	regions: RegionsData;
 	onCursorMove: (x: number, y: number) => void;
+}
+
+// Hook to load an image from a URL, returns null if not yet loaded or failed
+function useImage(src: string): HTMLImageElement | null {
+	const [image, setImage] = useState<HTMLImageElement | null>(null);
+
+	useEffect(() => {
+		const img = new window.Image();
+		img.crossOrigin = 'anonymous';
+		img.onload = () => setImage(img);
+		img.onerror = () => setImage(null);
+		img.src = src;
+		return () => {
+			img.onload = null;
+			img.onerror = null;
+		};
+	}, [src]);
+
+	return image;
+}
+
+// Create a tinted version of an image by compositing color through it
+// Uses an offscreen canvas with 'multiply' blend mode
+function useTintedCanvas(
+	image: HTMLImageElement | null,
+	color: string,
+	opacity: number
+): HTMLCanvasElement | null {
+	return useMemo(() => {
+		if (!image) return null;
+
+		const canvas = document.createElement('canvas');
+		canvas.width = CANVAS_SIZE;
+		canvas.height = CANVAS_SIZE;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return null;
+
+		// Draw the white region PNG
+		ctx.globalAlpha = opacity;
+		ctx.drawImage(image, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+		// Multiply with the chosen color — white pixels become the color, transparent stays transparent
+		ctx.globalCompositeOperation = 'multiply';
+		ctx.fillStyle = color;
+		ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+		// Restore alpha from original image (multiply doesn't preserve it)
+		ctx.globalCompositeOperation = 'destination-in';
+		ctx.globalAlpha = opacity;
+		ctx.drawImage(image, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+		return canvas;
+	}, [image, color, opacity]);
 }
 
 export default function MascotCanvas({
@@ -16,6 +69,19 @@ export default function MascotCanvas({
 }: MascotCanvasProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [scale, setScale] = useState(1);
+
+	// Load artist PNGs
+	const bodyImg = useImage(MASCOT_ASSETS.body);
+	const backImg = useImage(MASCOT_ASSETS.back);
+	const eyesImg = useImage(MASCOT_ASSETS.eyes);
+	const outlinesImg = useImage(MASCOT_ASSETS.outlines);
+
+	// Create tinted canvases for each region
+	const tintedBody = useTintedCanvas(bodyImg, regions.body.color, regions.body.opacity);
+	const tintedBack = useTintedCanvas(backImg, regions.back.color, regions.back.opacity);
+	const tintedEyes = useTintedCanvas(eyesImg, regions.eyes.color, regions.eyes.opacity);
+
+	const assetsLoaded = !!(bodyImg && backImg && eyesImg && outlinesImg);
 
 	// Responsive scaling: fit canvas to container
 	useEffect(() => {
@@ -47,7 +113,7 @@ export default function MascotCanvas({
 		[scale, onCursorMove]
 	);
 
-	// Center coordinates
+	// Center coordinates for placeholder shapes
 	const cx = CANVAS_SIZE / 2;
 	const cy = CANVAS_SIZE / 2;
 
@@ -71,119 +137,92 @@ export default function MascotCanvas({
 				onMouseMove={handleMouseMove}
 				style={{ cursor: 'crosshair' }}
 			>
-				{/* Layer 0: Sisyphus base (placeholder shapes) */}
-				<Layer listening={false}>
-					{/* Body - main body ellipse */}
-					<Ellipse
-						x={cx}
-						y={cy + 40}
-						radiusX={220}
-						radiusY={280}
-						fill={regions.body.color}
-						opacity={regions.body.opacity}
-						stroke="#000"
-						strokeWidth={3}
-					/>
+				{assetsLoaded ? (
+					<>
+						{/* Layer 0: Body + Back (tinted PNGs) */}
+						<Layer listening={false}>
+							{tintedBack && (
+								<KonvaImage image={tintedBack} x={0} y={0} width={CANVAS_SIZE} height={CANVAS_SIZE} />
+							)}
+							{tintedBody && (
+								<KonvaImage image={tintedBody} x={0} y={0} width={CANVAS_SIZE} height={CANVAS_SIZE} />
+							)}
+						</Layer>
 
-					{/* Back - shell/back region */}
-					<Ellipse
-						x={cx}
-						y={cy - 40}
-						radiusX={180}
-						radiusY={200}
-						fill={regions.back.color}
-						opacity={regions.back.opacity}
-						stroke="#000"
-						strokeWidth={3}
-					/>
+						{/* Layer 1: Eyes (tinted PNG) */}
+						<Layer listening={false}>
+							{tintedEyes && (
+								<KonvaImage image={tintedEyes} x={0} y={0} width={CANVAS_SIZE} height={CANVAS_SIZE} />
+							)}
+						</Layer>
 
-					{/* Eyes - two circles */}
-					<Group>
-						<Circle
-							x={cx - 60}
-							y={cy - 80}
-							radius={35}
-							fill={regions.eyes.color}
-							opacity={regions.eyes.opacity}
-							stroke="#000"
-							strokeWidth={3}
-						/>
-						{/* Pupil left */}
-						<Circle
-							x={cx - 50}
-							y={cy - 80}
-							radius={12}
-							fill="#000"
-						/>
-						<Circle
-							x={cx + 60}
-							y={cy - 80}
-							radius={35}
-							fill={regions.eyes.color}
-							opacity={regions.eyes.opacity}
-							stroke="#000"
-							strokeWidth={3}
-						/>
-						{/* Pupil right */}
-						<Circle
-							x={cx + 70}
-							y={cy - 80}
-							radius={12}
-							fill="#000"
-						/>
-					</Group>
+						{/* Layer 2: Patterns — placeholder, implemented in Phase C */}
+						<Layer listening={false} />
 
-					{/* Legs - simple lines */}
-					{[
-						[-140, 180, -200, 300],
-						[-80, 220, -100, 340],
-						[80, 220, 100, 340],
-						[140, 180, 200, 300],
-					].map(([x1, y1, x2, y2], i) => (
-						<Line
-							key={i}
-							points={[cx + x1, cy + y1, cx + x2, cy + y2]}
-							stroke="#000"
-							strokeWidth={12}
-							lineCap="round"
-						/>
-					))}
+						{/* Layer 3: Outlines & details (untinted) */}
+						<Layer listening={false}>
+							<KonvaImage image={outlinesImg} x={0} y={0} width={CANVAS_SIZE} height={CANVAS_SIZE} />
+						</Layer>
 
-					{/* Antennae */}
-					<Line
-						points={[cx - 40, cy - 240, cx - 80, cy - 340]}
-						stroke="#000"
-						strokeWidth={4}
-						lineCap="round"
-					/>
-					<Circle
-						x={cx - 80}
-						y={cy - 345}
-						radius={8}
-						fill={regions.body.color}
-						opacity={regions.body.opacity}
-						stroke="#000"
-						strokeWidth={3}
-					/>
-					<Line
-						points={[cx + 40, cy - 240, cx + 80, cy - 340]}
-						stroke="#000"
-						strokeWidth={4}
-						lineCap="round"
-					/>
-					<Circle
-						x={cx + 80}
-						y={cy - 345}
-						radius={8}
-						fill={regions.body.color}
-						opacity={regions.body.opacity}
-						stroke="#000"
-						strokeWidth={3}
-					/>
-
-					{/* Placeholder label */}
-					{/* Text rendered via a simple rect overlay - actual SVG will replace all of this */}
-				</Layer>
+						{/* Layers 4, 5, 6: Drawable — placeholder, implemented in Phase B */}
+						<Layer />
+					</>
+				) : (
+					<>
+						{/* Placeholder shapes while PNGs are not yet available */}
+						<Layer listening={false}>
+							{/* Body */}
+							<Ellipse
+								x={cx}
+								y={cy + 40}
+								radiusX={220}
+								radiusY={280}
+								fill={regions.body.color}
+								opacity={regions.body.opacity}
+								stroke="#000"
+								strokeWidth={3}
+							/>
+							{/* Back/shell */}
+							<Ellipse
+								x={cx}
+								y={cy - 40}
+								radiusX={180}
+								radiusY={200}
+								fill={regions.back.color}
+								opacity={regions.back.opacity}
+								stroke="#000"
+								strokeWidth={3}
+							/>
+							{/* Eyes */}
+							<Group>
+								<Circle x={cx - 60} y={cy - 80} radius={35} fill={regions.eyes.color} opacity={regions.eyes.opacity} stroke="#000" strokeWidth={3} />
+								<Circle x={cx - 50} y={cy - 80} radius={12} fill="#000" />
+								<Circle x={cx + 60} y={cy - 80} radius={35} fill={regions.eyes.color} opacity={regions.eyes.opacity} stroke="#000" strokeWidth={3} />
+								<Circle x={cx + 70} y={cy - 80} radius={12} fill="#000" />
+							</Group>
+							{/* Legs */}
+							{[[-140, 180, -200, 300], [-80, 220, -100, 340], [80, 220, 100, 340], [140, 180, 200, 300]].map(([x1, y1, x2, y2], i) => (
+								<Line key={i} points={[cx + x1, cy + y1, cx + x2, cy + y2]} stroke="#000" strokeWidth={12} lineCap="round" />
+							))}
+							{/* Antennae */}
+							<Line points={[cx - 40, cy - 240, cx - 80, cy - 340]} stroke="#000" strokeWidth={4} lineCap="round" />
+							<Circle x={cx - 80} y={cy - 345} radius={8} fill={regions.body.color} opacity={regions.body.opacity} stroke="#000" strokeWidth={3} />
+							<Line points={[cx + 40, cy - 240, cx + 80, cy - 340]} stroke="#000" strokeWidth={4} lineCap="round" />
+							<Circle x={cx + 80} y={cy - 345} radius={8} fill={regions.body.color} opacity={regions.body.opacity} stroke="#000" strokeWidth={3} />
+							{/* Label */}
+							<Text
+								x={cx - 180}
+								y={cy + 340}
+								width={360}
+								text="⚠ Place artist PNGs in /public/assets/mascot/"
+								fontSize={16}
+								fontFamily="Tahoma, sans-serif"
+								fill="#888"
+								align="center"
+							/>
+						</Layer>
+					</>
+				)}
 			</Stage>
 		</div>
 	);

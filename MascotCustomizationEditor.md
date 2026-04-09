@@ -2,38 +2,67 @@
 
 ## Overview
 
-A browser-based image editor where users customize the Sisyphus mascot by recoloring SVG regions, applying patterns, and drawing freely on layered canvases. The editor has a **Windows XP Paint** aesthetic. Built with **React** + **Konva.js** (`react-konva`).
+A browser-based image editor where users customize the Sisyphus mascot by tinting PNG region layers, applying patterns, and drawing freely on layered canvases. The editor has a **Windows XP Paint** aesthetic. Built with **React** + **Konva.js** (`react-konva`).
 
 ---
+
+## Artist Deliverables
+
+| Asset | Format | Size | Count | Notes |
+|-------|--------|------|-------|-------|
+| Body region | PNG with alpha | 1024×1024 | 1 | Body only in white, everything else transparent |
+| Back/shell region | PNG with alpha | 1024×1024 | 1 | Back only in white, everything else transparent |
+| Eyes region | PNG with alpha | 1024×1024 | 1 | Eyes only in white, everything else transparent |
+| Outlines & details | PNG with alpha | 1024×1024 | 1 | Black lines, shading, texture — transparent background |
+| Full silhouette | PNG with alpha | 1024×1024 | 1 | Solid white filled shape of entire mascot — transparent background |
+| Pattern: Squiggly | SVG | 256×256 | 1 | Seamlessly tileable |
+| Pattern: Stripes | SVG | 256×256 | 1 | Seamlessly tileable |
+| Pattern: Dots | SVG | 256×256 | 1 | Seamlessly tileable |
+| Pattern: Stars | SVG | 256×256 | 1 | Seamlessly tileable |
+| Stamp shapes | SVG | 128×128 | ~5+ | Star, heart, circle, lightning bolt, etc. |
 
 ## Layer Architecture
 
 ```
-Layer 4 (drawable)   ─── User drawing layer 3
-Layer 3 (drawable)   ─── User drawing layer 2
-Layer 2 (drawable)   ─── User drawing layer 1 (default active)
-Layer 1 (patterns)   ─── Auto-generated, not drawable
-Layer 0 (base)       ─── Sisyphus SVG, three color regions, not drawable
+Layer 6:  Drawable layer 3
+Layer 5:  Drawable layer 2
+Layer 4:  Drawable layer 1 (default active)
+Layer 3:  Outlines & details PNG (locked, untinted, always on top)
+Layer 2:  Pattern layer (auto-generated, not drawable)
+Layer 1:  Eyes PNG × eye color tint
+Layer 0:  Back PNG × back color tint, Body PNG × body color tint
 ```
 
-### Layer 0 — Sisyphus Base (locked)
+### Layer 0 — Colored Regions (locked)
 
-- SVG rendered at 1024×1024
-- Three named fill regions: **Body**, **Back**, **Eyes**
-- Each region's fill color and opacity controlled by the UI
+- Body and Back PNGs rendered at 1024×1024
+- Each tinted with the user's chosen color via Konva color multiply
+- Opacity per region controlled by UI slider
 - Not interactive beyond color/opacity changes
 
-### Layer 1 — Patterns (auto-generated, locked)
+### Layer 1 - Patterns (auto-generated, locked)
 
-- Not user-drawable
-- Renders pattern tiles masked to Body and/or Back regions
-- Regenerated only when pattern settings change (pattern type, color, opacity, rotation, enabled/disabled)
-- Cached as rasterized image between changes for performance
+Not user-drawable
+Renders pattern tiles masked to Body and/or Back regions using their PNGs as alpha clip masks
+Regenerated only when pattern settings change
+Cached as rasterized image between changes for performance
 
-### Layers 2, 3, 4 — Drawable
+### Layer 2 — Eyes (locked)
+
+- Eyes PNG rendered at 1024×1024
+- Tinted with the user's chosen eye color
+- Separate from Layer 0 so eyes always render on top of body/back
+
+### Layer 3 — Outlines (locked)
+
+- sisyphus-outline.png rendered on top of everything
+- Preserves lines, shading, and texture above the patterns, but allows users to paint over it
+- Not tinted, not interactive
+
+### Layers 4, 5, 6 — Drawable
 
 - Raster drawing layers (Konva `Layer` with freehand line drawing)
-- Layer 2 is the default active layer
+- Layer 4 is the default active layer
 - Each layer has:
   - **Visibility toggle** (eye icon) — shows/hides the layer
   - **Mask mode toggle** — cycles through three states:
@@ -73,22 +102,11 @@ Same controls as Body, independent values.
 
 ### How It Works
 
-1. A seamlessly tileable pattern image (256×256 or 512×512 SVG/PNG) is repeated to fill the entire 1024×1024 canvas
+1. A seamlessly tileable pattern SVG (256×256) is repeated to fill the entire 1024×1024 canvas
 2. The tiled pattern is rotated by the user's chosen angle around the canvas center
-3. The result is **clipped/masked** to the corresponding SVG region (Body or Back)
-4. Pattern color is applied by tinting the pattern asset (if SVG, change fill; if PNG, use Konva color filters or pre-render colored variants)
+3. The result is **clipped/masked** to the corresponding region using its PNG as an alpha clip mask
+4. Pattern color is applied by changing the SVG fill attribute before tiling
 5. Pattern opacity is applied on the pattern layer group
-
-### Pattern Assets (artist deliverables)
-
-| Pattern | Filename | Format | Tile Size |
-|---------|----------|--------|-----------|
-| Squiggly lines | `pattern-squiggly.svg` | SVG | 256×256 |
-| Stripes | `pattern-stripes.svg` | SVG | 256×256 |
-| Dots | `pattern-dots.svg` | SVG | 256×256 |
-| Stars | `pattern-stars.svg` | SVG | 256×256 |
-
-SVG is preferred so color can be changed by swapping fill attributes. All patterns must tile seamlessly when repeated.
 
 ### Performance
 
@@ -196,7 +214,7 @@ const APPROVED_COLORS = [
 ]
 ```
 
-This palette can be curated by the art director. Users can still manually pick any hex code — the approved list is only for randomization.
+Curated by the art director. Users can still manually pick any hex code — the approved list is only for randomization quality.
 
 ### Does NOT randomize
 
@@ -278,9 +296,11 @@ Mostly decorative but can include functional items:
 ### For the Art Director
 
 - **File → Export Layers** (or a separate admin-accessible export):
-  - Layer 0 rendered as PNG with current colors (no patterns)
-  - Layer 1 rendered as PNG (patterns only)
-  - Layers 2, 3, 4 rendered as separate PNGs
+  - Layer 0 rendered as PNG (body + back tinted, no patterns)
+  - Layer 1 rendered as PNG (eyes tinted)
+  - Layer 2 rendered as PNG (patterns only)
+  - Layer 3 (outlines) — original asset, no export needed
+  - Layers 4, 5, 6 rendered as separate PNGs (user drawings)
   - A **JSON manifest** with all settings:
 
 ```json
@@ -293,9 +313,9 @@ Mostly decorative but can include functional items:
     "eyes": { "color": "#F4A261", "opacity": 1.0 }
   },
   "layers": [
-    { "id": 2, "visible": true, "maskMode": "unmasked", "dataUrl": "layer2.png" },
-    { "id": 3, "visible": true, "maskMode": "mask-in", "dataUrl": "layer3.png" },
-    { "id": 4, "visible": false, "maskMode": "unmasked", "dataUrl": "layer4.png" }
+    { "id": 4, "visible": true, "maskMode": "unmasked", "dataUrl": "layer4.png" },
+    { "id": 5, "visible": true, "maskMode": "mask-in", "dataUrl": "layer5.png" },
+    { "id": 6, "visible": false, "maskMode": "unmasked", "dataUrl": "layer6.png" }
   ]
 }
 ```
@@ -322,9 +342,9 @@ This gives the art director maximum flexibility to recompose in Photoshop/Illust
     "eyes": { "color": "#F4A261", "opacity": 1.0 }
   },
   "layers": [
-    { "id": 2, "visible": true, "maskMode": "unmasked", "strokes": [ /* serialized Konva line/shape data */ ] },
-    { "id": 3, "visible": true, "maskMode": "mask-in", "strokes": [] },
-    { "id": 4, "visible": false, "maskMode": "unmasked", "strokes": [] }
+    { "id": 4, "visible": true, "maskMode": "unmasked", "strokes": [ /* serialized Konva line/shape data */ ] },
+    { "id": 5, "visible": true, "maskMode": "mask-in", "strokes": [] },
+    { "id": 6, "visible": false, "maskMode": "unmasked", "strokes": [] }
   ]
 }
 ```
@@ -349,15 +369,25 @@ Each stroke is stored as a serialized Konva node (tool type, points array, color
 
 | Asset | Format | Size | Count | Notes |
 |-------|--------|------|-------|-------|
-| Sisyphus base | SVG | 1024×1024 | 1 | Three named regions: `body`, `back`, `eyes`. Black outlines, white/neutral fills |
-| Pattern: Squiggly | SVG
+| Body region | PNG with alpha | 1024×1024 | 1 | Body only in white, everything else transparent |
+| Back/shell region | PNG with alpha | 1024×1024 | 1 | Back only in white, everything else transparent |
+| Eyes region | PNG with alpha | 1024×1024 | 1 | Eyes only in white, everything else transparent |
+| Outlines & details | PNG with alpha | 1024×1024 | 1 | Black lines, shading, texture — transparent background |
+| Full silhouette | PNG with alpha | 1024×1024 | 1 | Solid white filled shape of entire mascot — transparent background |
+| Pattern: Squiggly | SVG | 256×256 | 1 | Seamlessly tileable |
+| Pattern: Stripes | SVG | 256×256 | 1 | Seamlessly tileable |
+| Pattern: Dots | SVG | 256×256 | 1 | Seamlessly tileable |
+| Pattern: Stars | SVG | 256×256 | 1 | Seamlessly tileable |
+| Stamp shapes | SVG | 128×128 | ~5+ | Star, heart, circle, lightning bolt, etc. |
 
 # Phase A: Core Canvas & Coloring
 
 Goal: User can see Sisyphus and recolor it. Foundation for everything else.
 
 Set up Konva.js + react-konva
-Render Sisyphus SVG as Layer 0
+Render Layer 0 (Body + Back PNGs with color tinting via Konva multiply)
+Render Layer 1 (Eyes PNG with color tinting)
+Render Layer 3 (Outlines PNG, untinted, always on top)
 Implement three color region controls (Body, Back, Eyes) with color picker, hex input, and opacity slider
 Build the XP Paint UI shell (title bar, toolbar, canvas area, bottom bar, status bar)
 Add tooltips on all tool buttons
@@ -370,12 +400,12 @@ Deliverable: A styled editor where you can recolor the mascot and your choices p
 
 Goal: User can draw on the mascot.
 
-Implement drawable layers (2, 3, 4) with layer switching
+Implement drawable layers (4, 5, 6) with layer switching
 Brush tool (variable size, color, opacity)
 Eraser tool
 Undo/redo system (per-layer history)
 Layer visibility toggles
-Layer mask modes (unmasked / mask-in / mask-out)
+Layer mask modes using silhouette PNG (unmasked / mask-in / mask-out)
 Stamp shapes (size + rotation selection before placing)
 The "A" button (joke text tool)
 Update Supabase save/load to include stroke data
@@ -387,11 +417,11 @@ Deliverable: Fully functional drawing on layers with masking and persistence.
 
 Goal: Polish, patterns, and output.
 
-Pattern system (4 patterns, per-region masking, color, opacity, rotation)
+Pattern system (Layer 2: 4 patterns, masked to Body/Back PNGs, color, opacity, rotation)
 Pattern layer caching for performance
 Randomize button with approved color palette
 Export: flattened PNG at 1x/2x/4x
-Export: separated layers + JSON manifest for art director
+Export: separated layers (0-6) + JSON manifest for art director
 Menu bar functionality (File → Save/Export, Edit → Undo/Redo/Clear)
 Status bar (cursor position, active layer, current tool)
 Final polish and edge case testing
@@ -399,4 +429,3 @@ Final polish and edge case testing
 Deliverable: Complete editor, ready for the team.
 
 Each phase produces something functional and testable on its own. Phase A alone is already useful — you could ship it and get feedback before investing in B and C.
-Want me to add these phases into the implementation document?

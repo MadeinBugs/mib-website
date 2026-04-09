@@ -69,10 +69,20 @@ export const DEFAULT_REGIONS: RegionsData = {
 };
 
 export const DEFAULT_LAYERS: LayerData[] = [
-	{ id: 2, visible: true, maskMode: 'unmasked', strokes: [] },
-	{ id: 3, visible: true, maskMode: 'unmasked', strokes: [] },
-	{ id: 4, visible: false, maskMode: 'unmasked', strokes: [] },
+	{ id: 4, visible: true, maskMode: 'unmasked', strokes: [] },
+	{ id: 5, visible: true, maskMode: 'unmasked', strokes: [] },
+	{ id: 6, visible: false, maskMode: 'unmasked', strokes: [] },
 ];
+
+// Asset paths for the PNG-based layer system
+// These will be placed in /public/assets/mascot/ by the artist
+export const MASCOT_ASSETS = {
+	body: '/assets/mascot/sisyphus-body.png',
+	back: '/assets/mascot/sisyphus-back.png',
+	eyes: '/assets/mascot/sisyphus-eyes.png',
+	outlines: '/assets/mascot/sisyphus-outlines.png',
+	silhouette: '/assets/mascot/sisyphus-silhouette.png',
+} as const;
 
 export const APPROVED_COLORS = [
 	// Warm

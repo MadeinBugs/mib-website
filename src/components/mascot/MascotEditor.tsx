@@ -171,6 +171,27 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 		img.src = MASCOT_ASSETS.silhouette;
 	}, []);
 
+	// --- On-load preview upload for users with existing data ---
+	// Populates the gallery for users who saved before the preview feature was deployed.
+	// Runs once, 5 seconds after mount, only if they have real saved data.
+	useEffect(() => {
+		if (!resolvedInitial) return; // brand new user, nothing to upload
+		const timer = setTimeout(async () => {
+			try {
+				const stage = canvasRef.current?.getStage();
+				if (!stage) return;
+				const dataUrl = stage.toDataURL({ pixelRatio: 1, mimeType: 'image/png' });
+				const res = await fetch(dataUrl);
+				const blob = await res.blob();
+				await supabase.storage
+					.from('mascot-previews')
+					.upload(`${userId}/${year}.png`, blob, { upsert: true, contentType: 'image/png' });
+			} catch { /* silent */ }
+		}, 5000);
+		return () => clearTimeout(timer);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	// --- Keyboard shortcuts ---
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {

@@ -53,17 +53,17 @@ export type SaveStatus = 'saved' | 'saving' | 'error' | 'idle';
 
 export const DEFAULT_REGIONS: RegionsData = {
 	body: {
-		color: '#8B6914',
+		color: '#00a186',
 		opacity: 1.0,
 		pattern: { type: 'none', color: '#000000', opacity: 1.0, rotation: 0 },
 	},
 	back: {
-		color: '#6B4F12',
+		color: '#286867',
 		opacity: 1.0,
 		pattern: { type: 'none', color: '#000000', opacity: 1.0, rotation: 0 },
 	},
 	eyes: {
-		color: '#FFFFFF',
+		color: '#002c33',
 		opacity: 1.0,
 	},
 };

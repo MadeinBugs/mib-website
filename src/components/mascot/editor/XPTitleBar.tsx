@@ -24,7 +24,7 @@ export default function XPTitleBar({ title }: XPTitleBarProps) {
 		>
 			<div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
 				<span style={{ fontSize: '14px' }}>🎨</span>
-				<span>{title}</span>
+				<span style={{ fontFamily: "'Homemade Apple', cursive", fontSize: '13px', color: '#FF69B4' }}>{title}</span>
 			</div>
 			<div style={{ display: 'flex', gap: '2px' }}>
 				{['—', '□', '×'].map((btn) => (

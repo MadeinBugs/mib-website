@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
 import { Stage, Layer, Image as KonvaImage, Line, Text as KonvaText, Ellipse, Circle, Group } from 'react-konva';
 import type Konva from 'konva';
-import type { RegionsData, StrokeData, Tool } from './types';
+import type { RegionsData, LayerData, StrokeData, Tool } from './types';
 import { CANVAS_SIZE, MASCOT_ASSETS } from './types';
 
 interface MascotCanvasProps {

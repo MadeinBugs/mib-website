@@ -187,25 +187,34 @@ export default function XPToolbar({
 				</div>
 			)}
 
-			{/* Size slider */}
+			{/* Size slider — XP style */}
 			<div>
 				<div style={{ fontSize: '9px', color: '#444' }}>Size: {brushSize}px</div>
-				<input
-					type="range" min={1} max={50} value={brushSize}
-					onChange={(e) => onBrushSizeChange(parseInt(e.target.value))}
-					style={{ width: '100%', accentColor: xp.titleGradientEnd }}
-				/>
+				<div style={{ position: 'relative', height: '20px', ...sunkenStyle(), background: xp.bgLight, padding: '0 2px' }}>
+					{/* Track ticks */}
+					<div style={{ position: 'absolute', top: '50%', left: '4px', right: '4px', height: '2px', background: '#808080', transform: 'translateY(-50%)' }} />
+					<input
+						type="range" min={1} max={50} value={brushSize}
+						onChange={(e) => onBrushSizeChange(parseInt(e.target.value))}
+						className="xp-slider"
+						style={{ width: '100%', height: '100%', position: 'relative', zIndex: 1, cursor: 'pointer' }}
+					/>
+				</div>
 			</div>
 
-			{/* Opacity slider (for brush/stamp/text) */}
+			{/* Opacity slider — XP style */}
 			{activeTool !== 'picker' && (
 				<div>
 					<div style={{ fontSize: '9px', color: '#444' }}>Opacity: {Math.round(brushOpacity * 100)}%</div>
-					<input
-						type="range" min={5} max={100} value={Math.round(brushOpacity * 100)}
-						onChange={(e) => onBrushOpacityChange(parseInt(e.target.value) / 100)}
-						style={{ width: '100%', accentColor: xp.titleGradientEnd }}
-					/>
+					<div style={{ position: 'relative', height: '20px', ...sunkenStyle(), background: xp.bgLight, padding: '0 2px' }}>
+						<div style={{ position: 'absolute', top: '50%', left: '4px', right: '4px', height: '2px', background: '#808080', transform: 'translateY(-50%)' }} />
+						<input
+							type="range" min={5} max={100} value={Math.round(brushOpacity * 100)}
+							onChange={(e) => onBrushOpacityChange(parseInt(e.target.value) / 100)}
+							className="xp-slider"
+							style={{ width: '100%', height: '100%', position: 'relative', zIndex: 1, cursor: 'pointer' }}
+						/>
+					</div>
 				</div>
 			)}
 

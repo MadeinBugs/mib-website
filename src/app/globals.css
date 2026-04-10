@@ -386,3 +386,47 @@ h1,
     transition: transform 0.3s ease-out;
   }
 }
+
+/* ── XP Paint-style slider (mascot editor) ── */
+.xp-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  margin: 0;
+}
+
+.xp-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px;
+  height: 18px;
+  background: #D4D0C8;
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  border-bottom: 1px solid #808080;
+  border-right: 1px solid #808080;
+  cursor: pointer;
+  margin-top: -1px;
+}
+
+.xp-slider::-moz-range-thumb {
+  width: 11px;
+  height: 18px;
+  background: #D4D0C8;
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  border-bottom: 1px solid #808080;
+  border-right: 1px solid #808080;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.xp-slider::-webkit-slider-runnable-track {
+  height: 2px;
+  background: transparent;
+}
+
+.xp-slider::-moz-range-track {
+  height: 2px;
+  background: transparent;
+  border: none;
+}

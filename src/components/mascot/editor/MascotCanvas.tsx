@@ -3,8 +3,8 @@
 import { useRef, useEffect, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
 import { Stage, Layer, Image as KonvaImage, Line, Text as KonvaText, Ellipse, Circle, Group } from 'react-konva';
 import type Konva from 'konva';
-import type { RegionsData, LayerData, StrokeData, Tool } from './types';
-import { CANVAS_SIZE, MASCOT_ASSETS } from './types';
+import type { RegionsData, LayerData, StrokeData, Tool, PatternSettings } from './types';
+import { CANVAS_SIZE, MASCOT_ASSETS, PATTERN_ASSETS } from './types';
 
 interface MascotCanvasProps {
 	regions: RegionsData;
@@ -59,6 +59,77 @@ function useTintedCanvas(
 		ctx.drawImage(image, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
 		return canvas;
 	}, [image, color, opacity]);
+}
+
+// Load an SVG as an Image element
+function useSvgImage(src: string | null): HTMLImageElement | null {
+	const [image, setImage] = useState<HTMLImageElement | null>(null);
+	useEffect(() => {
+		if (!src) { setImage(null); return; }
+		const img = new window.Image();
+		img.crossOrigin = 'anonymous';
+		img.onload = () => setImage(img);
+		img.onerror = () => setImage(null);
+		img.src = src;
+		return () => { img.onload = null; img.onerror = null; };
+	}, [src]);
+	return image;
+}
+
+// Build an offscreen canvas with a tiled & recolored SVG pattern, rotated, then clipped to a region PNG
+function usePatternCanvas(
+	pattern: PatternSettings,
+	regionImage: HTMLImageElement | null,
+): HTMLCanvasElement | null {
+	const patternSrc = pattern.type !== 'none' ? PATTERN_ASSETS[pattern.type] : null;
+	const svgImg = useSvgImage(patternSrc);
+
+	return useMemo(() => {
+		if (!svgImg || !regionImage || pattern.type === 'none') return null;
+
+		const TILE = 256;
+		const canvas = document.createElement('canvas');
+		canvas.width = CANVAS_SIZE;
+		canvas.height = CANVAS_SIZE;
+		const ctx = canvas.getContext('2d');
+		if (!ctx) return null;
+
+		// Step 1: tile the SVG across a larger area to account for rotation
+		const diagonal = Math.ceil(Math.sqrt(2) * CANVAS_SIZE);
+		const tileCanvas = document.createElement('canvas');
+		tileCanvas.width = diagonal;
+		tileCanvas.height = diagonal;
+		const tCtx = tileCanvas.getContext('2d');
+		if (!tCtx) return null;
+
+		for (let y = 0; y < diagonal; y += TILE) {
+			for (let x = 0; x < diagonal; x += TILE) {
+				tCtx.drawImage(svgImg, x, y, TILE, TILE);
+			}
+		}
+
+		// Step 2: recolor the tiled pattern — fill with pattern color using source-in
+		tCtx.globalCompositeOperation = 'source-in';
+		tCtx.fillStyle = pattern.color;
+		tCtx.fillRect(0, 0, diagonal, diagonal);
+
+		// Step 3: draw rotated tile onto main canvas
+		const cx = CANVAS_SIZE / 2;
+		const cy = CANVAS_SIZE / 2;
+		ctx.save();
+		ctx.globalAlpha = pattern.opacity;
+		ctx.translate(cx, cy);
+		ctx.rotate((pattern.rotation * Math.PI) / 180);
+		ctx.drawImage(tileCanvas, -diagonal / 2, -diagonal / 2);
+		ctx.restore();
+
+		// Step 4: clip to region PNG (keep only pixels that overlap the region)
+		ctx.globalCompositeOperation = 'destination-in';
+		ctx.globalAlpha = 1;
+		ctx.drawImage(regionImage, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+		return canvas;
+	}, [svgImg, regionImage, pattern.type, pattern.color, pattern.opacity, pattern.rotation]);
 }
 
 function StrokeRenderer({ stroke }: { stroke: StrokeData }) {
@@ -124,6 +195,10 @@ const MascotCanvas = forwardRef<MascotCanvasHandle, MascotCanvasProps>(function 
 	const tintedBody = useTintedCanvas(bodyImg, regions.body.color, regions.body.opacity);
 	const tintedBack = useTintedCanvas(backImg, regions.back.color, regions.back.opacity);
 	const tintedEyes = useTintedCanvas(eyesImg, regions.eyes.color, regions.eyes.opacity);
+
+	// Pattern canvases for body and back (Layer 2)
+	const bodyPatternCanvas = usePatternCanvas(regions.body.pattern, bodyImg);
+	const backPatternCanvas = usePatternCanvas(regions.back.pattern, backImg);
 
 	const assetsLoaded = !!(bodyImg && backImg && eyesImg && outlinesImg);
 
@@ -295,8 +370,11 @@ const MascotCanvas = forwardRef<MascotCanvasHandle, MascotCanvasProps>(function 
 								{tintedEyes && <KonvaImage image={tintedEyes} x={0} y={0} width={CANVAS_SIZE} height={CANVAS_SIZE} />}
 							</Layer>
 
-							{/* Layer 2: Patterns — implemented in Phase C */}
-							<Layer listening={false} />
+							{/* Layer 2: Patterns (tiled SVGs clipped to body/back regions) */}
+							<Layer listening={false}>
+								{backPatternCanvas && <KonvaImage image={backPatternCanvas} x={0} y={0} width={CANVAS_SIZE} height={CANVAS_SIZE} />}
+								{bodyPatternCanvas && <KonvaImage image={bodyPatternCanvas} x={0} y={0} width={CANVAS_SIZE} height={CANVAS_SIZE} />}
+							</Layer>
 
 							{/* Layer 3: Outlines & details */}
 							<Layer listening={false}>

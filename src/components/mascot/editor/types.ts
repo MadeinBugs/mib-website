@@ -84,6 +84,13 @@ export const MASCOT_ASSETS = {
 	silhouette: '/assets/mascot/sisyphus-silhouette.png',
 } as const;
 
+export const PATTERN_ASSETS: Record<Exclude<PatternSettings['type'], 'none'>, string> = {
+	squiggly: '/assets/mascot/pattern-squiggly.svg',
+	stripes: '/assets/mascot/Pattern-stripes.svg',
+	dots: '/assets/mascot/Pattern-dots.svg',
+	stars: '/assets/mascot/Pattern-stars.svg',
+};
+
 export const APPROVED_COLORS = [
 	// Warm
 	'#E63946', '#F4A261', '#E9C46A', '#F2CC8F',

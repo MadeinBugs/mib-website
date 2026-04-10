@@ -10,6 +10,7 @@ import type {
 	StrokeData,
 	Tool,
 	SaveStatus,
+	PatternSettings,
 } from './editor/types';
 import {
 	DEFAULT_REGIONS,
@@ -44,6 +45,22 @@ function buildInitialData(raw: CustomizationData | null): CustomizationData {
 
 function randomColor() {
 	return APPROVED_COLORS[Math.floor(Math.random() * APPROVED_COLORS.length)];
+}
+
+const PATTERN_TYPES: PatternSettings['type'][] = ['none', 'squiggly', 'stripes', 'dots', 'stars'];
+
+function randomPattern(): PatternSettings {
+	// 50% chance of having a pattern
+	if (Math.random() < 0.5) {
+		return { type: 'none', color: '#000000', opacity: 1.0, rotation: 0 };
+	}
+	const types = PATTERN_TYPES.filter((t) => t !== 'none');
+	return {
+		type: types[Math.floor(Math.random() * types.length)],
+		color: randomColor(),
+		opacity: 0.8 + Math.random() * 0.2, // 80-100%
+		rotation: Math.floor(Math.random() * 360),
+	};
 }
 
 interface MascotEditorProps {
@@ -216,8 +233,8 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 		commitChange({
 			...prev,
 			regions: {
-				body: { ...prev.regions.body, color: randomColor() },
-				back: { ...prev.regions.back, color: randomColor() },
+				body: { ...prev.regions.body, color: randomColor(), pattern: randomPattern() },
+				back: { ...prev.regions.back, color: randomColor(), pattern: randomPattern() },
 				eyes: { ...prev.regions.eyes, color: randomColor() },
 			},
 		});

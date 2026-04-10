@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
-import { Stage, Layer, Image as KonvaImage, Line, Text as KonvaText, Ellipse, Circle, Group } from 'react-konva';
+import { Stage, Layer, Image as KonvaImage, Line, Text as KonvaText } from 'react-konva';
 import type Konva from 'konva';
 import type { RegionsData, LayerData, StrokeData, Tool, PatternSettings } from './types';
 import { CANVAS_SIZE, MASCOT_ASSETS, PATTERN_ASSETS } from './types';
@@ -202,6 +202,8 @@ const MascotCanvas = forwardRef<MascotCanvasHandle, MascotCanvasProps>(function 
 
 	const assetsLoaded = !!(bodyImg && backImg && eyesImg && outlinesImg);
 
+	// While assets are loading, show a blank white canvas (no flickering placeholder)
+
 	// Fit the stage to the container as a square, using the minimum dimension
 	useEffect(() => {
 		const container = containerRef.current;
@@ -295,8 +297,6 @@ const MascotCanvas = forwardRef<MascotCanvasHandle, MascotCanvasProps>(function 
 	}, [currentStroke, activeLayerId, onStrokeComplete]);
 
 	const cursorStyle = activeTool === 'picker' ? 'crosshair' : activeTool === 'text' ? 'text' : 'crosshair';
-	const cx = CANVAS_SIZE / 2;
-	const cy = CANVAS_SIZE / 2;
 
 	// Build mask-in and mask-out offscreen canvases for drawable layer compositing
 	const maskInCanvas = useMemo(() => {
@@ -357,7 +357,7 @@ const MascotCanvas = forwardRef<MascotCanvasHandle, MascotCanvasProps>(function 
 					onTouchEnd={handleMouseUp}
 					style={{ cursor: cursorStyle }}
 				>
-					{assetsLoaded ? (
+					{assetsLoaded && (
 						<>
 							{/* Layer 0: Body + Back (tinted PNGs) */}
 							<Layer listening={false}>
@@ -395,7 +395,6 @@ const MascotCanvas = forwardRef<MascotCanvasHandle, MascotCanvasProps>(function 
 										{currentStroke && layer.id === activeLayerId && (
 											<StrokeRenderer stroke={currentStroke} />
 										)}
-										{/* Apply silhouette mask as an overlay using destination-in/out */}
 										{maskCanvas && (layer.strokes.length > 0 || (currentStroke && layer.id === activeLayerId)) && (
 											<KonvaImage
 												image={maskCanvas}
@@ -409,27 +408,6 @@ const MascotCanvas = forwardRef<MascotCanvasHandle, MascotCanvasProps>(function 
 									</Layer>
 								);
 							})}
-						</>
-					) : (
-						<>
-							<Layer listening={false}>
-								<Ellipse x={cx} y={cy + 40} radiusX={220} radiusY={280} fill={regions.body.color} opacity={regions.body.opacity} stroke="#000" strokeWidth={3} />
-								<Ellipse x={cx} y={cy - 40} radiusX={180} radiusY={200} fill={regions.back.color} opacity={regions.back.opacity} stroke="#000" strokeWidth={3} />
-								<Group>
-									<Circle x={cx - 60} y={cy - 80} radius={35} fill={regions.eyes.color} opacity={regions.eyes.opacity} stroke="#000" strokeWidth={3} />
-									<Circle x={cx - 50} y={cy - 80} radius={12} fill="#000" />
-									<Circle x={cx + 60} y={cy - 80} radius={35} fill={regions.eyes.color} opacity={regions.eyes.opacity} stroke="#000" strokeWidth={3} />
-									<Circle x={cx + 70} y={cy - 80} radius={12} fill="#000" />
-								</Group>
-								{[[-140, 180, -200, 300], [-80, 220, -100, 340], [80, 220, 100, 340], [140, 180, 200, 300]].map(([x1, y1, x2, y2], i) => (
-									<Line key={i} points={[cx + x1, cy + y1, cx + x2, cy + y2]} stroke="#000" strokeWidth={12} lineCap="round" />
-								))}
-								<Line points={[cx - 40, cy - 240, cx - 80, cy - 340]} stroke="#000" strokeWidth={4} lineCap="round" />
-								<Circle x={cx - 80} y={cy - 345} radius={8} fill={regions.body.color} opacity={regions.body.opacity} stroke="#000" strokeWidth={3} />
-								<Line points={[cx + 40, cy - 240, cx + 80, cy - 340]} stroke="#000" strokeWidth={4} lineCap="round" />
-								<Circle x={cx + 80} y={cy - 345} radius={8} fill={regions.body.color} opacity={regions.body.opacity} stroke="#000" strokeWidth={3} />
-								<KonvaText x={cx - 180} y={cy + 340} width={360} text="⚠ Place artist PNGs in /public/assets/mascot/" fontSize={16} fontFamily="Tahoma, sans-serif" fill="#888" align="center" />
-							</Layer>
 						</>
 					)}
 				</Stage>

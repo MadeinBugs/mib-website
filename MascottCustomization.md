@@ -141,24 +141,27 @@ Add a protected mascot customization tool to the MIB website where employees sel
 
 ### To Modify
 
-- `next.config.js` — Remove `output: 'export'`, adjust base path logic
-- `package.json` — Add Supabase dependencies, update scripts
-- `.github/workflows/deploy.yml` — Rename to `deploy.yml.bak` (superseded by Vercel)
-- `src/lib/metadataPaths.ts` — Simplify base path logic if needed
-- `.gitignore` — Verify `.env*.local` is listed
+- `next.config.js` — Remove `output: 'export'`, remove base path logic ✅
+- `package.json` — Add Supabase dependencies, remove `export` script ✅
+- `.github/workflows/deploy.yml` — Renamed to `deploy.yml.bak` ✅
+- `src/lib/metadataPaths.ts` — Simplified (removed `USE_BASE_PATH`) ✅
+- `src/lib/imagePaths.ts` — Simplified (removed `USE_BASE_PATH`) ✅
+- `.gitignore` — Verified `.env*.local` is listed ✅
 
 ### To Create
 
-- `.env.local` — Supabase credentials for local development (not committed)
-- `src/middleware.ts` — Auth middleware for route protection (scoped to `/mascot/:path*`)
-- `src/lib/supabase/server.ts` — Server-side Supabase client
-- `src/lib/supabase/client.ts` — Browser-side Supabase client
-- `src/app/mascot/layout.tsx` — Mascot section layout
-- `src/app/mascot/page.tsx` — Main customization page (protected)
-- `src/app/mascot/login/page.tsx` — Login page
-- `src/app/mascot/register/page.tsx` — Registration page
-- `src/app/mascot/logout/route.ts` — Logout API route
-- `src/components/mascot/MascotEditor.tsx` — Editor client component (shell)
+- `.env.local` — Supabase credentials for local development (not committed) ✅
+- `src/middleware.ts` — Auth middleware for route protection (scoped to `/mascot/:path*`) ✅
+- `src/lib/supabase/server.ts` — Server-side Supabase client ✅
+- `src/lib/supabase/client.ts` — Browser-side Supabase client ✅
+- `src/app/mascot/layout.tsx` — Mascot section layout ✅
+- `src/app/mascot/page.tsx` — Main customization page (protected) ✅
+- `src/app/mascot/login/page.tsx` — Login page ✅
+- `src/app/mascot/register/page.tsx` — Registration page ✅
+- `src/app/mascot/logout/route.ts` — Logout API route ✅
+- `src/app/mascot/api/validate-invite/route.ts` — Server-side invite code validation ✅
+- `src/app/mascot/api/consume-invite/route.ts` — Server-side invite code consumption + profile creation ✅
+- `src/components/mascot/MascotEditor.tsx` — Editor client component (shell) ✅
 
 ---
 
@@ -191,3 +194,4 @@ Add a protected mascot customization tool to the MIB website where employees sel
 1. **Admin panel**: Currently no way for admins to create invite codes or view all customizations through the UI. Initial codes can be seeded via Supabase dashboard. A simple admin page could be added later if needed.
 2. **Export/download**: The art director may need to export all team customizations for the poster. A simple admin-only API route or Supabase dashboard query could handle this. Worth discussing when planning the customization mechanics.
 3. **Rate limiting**: Supabase has built-in rate limiting on auth endpoints. Additional rate limiting on API routes can be added via Vercel Edge middleware if needed, but likely unnecessary for 15-50 users.
+4. **Supabase free-tier inactivity pause**: Free projects may pause after inactivity (cold start on next request). For this internal tool, that is usually acceptable; data is retained. Recommended approach is operational: reopen/warm the project before active usage windows (e.g., before poster week). Avoid relying on synthetic keep-alive pings as a core strategy; if always-on reliability is required, upgrade to a paid tier.

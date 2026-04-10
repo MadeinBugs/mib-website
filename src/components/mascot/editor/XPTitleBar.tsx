@@ -23,8 +23,8 @@ export default function XPTitleBar({ title }: XPTitleBarProps) {
 			}}
 		>
 			<div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-				<span style={{ fontSize: '14px' }}>🎨</span>
-				<span style={{ fontFamily: "'Homemade Apple', cursive", fontSize: '13px', color: '#FF69B4' }}>{title}</span>
+				<span style={{ fontSize: '14px', lineHeight: 1 }}>🎨</span>
+				<span style={{ fontFamily: "'Homemade Apple', cursive", fontSize: '13px', color: '#FF69B4', lineHeight: 1, paddingTop: '4px', display: 'inline-block' }}>{title}</span>
 			</div>
 			<div style={{ display: 'flex', gap: '2px' }}>
 				{['—', '□', '×'].map((btn) => (

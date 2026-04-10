@@ -284,6 +284,16 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 		[handleRegionUpdate, activeRegion]
 	);
 
+	const handleExport = useCallback((scale: 1 | 2 | 4) => {
+		const stage = canvasRef.current?.getStage();
+		if (!stage) return;
+		const dataUrl = stage.toDataURL({ pixelRatio: scale, mimeType: 'image/png' });
+		const link = document.createElement('a');
+		link.href = dataUrl;
+		link.download = `mib-mascot-${scale}x.png`;
+		link.click();
+	}, []);
+
 	const handleStartOver = useCallback(() => {
 		if (!window.confirm('Start over? This will erase all your customizations.\n\nRecomeçar? Isso apagará todas as suas customizações.')) {
 			return;
@@ -315,7 +325,7 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 				}}
 			>
 				<XPTitleBar title={t.editorTitle} />
-				<XPMenuBar />
+				<XPMenuBar onExport={handleExport} />
 
 				<div style={{ display: 'flex', flex: 1, overflow: 'hidden', minHeight: 0 }}>
 					<XPToolbar

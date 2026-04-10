@@ -40,8 +40,11 @@ function buildInitialData(raw: CustomizationData | null): CustomizationData {
 	return {
 		regions: { ...deepClone(DEFAULT_REGIONS), ...raw.regions },
 		layers: raw.layers?.length ? raw.layers : deepClone(DEFAULT_LAYERS),
+		commentary: raw.commentary ?? '',
 	};
 }
+
+const COMMENTARY_MAX_LENGTH = 500;
 
 function randomColor() {
 	return APPROVED_COLORS[Math.floor(Math.random() * APPROVED_COLORS.length)];
@@ -75,8 +78,23 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 	const supabase = useMemo(() => createClient(), []);
 	const canvasRef = useRef<MascotCanvasHandle>(null);
 
+	// If Supabase returned null, try recovering from localStorage before falling back to defaults
+	const [resolvedInitial] = useState<CustomizationData | null>(() => {
+		if (initialData) return initialData;
+		if (typeof window !== 'undefined') {
+			try {
+				const cached = localStorage.getItem(`mascot_${userId}_${year}`);
+				if (cached) {
+					const parsed = JSON.parse(cached);
+					if (parsed && parsed.regions) return parsed as CustomizationData;
+				}
+			} catch { /* ignore corrupt data */ }
+		}
+		return null;
+	});
+
 	// --- Core data (ref is the source of truth; render via tick) ---
-	const dataRef = useRef<CustomizationData>(buildInitialData(initialData));
+	const dataRef = useRef<CustomizationData>(buildInitialData(resolvedInitial));
 	const pastRef = useRef<CustomizationData[]>([]);
 	const futureRef = useRef<CustomizationData[]>([]);
 	const [renderTick, setRenderTick] = useState(0);
@@ -124,7 +142,13 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 	// --- Save state ---
 	const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
 	const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-	const lastSavedRef = useRef<string>(JSON.stringify(buildInitialData(initialData)));
+	const lastSavedRef = useRef<string>(JSON.stringify(buildInitialData(resolvedInitial)));
+
+	// --- Preview upload (15s debounce, silent errors) ---
+	const previewUploadTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	// --- Commentary ---
+	const [commentary, setCommentary] = useState(resolvedInitial?.commentary ?? '');
 
 	// --- Cursor ---
 	const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
@@ -187,6 +211,21 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 					if (error) throw error;
 					lastSavedRef.current = serialized;
 					setSaveStatus('saved');
+
+					// Schedule preview upload (15s debounce, separate from save)
+					if (previewUploadTimerRef.current) clearTimeout(previewUploadTimerRef.current);
+					previewUploadTimerRef.current = setTimeout(async () => {
+						try {
+							const stage = canvasRef.current?.getStage();
+							if (!stage) return;
+							const dataUrl = stage.toDataURL({ pixelRatio: 1, mimeType: 'image/png' });
+							const res = await fetch(dataUrl);
+							const blob = await res.blob();
+							await supabase.storage
+								.from('mascot-previews')
+								.upload(`${userId}/${year}.png`, blob, { upsert: true, contentType: 'image/png' });
+						} catch { /* silent — preview upload is non-critical */ }
+					}, 15000);
 				} catch {
 					setSaveStatus('error');
 				}
@@ -298,8 +337,20 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 		if (!window.confirm('Start over? This will erase all your customizations.\n\nRecomeçar? Isso apagará todas as suas customizações.')) {
 			return;
 		}
+		setCommentary('');
 		commitChange(buildInitialData(null));
 	}, [commitChange]);
+
+	const handleCommentaryChange = useCallback(
+		(value: string) => {
+			const clamped = value.slice(0, COMMENTARY_MAX_LENGTH);
+			setCommentary(clamped);
+			// Merge commentary into data and trigger save
+			dataRef.current = { ...dataRef.current, commentary: clamped };
+			setRenderTick((v) => v + 1);
+		},
+		[]
+	);
 
 	// --- Save label ---
 	const saveLabel =
@@ -312,7 +363,7 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 					: t.ready;
 
 	return (
-		<div style={{ padding: '16px', display: 'flex', justifyContent: 'center' }}>
+		<div style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 			<div
 				style={{
 					display: 'flex',
@@ -391,6 +442,57 @@ export default function MascotEditor({ userId, year, initialData, displayName }:
 					activeLayer={activeLayerId}
 					activeTool={activeTool}
 				/>
+			</div>
+
+			{/* Commentary textarea below editor */}
+			<div
+				style={{
+					width: '100%',
+					maxWidth: '960px',
+					marginTop: '12px',
+				}}
+			>
+				<label
+					style={{
+						display: 'block',
+						fontSize: '11px',
+						fontFamily: 'Tahoma, Geneva, sans-serif',
+						color: '#333',
+						marginBottom: '4px',
+					}}
+				>
+					{t.commentaryLabel}
+				</label>
+				<textarea
+					value={commentary}
+					onChange={(e) => handleCommentaryChange(e.target.value)}
+					maxLength={COMMENTARY_MAX_LENGTH}
+					placeholder={t.commentaryPlaceholder}
+					style={{
+						width: '100%',
+						minHeight: '72px',
+						padding: '6px 8px',
+						fontFamily: 'Tahoma, Geneva, sans-serif',
+						fontSize: '11px',
+						border: '2px solid',
+						borderColor: '#808080 #fff #fff #808080',
+						background: '#fff',
+						resize: 'vertical',
+						outline: 'none',
+						boxSizing: 'border-box',
+					}}
+				/>
+				<div
+					style={{
+						textAlign: 'right',
+						fontSize: '10px',
+						fontFamily: 'Tahoma, Geneva, sans-serif',
+						color: commentary.length >= COMMENTARY_MAX_LENGTH ? '#c62828' : '#666',
+						marginTop: '2px',
+					}}
+				>
+					{t.commentaryCharCount(commentary.length, COMMENTARY_MAX_LENGTH)}
+				</div>
 			</div>
 		</div>
 	);

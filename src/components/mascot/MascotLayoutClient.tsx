@@ -6,7 +6,7 @@ import { MascotLocaleProvider, useMascotLocale } from './MascotLocaleContext';
 import MascotLanguageSwitcher from './MascotLanguageSwitcher';
 import { getImagePath } from '@/lib/imagePaths';
 
-function MascotHeader({ displayName }: { displayName: string | null }) {
+function MascotHeader({ displayName, userRole }: { displayName: string | null; userRole: string | null }) {
 	const { t } = useMascotLocale();
 
 	return (
@@ -21,6 +21,14 @@ function MascotHeader({ displayName }: { displayName: string | null }) {
 				/>
 			</a>
 			<div className="flex items-center gap-4">
+				{userRole === 'artist' && (
+					<a
+						href="/mascot/gallery"
+						className="text-sm font-body text-amber-600 hover:text-amber-700 font-semibold transition-colors"
+					>
+						{t.galleryLink}
+					</a>
+				)}
 				<MascotLanguageSwitcher inHeader />
 				<span className="text-sm font-body text-neutral-600">
 					{displayName}
@@ -40,15 +48,17 @@ export default function MascotLayoutClient({
 	children,
 	isLoggedIn,
 	displayName,
+	userRole,
 }: {
 	children: ReactNode;
 	isLoggedIn: boolean;
 	displayName: string | null;
+	userRole: string | null;
 }) {
 	return (
 		<MascotLocaleProvider>
 			<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
-				{isLoggedIn && <MascotHeader displayName={displayName} />}
+				{isLoggedIn && <MascotHeader displayName={displayName} userRole={userRole} />}
 				{!isLoggedIn && <MascotLanguageSwitcher />}
 				<main>{children}</main>
 			</div>

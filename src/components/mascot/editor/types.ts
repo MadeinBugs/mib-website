@@ -46,6 +46,7 @@ export interface StrokeData {
 export interface CustomizationData {
 	regions: RegionsData;
 	layers: LayerData[];
+	commentary?: string;
 }
 
 export type Tool = 'brush' | 'eraser' | 'stamp' | 'text' | 'picker';

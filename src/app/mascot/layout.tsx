@@ -20,20 +20,22 @@ export default async function MascotLayout({
 	const { data: { user } } = await supabase.auth.getUser();
 
 	let displayName: string | null = null;
+	let userRole: string | null = null;
 	if (user) {
 		const { data: profile } = await supabase
 			.from('profiles')
-			.select('display_name')
+			.select('display_name, role')
 			.eq('id', user.id)
 			.single();
 		displayName = profile?.display_name ?? user.email ?? null;
+		userRole = profile?.role ?? 'user';
 	}
 
 	return (
 		<>
 			{/* eslint-disable-next-line @next/next/no-page-custom-font */}
 			<link rel="stylesheet" href={FONT_LINK} />
-			<MascotLayoutClient isLoggedIn={!!user} displayName={displayName}>
+			<MascotLayoutClient isLoggedIn={!!user} displayName={displayName} userRole={userRole}>
 				{children}
 			</MascotLayoutClient>
 		</>

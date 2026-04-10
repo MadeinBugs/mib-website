@@ -345,11 +345,14 @@ This gives the art director maximum flexibility to recompose in Photoshop/Illust
     { "id": 4, "visible": true, "maskMode": "unmasked", "strokes": [ /* serialized Konva line/shape data */ ] },
     { "id": 5, "visible": true, "maskMode": "mask-in", "strokes": [] },
     { "id": 6, "visible": false, "maskMode": "unmasked", "strokes": [] }
-  ]
+  ],
+  "commentary": "I wanted a tropical vibe with bold colors and star patterns!"
 }
 ```
 
 Each stroke is stored as a serialized Konva node (tool type, points array, color, size, opacity). This allows **exact reconstruction** of the canvas on reload, including undo history.
+
+The `commentary` field is an optional string (max 500 characters) where users describe their mascot vision. It helps the art director understand creative intent when composing the final poster.
 
 ### Load
 
@@ -362,6 +365,164 @@ Each stroke is stored as a serialized Konva node (tool type, points array, color
 - On every successful Supabase save, also write to `localStorage`
 - On load, show `localStorage` data immediately for instant feedback, then replace with Supabase data when it arrives (if newer)
 - Supabase `updated_at` is the source of truth for conflict resolution
+
+### Preview Upload
+
+- After each successful Supabase save, a **15-second debounced** preview upload runs in the background
+- Captures the current canvas as a 1x (1024×1024) PNG via `stage.toDataURL({ pixelRatio: 1 })`
+- Converts base64 → Blob and uploads to Supabase Storage: `mascot-previews/{userId}/{year}.png` with `upsert: true`
+- Uses a **separate timer ref** (`previewUploadTimerRef`) from the 2-second save debounce — avoids hammering Storage on every small change
+- Errors are **silent** — preview upload failures do not affect `saveStatus` or the user experience
+- The Konva `Stage` ref is exposed from `MascotCanvas` to `MascotEditor` via an `onStageReady` callback prop
+- The `mascot-previews` bucket is **private** — signed URLs are generated server-side per page load (never publicly accessible)
+
+---
+
+## Commentary
+
+A text area below the editor window where users can describe their mascot or add notes for the art director.
+
+### UI
+
+- Positioned directly below the XP Paint editor window, same max-width as the editor (`960px`)
+- XP-style sunken 3D border (`borderStyle: 'inset'`), matching the editor aesthetic
+- Textarea with:
+  - **Placeholder (pt-BR):** "Descreva seu mascote ou adicione comentários..."
+  - **Placeholder (en):** "Describe your mascot or add any comments..."
+  - **Label (pt-BR):** "Seus comentários"
+  - **Label (en):** "Your comments"
+  - **Max length:** 500 characters
+  - **Character counter:** `n/500` displayed inline below the textarea
+  - Font: Tahoma, small size, consistent with the XP aesthetic
+
+### Persistence
+
+- Saved as `commentary` field inside the existing `customization_data` JSONB column — **no new table or column needed**
+- Auto-saved with the same 2-second debounce as all other editor changes
+- Loaded from `initialData.commentary` on page load
+- Included in the localStorage mirror
+
+### i18n Keys
+
+```ts
+// pt-BR
+commentaryLabel: 'Seus comentários',
+commentaryPlaceholder: 'Descreva seu mascote ou adicione comentários...',
+commentaryCharCount: (n: number, max: number) => `${n}/${max}`,
+
+// en
+commentaryLabel: 'Your comments',
+commentaryPlaceholder: 'Describe your mascot or add any comments...',
+commentaryCharCount: (n: number, max: number) => `${n}/${max}`,
+```
+
+---
+
+## Role System
+
+A simple text-based role on the `profiles` table to gate access to the gallery.
+
+### Schema
+
+```sql
+ALTER TABLE profiles ADD COLUMN role TEXT NOT NULL DEFAULT 'user';
+```
+
+Two values: `'user'` (default for all employees) and `'artist'` (the art director). Set manually via the Supabase dashboard — no UI for role management needed.
+
+### RLS Policies
+
+```sql
+-- Artist can read all customizations (for the gallery)
+CREATE POLICY "Artist can read all customizations"
+ON mascot_customizations FOR SELECT
+USING (
+  auth.uid() = user_id
+  OR EXISTS (
+    SELECT 1 FROM profiles
+    WHERE profiles.id = auth.uid()
+    AND profiles.role = 'artist'
+  )
+);
+
+-- Artist can read all profiles (to show display names in gallery)
+CREATE POLICY "Artist can read all profiles"
+ON profiles FOR SELECT
+USING (
+  auth.uid() = id
+  OR EXISTS (
+    SELECT 1 FROM profiles p2
+    WHERE p2.id = auth.uid()
+    AND p2.role = 'artist'
+  )
+);
+```
+
+### Storage Policies (mascot-previews bucket)
+
+```sql
+-- Users can upload/update their own preview
+ALLOW INSERT, UPDATE
+WHERE (storage.foldername(name))[1] = auth.uid()::text
+
+-- Artist can download all previews
+ALLOW SELECT
+WHERE EXISTS (
+  SELECT 1 FROM profiles
+  WHERE profiles.id = auth.uid()
+  AND profiles.role = 'artist'
+)
+```
+
+---
+
+## Gallery (`/mascot/gallery`)
+
+A read-only dashboard for the art director to view all team members' mascot customizations without depending on users exporting.
+
+### Access
+
+- Route: `/mascot/gallery`
+- **Server component** — checks `profile.role === 'artist'` on load
+- Non-artist users are redirected to `/mascot`
+- Navigation: an "Artist Gallery" link appears in the mascot layout header **only** when `role === 'artist'`
+
+### Data Loading (Server-Side)
+
+```typescript
+// Fetch all customizations for the current year, joined with profiles
+const { data } = await supabase
+  .from('mascot_customizations')
+  .select('user_id, year, updated_at, customization_data, profiles(display_name)')
+  .eq('year', CURRENT_YEAR)
+  .order('updated_at', { ascending: false });
+
+// Generate signed URLs for each preview PNG
+for (const item of data) {
+  const { data: url } = await supabase.storage
+    .from('mascot-previews')
+    .createSignedUrl(`${item.user_id}/${CURRENT_YEAR}.png`, 3600); // 1hr expiry
+  item.previewUrl = url?.signedUrl ?? null;
+}
+```
+
+### UI (Client Component)
+
+- Grid layout of cards, one per team member
+- Each card shows:
+  - **Display name** (from joined `profiles`)
+  - **Preview image** (1024×1024 PNG from Supabase Storage, displayed as thumbnail)
+  - **Last updated** date (formatted)
+  - **Commentary** text (from `customization_data.commentary`, if present)
+  - **"Download PNG"** button — links to the signed Storage URL
+  - **"Download JSON"** button — serializes `customization_data` as a `.json` file and triggers browser download
+- XP-style aesthetic (same `#D4D0C8` gray, sunken borders) to stay consistent with the editor
+- Cards with no preview image show a placeholder state
+
+### No Live Updates
+
+- The gallery is a snapshot on page load — the artist refreshes manually to see new changes
+- Signed URLs expire after 1 hour; refreshing the page generates new ones
 
 ---
 
@@ -428,4 +589,20 @@ Final polish and edge case testing
 
 Deliverable: Complete editor, ready for the team.
 
-Each phase produces something functional and testable on its own. Phase A alone is already useful — you could ship it and get feedback before investing in B and C.
+# Phase D: Commentary, Preview Upload & Gallery
+
+Goal: Art director can view all team mascots without depending on users exporting.
+
+Commentary textarea below editor (500 char limit, i18n, saved in existing JSONB)
+Add `role` column to `profiles` table (`'user'` default, `'artist'` for art director)
+Update RLS policies for artist read access on all customizations and profiles
+Create `mascot-previews` private Storage bucket with appropriate RLS
+Auto-upload 1x preview PNG to Storage on 15-second debounce after each save
+Expose Konva Stage ref from MascotCanvas to MascotEditor via `onStageReady` callback
+Build `/mascot/gallery` server page with artist role gate
+Build gallery client component (grid of cards: name, preview, date, commentary, downloads)
+Add conditional "Artist Gallery" link in mascot layout header
+
+Deliverable: Art director can browse all team mascots, read commentary, and download PNGs/JSON — no user action required.
+
+Each phase produces something functional and testable on its own. Phase A alone is already useful — you could ship it and get feedback before investing in later phases.

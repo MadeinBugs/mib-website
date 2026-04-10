@@ -41,6 +41,21 @@ export const mascotTranslations = {
 		editorPlaceholder: '🎨 Editor de mascote em breve!',
 		editorPlaceholderSub: 'Ferramentas de customização aparecerão aqui.',
 
+		// Commentary
+		commentaryLabel: 'Seus comentários',
+		commentaryPlaceholder: 'Descreva seu mascote ou adicione comentários...',
+		commentaryCharCount: (n: number, max: number) => `${n}/${max}`,
+
+		// Gallery
+		galleryTitle: 'Galeria do Time',
+		galleryLink: 'Galeria',
+		galleryEmpty: 'Nenhuma customização encontrada para este ano.',
+		galleryDownloadPng: 'Baixar PNG',
+		galleryDownloadJson: 'Baixar JSON',
+		galleryLastUpdated: 'Atualizado',
+		galleryNoPreview: 'Sem prévia',
+		galleryNoCommentary: 'Sem comentários.',
+
 		// Errors
 		unexpectedError: 'Ocorreu um erro inesperado',
 		invalidInviteCode: 'Código de convite inválido',
@@ -87,6 +102,21 @@ export const mascotTranslations = {
 		ready: 'Ready',
 		editorPlaceholder: '🎨 Mascot editor coming soon!',
 		editorPlaceholderSub: 'Customization tools will appear here.',
+
+		// Commentary
+		commentaryLabel: 'Your comments',
+		commentaryPlaceholder: 'Describe your mascot or add any comments...',
+		commentaryCharCount: (n: number, max: number) => `${n}/${max}`,
+
+		// Gallery
+		galleryTitle: 'Team Gallery',
+		galleryLink: 'Gallery',
+		galleryEmpty: 'No customizations found for this year.',
+		galleryDownloadPng: 'Download PNG',
+		galleryDownloadJson: 'Download JSON',
+		galleryLastUpdated: 'Updated',
+		galleryNoPreview: 'No preview',
+		galleryNoCommentary: 'No comments.',
 
 		// Errors
 		unexpectedError: 'An unexpected error occurred',

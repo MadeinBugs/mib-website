@@ -1,14 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useMascotLocale } from './MascotLocaleContext';
 import type {
-	RegionsData,
+	CustomizationData,
 	BodyRegion,
 	EyesRegion,
-	CustomizationData,
-	LayerData,
 	StrokeData,
 	Tool,
 	SaveStatus,
@@ -17,17 +15,36 @@ import {
 	DEFAULT_REGIONS,
 	DEFAULT_LAYERS,
 	APPROVED_COLORS,
+	CANVAS_SIZE,
+	MASCOT_ASSETS,
 } from './editor/types';
-import { xp, sunkenStyle } from './editor/xpStyles';
 import XPTitleBar from './editor/XPTitleBar';
 import XPMenuBar from './editor/XPMenuBar';
 import XPToolbar from './editor/XPToolbar';
 import XPColorPalette from './editor/XPColorPalette';
 import RegionControls from './editor/RegionControls';
 import XPStatusBar from './editor/XPStatusBar';
-import MascotCanvas from './editor/MascotCanvas';
+import MascotCanvas, { type MascotCanvasHandle } from './editor/MascotCanvas';
 
-type RegionKey = 'body' | 'back' | 'eyes';
+const MAX_UNDO = 50;
+
+function deepClone<T>(obj: T): T {
+	return JSON.parse(JSON.stringify(obj));
+}
+
+function buildInitialData(raw: CustomizationData | null): CustomizationData {
+	if (!raw) {
+		return { regions: deepClone(DEFAULT_REGIONS), layers: deepClone(DEFAULT_LAYERS) };
+	}
+	return {
+		regions: { ...deepClone(DEFAULT_REGIONS), ...raw.regions },
+		layers: raw.layers?.length ? raw.layers : deepClone(DEFAULT_LAYERS),
+	};
+}
+
+function randomColor() {
+	return APPROVED_COLORS[Math.floor(Math.random() * APPROVED_COLORS.length)];
+}
 
 interface MascotEditorProps {
 	userId: string;
@@ -36,327 +53,282 @@ interface MascotEditorProps {
 	displayName: string | null;
 }
 
-const LOCAL_STORAGE_KEY = (userId: string, year: number) =>
-	`mascot_${userId}_${year}`;
+export default function MascotEditor({ userId, year, initialData, displayName }: MascotEditorProps) {
+	const { t } = useMascotLocale();
+	const supabase = useMemo(() => createClient(), []);
+	const canvasRef = useRef<MascotCanvasHandle>(null);
 
-function deepCloneLayers(layers: LayerData[]): LayerData[] {
-	return layers.map((l) => ({
-		...l,
-		strokes: l.strokes.map((s) => ({ ...s, points: s.points ? [...s.points] : undefined })),
-	}));
-}
+	// --- Core data (ref is the source of truth; render via tick) ---
+	const dataRef = useRef<CustomizationData>(buildInitialData(initialData));
+	const pastRef = useRef<CustomizationData[]>([]);
+	const futureRef = useRef<CustomizationData[]>([]);
+	const [renderTick, setRenderTick] = useState(0);
 
-function buildInitialData(raw: CustomizationData | null): CustomizationData {
-	if (raw && raw.regions) {
-		return {
-			regions: raw.regions,
-			layers: raw.layers && raw.layers.length > 0 ? raw.layers : deepCloneLayers(DEFAULT_LAYERS),
-		};
-	}
-	return { regions: { ...DEFAULT_REGIONS }, layers: deepCloneLayers(DEFAULT_LAYERS) };
-}
+	// Read from ref for rendering
+	const data = dataRef.current;
+	const canUndo = pastRef.current.length > 0;
+	const canRedo = futureRef.current.length > 0;
 
-// Per-layer undo/redo history
-interface LayerHistory {
-	past: StrokeData[][];
-	future: StrokeData[][];
-}
+	// Apply a new data snapshot, pushing current state to undo
+	const commitChange = useCallback((newData: CustomizationData) => {
+		const trimmed = pastRef.current.length >= MAX_UNDO
+			? pastRef.current.slice(1)
+			: pastRef.current;
+		pastRef.current = [...trimmed, deepClone(dataRef.current)];
+		futureRef.current = [];
+		dataRef.current = newData;
+		setRenderTick((v) => v + 1);
+	}, []);
 
-export default function MascotEditor({
-	userId,
-	year,
-	initialData,
-	displayName,
-}: MascotEditorProps) {
-	const [data, setData] = useState<CustomizationData>(() =>
-		buildInitialData(initialData)
-	);
-	const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+	const handleUndo = useCallback(() => {
+		if (pastRef.current.length === 0) return;
+		const snapshot = pastRef.current.pop()!;
+		futureRef.current.push(deepClone(dataRef.current));
+		dataRef.current = deepClone(snapshot);
+		setRenderTick((v) => v + 1);
+	}, []);
+
+	const handleRedo = useCallback(() => {
+		if (futureRef.current.length === 0) return;
+		const snapshot = futureRef.current.pop()!;
+		pastRef.current.push(deepClone(dataRef.current));
+		dataRef.current = deepClone(snapshot);
+		setRenderTick((v) => v + 1);
+	}, []);
+
+	// --- Tool & brush state ---
 	const [activeTool, setActiveTool] = useState<Tool>('brush');
 	const [brushSize, setBrushSize] = useState(8);
 	const [brushColor, setBrushColor] = useState('#000000');
 	const [brushOpacity, setBrushOpacity] = useState(1.0);
-	const [activeRegion, setActiveRegion] = useState<RegionKey>('body');
 	const [activeLayerId, setActiveLayerId] = useState(4);
+	const [activeRegion, setActiveRegion] = useState<'body' | 'back' | 'eyes'>('body');
+
+	// --- Save state ---
+	const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+	const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const lastSavedRef = useRef<string>(JSON.stringify(buildInitialData(initialData)));
+
+	// --- Cursor ---
 	const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-	const { t } = useMascotLocale();
 
-	const hasChangedRef = useRef(false);
-
-	// Per-layer undo/redo history — keyed by layer id
-	const [histories, setHistories] = useState<Record<number, LayerHistory>>(() => {
-		const h: Record<number, LayerHistory> = {};
-		for (const layer of (initialData?.layers ?? DEFAULT_LAYERS)) {
-			h[layer.id] = { past: [], future: [] };
-		}
-		return h;
-	});
-
-	// Load
+	// --- Silhouette canvas for masking ---
+	const [silhouetteCanvas, setSilhouetteCanvas] = useState<HTMLCanvasElement | null>(null);
 	useEffect(() => {
-		if (initialData && initialData.regions) {
-			setData(buildInitialData(initialData));
-			try {
-				localStorage.setItem(LOCAL_STORAGE_KEY(userId, year), JSON.stringify(initialData));
-			} catch { /* localStorage unavailable */ }
-		} else {
-			try {
-				const cached = localStorage.getItem(LOCAL_STORAGE_KEY(userId, year));
-				if (cached) {
-					const parsed = JSON.parse(cached) as CustomizationData;
-					if (parsed.regions) setData(buildInitialData(parsed));
-				}
-			} catch { /* localStorage unavailable */ }
-		}
-	}, [initialData, userId, year]);
-
-	// Save
-	const saveToSupabase = useCallback(
-		async (newData: CustomizationData) => {
-			setSaveStatus('saving');
-			const supabase = createClient();
-			const { error } = await supabase
-				.from('mascot_customizations')
-				.upsert(
-					{ user_id: userId, year, customization_data: newData, updated_at: new Date().toISOString() },
-					{ onConflict: 'user_id,year' }
-				);
-			if (error) {
-				setSaveStatus('error');
-				try { localStorage.setItem(LOCAL_STORAGE_KEY(userId, year), JSON.stringify(newData)); } catch { }
-				return;
+		const img = new window.Image();
+		img.crossOrigin = 'anonymous';
+		img.onload = () => {
+			const c = document.createElement('canvas');
+			c.width = CANVAS_SIZE;
+			c.height = CANVAS_SIZE;
+			const ctx = c.getContext('2d');
+			if (ctx) {
+				ctx.drawImage(img, 0, 0, CANVAS_SIZE, CANVAS_SIZE);
 			}
-			try { localStorage.setItem(LOCAL_STORAGE_KEY(userId, year), JSON.stringify(newData)); } catch { }
-			setSaveStatus('saved');
-		},
-		[userId, year]
-	);
-
-	useEffect(() => {
-		if (!hasChangedRef.current) return;
-		const timeout = setTimeout(() => { saveToSupabase(data); }, 2000);
-		return () => clearTimeout(timeout);
-	}, [data, saveToSupabase]);
-
-	// Region update handler
-	const handleRegionUpdate = useCallback(
-		(region: RegionKey, updates: Partial<BodyRegion> | Partial<EyesRegion>) => {
-			hasChangedRef.current = true;
-			setData((prev) => ({
-				...prev,
-				regions: { ...prev.regions, [region]: { ...prev.regions[region], ...updates } },
-			}));
-			setSaveStatus('idle');
-		},
-		[]
-	);
-
-	const handlePaletteColor = useCallback(
-		(color: string) => {
-			handleRegionUpdate(activeRegion, { color });
-		},
-		[activeRegion, handleRegionUpdate]
-	);
-
-	// Randomize
-	const handleRandomize = useCallback(() => {
-		hasChangedRef.current = true;
-		const pick = () => APPROVED_COLORS[Math.floor(Math.random() * APPROVED_COLORS.length)];
-		const randomPattern = (): BodyRegion['pattern'] => {
-			if (Math.random() < 0.5) return { type: 'none', color: '#000000', opacity: 1.0, rotation: 0 };
-			const types = ['squiggly', 'stripes', 'dots', 'stars'] as const;
-			return {
-				type: types[Math.floor(Math.random() * types.length)],
-				color: pick(),
-				opacity: 0.8 + Math.random() * 0.2,
-				rotation: Math.floor(Math.random() * 360),
-			};
+			setSilhouetteCanvas(c);
 		};
-		setData((prev) => ({
+		img.src = MASCOT_ASSETS.silhouette;
+	}, []);
+
+	// --- Keyboard shortcuts ---
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+				e.preventDefault();
+				handleUndo();
+			}
+			if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+				e.preventDefault();
+				handleRedo();
+			}
+		};
+		window.addEventListener('keydown', handleKeyDown);
+		return () => window.removeEventListener('keydown', handleKeyDown);
+	}, [handleUndo, handleRedo]);
+
+	// --- Auto-save with debounce ---
+	const scheduleSave = useCallback(
+		(newData: CustomizationData) => {
+			const serialized = JSON.stringify(newData);
+			// Mirror to localStorage
+			try {
+				localStorage.setItem(`mascot_${userId}_${year}`, serialized);
+			} catch { /* quota exceeded, ignore */ }
+
+			if (serialized === lastSavedRef.current) return;
+			setSaveStatus('saving');
+
+			if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+			saveTimerRef.current = setTimeout(async () => {
+				try {
+					const { error } = await supabase
+						.from('mascot_customizations')
+						.upsert(
+							{ user_id: userId, year, customization_data: newData, updated_at: new Date().toISOString() },
+							{ onConflict: 'user_id,year' }
+						);
+					if (error) throw error;
+					lastSavedRef.current = serialized;
+					setSaveStatus('saved');
+				} catch {
+					setSaveStatus('error');
+				}
+			}, 2000);
+		},
+		[supabase, userId, year]
+	);
+
+	// Trigger save whenever data changes
+	useEffect(() => {
+		scheduleSave(dataRef.current);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [renderTick, scheduleSave]);
+
+	// --- Callbacks ---
+
+	const handleStrokeComplete = useCallback(
+		(layerId: number, stroke: StrokeData) => {
+			const prev = dataRef.current;
+			const newLayers = prev.layers.map((l) =>
+				l.id === layerId ? { ...l, strokes: [...l.strokes, stroke] } : l
+			);
+			commitChange({ ...prev, layers: newLayers });
+		},
+		[commitChange]
+	);
+
+	const handleRegionUpdate = useCallback(
+		(region: 'body' | 'back' | 'eyes', updates: Partial<BodyRegion> | Partial<EyesRegion>) => {
+			const prev = dataRef.current;
+			commitChange({
+				...prev,
+				regions: {
+					...prev.regions,
+					[region]: { ...prev.regions[region], ...updates },
+				},
+			});
+		},
+		[commitChange]
+	);
+
+	const handleRandomize = useCallback(() => {
+		const prev = dataRef.current;
+		commitChange({
 			...prev,
 			regions: {
-				body: { color: pick(), opacity: 1.0, pattern: randomPattern() },
-				back: { color: pick(), opacity: 1.0, pattern: randomPattern() },
-				eyes: { color: pick(), opacity: 1.0 },
+				body: { ...prev.regions.body, color: randomColor() },
+				back: { ...prev.regions.back, color: randomColor() },
+				eyes: { ...prev.regions.eyes, color: randomColor() },
 			},
-		}));
-		setSaveStatus('idle');
-	}, []);
+		});
+	}, [commitChange]);
 
-	const handleCursorMove = useCallback((x: number, y: number) => {
-		setCursorPos({ x, y });
-	}, []);
+	const handleToggleLayerVisibility = useCallback(
+		(id: number) => {
+			const prev = dataRef.current;
+			commitChange({
+				...prev,
+				layers: prev.layers.map((l) =>
+					l.id === id ? { ...l, visible: !l.visible } : l
+				),
+			});
+		},
+		[commitChange]
+	);
 
-	// Stroke completion — push to layer + undo history
-	const handleStrokeComplete = useCallback((layerId: number, stroke: StrokeData) => {
-		hasChangedRef.current = true;
-		setData((prev) => ({
-			...prev,
-			layers: prev.layers.map((l) =>
-				l.id === layerId ? { ...l, strokes: [...l.strokes, stroke] } : l
-			),
-		}));
-		setHistories((prev) => ({
-			...prev,
-			[layerId]: {
-				past: [...(prev[layerId]?.past ?? []), data.layers.find((l) => l.id === layerId)?.strokes ?? []],
-				future: [],
-			},
-		}));
-		setSaveStatus('idle');
-	}, [data.layers]);
+	const handleCycleMaskMode = useCallback(
+		(id: number) => {
+			const prev = dataRef.current;
+			const cycle: Record<string, 'unmasked' | 'mask-in' | 'mask-out'> = {
+				unmasked: 'mask-in',
+				'mask-in': 'mask-out',
+				'mask-out': 'unmasked',
+			};
+			commitChange({
+				...prev,
+				layers: prev.layers.map((l) =>
+					l.id === id ? { ...l, maskMode: cycle[l.maskMode] } : l
+				),
+			});
+		},
+		[commitChange]
+	);
 
-	// Undo
-	const handleUndo = useCallback(() => {
-		const history = histories[activeLayerId];
-		if (!history || history.past.length === 0) return;
-		hasChangedRef.current = true;
-		const currentStrokes = data.layers.find((l) => l.id === activeLayerId)?.strokes ?? [];
-		const previousStrokes = history.past[history.past.length - 1];
-		setHistories((prev) => ({
-			...prev,
-			[activeLayerId]: {
-				past: prev[activeLayerId].past.slice(0, -1),
-				future: [currentStrokes, ...prev[activeLayerId].future],
-			},
-		}));
-		setData((prev) => ({
-			...prev,
-			layers: prev.layers.map((l) =>
-				l.id === activeLayerId ? { ...l, strokes: previousStrokes } : l
-			),
-		}));
-		setSaveStatus('idle');
-	}, [activeLayerId, histories, data.layers]);
-
-	// Redo
-	const handleRedo = useCallback(() => {
-		const history = histories[activeLayerId];
-		if (!history || history.future.length === 0) return;
-		hasChangedRef.current = true;
-		const currentStrokes = data.layers.find((l) => l.id === activeLayerId)?.strokes ?? [];
-		const nextStrokes = history.future[0];
-		setHistories((prev) => ({
-			...prev,
-			[activeLayerId]: {
-				past: [...prev[activeLayerId].past, currentStrokes],
-				future: prev[activeLayerId].future.slice(1),
-			},
-		}));
-		setData((prev) => ({
-			...prev,
-			layers: prev.layers.map((l) =>
-				l.id === activeLayerId ? { ...l, strokes: nextStrokes } : l
-			),
-		}));
-		setSaveStatus('idle');
-	}, [activeLayerId, histories, data.layers]);
-
-	const canUndo = (histories[activeLayerId]?.past.length ?? 0) > 0;
-	const canRedo = (histories[activeLayerId]?.future.length ?? 0) > 0;
-
-	// Layer visibility toggle
-	const handleToggleLayerVisibility = useCallback((id: number) => {
-		hasChangedRef.current = true;
-		setData((prev) => ({
-			...prev,
-			layers: prev.layers.map((l) =>
-				l.id === id ? { ...l, visible: !l.visible } : l
-			),
-		}));
-		setSaveStatus('idle');
-	}, []);
-
-	// Cycle mask mode
-	const handleCycleMaskMode = useCallback((id: number) => {
-		hasChangedRef.current = true;
-		const modes: LayerData['maskMode'][] = ['unmasked', 'mask-in', 'mask-out'];
-		setData((prev) => ({
-			...prev,
-			layers: prev.layers.map((l) => {
-				if (l.id !== id) return l;
-				const nextIdx = (modes.indexOf(l.maskMode) + 1) % modes.length;
-				return { ...l, maskMode: modes[nextIdx] };
-			}),
-		}));
-		setSaveStatus('idle');
-	}, []);
-
-	// Color picker callback
 	const handlePickColor = useCallback((color: string) => {
 		setBrushColor(color);
 		setActiveTool('brush');
 	}, []);
 
-	// Keyboard shortcuts
-	useEffect(() => {
-		const handler = (e: KeyboardEvent) => {
-			if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-				e.preventDefault();
-				handleUndo();
-			} else if ((e.ctrlKey || e.metaKey) && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
-				e.preventDefault();
-				handleRedo();
-			}
-		};
-		window.addEventListener('keydown', handler);
-		return () => window.removeEventListener('keydown', handler);
-	}, [handleUndo, handleRedo]);
+	// Color palette selects the active region color (not the brush color)
+	const handlePaletteColorSelect = useCallback(
+		(color: string) => {
+			handleRegionUpdate(activeRegion, { color });
+		},
+		[handleRegionUpdate, activeRegion]
+	);
 
+	const handleStartOver = useCallback(() => {
+		if (!window.confirm('Start over? This will erase all your customizations.\n\nRecomeçar? Isso apagará todas as suas customizações.')) {
+			return;
+		}
+		commitChange(buildInitialData(null));
+	}, [commitChange]);
+
+	// --- Save label ---
 	const saveLabel =
-		saveStatus === 'saved' ? t.saved
-			: saveStatus === 'saving' ? t.saving
-				: saveStatus === 'error' ? t.saveError
+		saveStatus === 'saved'
+			? t.saved
+			: saveStatus === 'saving'
+				? t.saving
+				: saveStatus === 'error'
+					? t.saveError
 					: t.ready;
 
 	return (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				border: `2px solid ${xp.border}`,
-				background: xp.bg,
-				maxWidth: '900px',
-				margin: '0 auto',
-				boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-				overflow: 'hidden',
-			}}
-		>
-			<XPTitleBar title="Sisifo.bmp - Paint" />
-			<XPMenuBar />
+		<div style={{ padding: '16px', display: 'flex', justifyContent: 'center' }}>
+			<div
+				style={{
+					display: 'flex',
+					flexDirection: 'column',
+					width: '100%',
+					maxWidth: '960px',
+					maxHeight: 'calc(100vh - 120px)',
+					overflow: 'hidden',
+					boxShadow: '2px 2px 10px rgba(0,0,0,0.3)',
+				}}
+			>
+				<XPTitleBar title={t.editorTitle} />
+				<XPMenuBar />
 
-			<div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
-				<XPToolbar
-					activeTool={activeTool}
-					onToolChange={setActiveTool}
-					brushSize={brushSize}
-					onBrushSizeChange={setBrushSize}
-					brushOpacity={brushOpacity}
-					onBrushOpacityChange={setBrushOpacity}
-					brushColor={brushColor}
-					onBrushColorChange={setBrushColor}
-					onRandomize={handleRandomize}
-					onUndo={handleUndo}
-					onRedo={handleRedo}
-					canUndo={canUndo}
-					canRedo={canRedo}
-					layers={data.layers}
-					activeLayerId={activeLayerId}
-					onActiveLayerChange={setActiveLayerId}
-					onToggleLayerVisibility={handleToggleLayerVisibility}
-					onCycleMaskMode={handleCycleMaskMode}
-					saveStatus={saveStatus}
-					saveLabel={saveLabel}
-				/>
+				<div style={{ display: 'flex', flex: 1, overflow: 'hidden', minHeight: 0 }}>
+					<XPToolbar
+						activeTool={activeTool}
+						onToolChange={setActiveTool}
+						brushSize={brushSize}
+						onBrushSizeChange={setBrushSize}
+						brushOpacity={brushOpacity}
+						onBrushOpacityChange={setBrushOpacity}
+						brushColor={brushColor}
+						onBrushColorChange={setBrushColor}
+						onRandomize={handleRandomize}
+						onUndo={handleUndo}
+						onRedo={handleRedo}
+						canUndo={canUndo}
+						canRedo={canRedo}
+						layers={data.layers}
+						activeLayerId={activeLayerId}
+						onActiveLayerChange={setActiveLayerId}
+						onToggleLayerVisibility={handleToggleLayerVisibility}
+						onCycleMaskMode={handleCycleMaskMode}
+						saveStatus={saveStatus}
+						saveLabel={saveLabel}
+						onStartOver={handleStartOver}
+					/>
 
-				<div style={{ flex: 1, padding: '4px', display: 'flex', flexDirection: 'column' }}>
-					<div
-						style={{
-							flex: 1, ...sunkenStyle(), padding: '2px', background: '#C0C0C0',
-							display: 'flex', minHeight: '400px', maxHeight: '620px',
-						}}
-					>
+					<div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden', minHeight: 0 }}>
+						{/* Canvas */}
 						<MascotCanvas
+							ref={canvasRef}
 							regions={data.regions}
 							layers={data.layers}
 							activeLayerId={activeLayerId}
@@ -364,41 +336,35 @@ export default function MascotEditor({
 							brushSize={brushSize}
 							brushColor={brushColor}
 							brushOpacity={brushOpacity}
-							onCursorMove={handleCursorMove}
+							silhouetteCanvas={silhouetteCanvas}
+							onCursorMove={(x, y) => setCursorPos({ x, y })}
 							onStrokeComplete={handleStrokeComplete}
 							onPickColor={handlePickColor}
 						/>
+
+						{/* Region controls below canvas, above palette */}
+						<RegionControls
+							regions={data.regions}
+							activeRegion={activeRegion}
+							onActiveRegionChange={setActiveRegion}
+							onRegionUpdate={handleRegionUpdate}
+						/>
+
+						{/* Color palette selects the active region's color */}
+						<XPColorPalette
+							selectedColor={data.regions[activeRegion].color}
+							onColorSelect={handlePaletteColorSelect}
+						/>
 					</div>
 				</div>
-			</div>
 
-			{/* Bottom bar */}
-			<div
-				style={{
-					display: 'flex', alignItems: 'center', gap: '16px',
-					padding: '4px 8px', borderTop: `1px solid ${xp.border}`,
-					background: xp.bg, flexWrap: 'wrap',
-				}}
-			>
-				<XPColorPalette
-					selectedColor={data.regions[activeRegion].color}
-					onColorSelect={handlePaletteColor}
-				/>
-				<div style={{ width: '1px', height: '28px', background: xp.border }} />
-				<RegionControls
-					regions={data.regions}
-					activeRegion={activeRegion}
-					onActiveRegionChange={setActiveRegion}
-					onRegionUpdate={handleRegionUpdate}
+				<XPStatusBar
+					cursorX={cursorPos.x}
+					cursorY={cursorPos.y}
+					activeLayer={activeLayerId}
+					activeTool={activeTool}
 				/>
 			</div>
-
-			<XPStatusBar
-				cursorX={cursorPos.x}
-				cursorY={cursorPos.y}
-				activeLayer={activeLayerId}
-				activeTool={activeTool.charAt(0).toUpperCase() + activeTool.slice(1)}
-			/>
 		</div>
 	);
 }

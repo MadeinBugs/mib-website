@@ -3,8 +3,8 @@ import '../globals.css';
 import MascotLayoutClient from '@/components/mascot/MascotLayoutClient';
 
 export const metadata = {
-	title: 'Sisyphus Studio — Made in Bugs',
-	description: 'Customize your own Sisyphus mascot',
+	title: 'Mascot Customization — Made in Bugs',
+	description: 'Customize your internal Sisyphus mascot',
 };
 
 export default async function MascotLayout({

@@ -30,7 +30,7 @@ export const mascotTranslations = {
 		signOut: 'Sair',
 
 		// Editor
-		editorTitle: 'Customize seu Sísifo',
+		editorTitle: 'MiB Paint',
 		editorWelcome: (name: string) => `Bem-vindo(a), ${name}!`,
 		editorWelcomeAnon: 'Bem-vindo(a)!',
 		editorSubtitle: (year: number) => `Crie sua versão única do Sísifo para o pôster do time ${year}.`,
@@ -77,7 +77,7 @@ export const mascotTranslations = {
 		signOut: 'Sign out',
 
 		// Editor
-		editorTitle: 'Customize Your Sisyphus',
+		editorTitle: 'MiB Paint',
 		editorWelcome: (name: string) => `Welcome, ${name}!`,
 		editorWelcomeAnon: 'Welcome!',
 		editorSubtitle: (year: number) => `Create your unique version of Sisyphus for the ${year} team poster.`,

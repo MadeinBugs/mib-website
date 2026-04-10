@@ -24,6 +24,7 @@ interface XPToolbarProps {
 	onCycleMaskMode: (id: number) => void;
 	saveStatus: SaveStatus;
 	saveLabel: string;
+	onStartOver: () => void;
 }
 
 interface ToolButton {
@@ -59,6 +60,7 @@ export default function XPToolbar({
 	onCycleMaskMode,
 	saveStatus,
 	saveLabel,
+	onStartOver,
 }: XPToolbarProps) {
 	const tools: ToolButton[] = [
 		{ tool: 'brush', icon: '✏️', label: 'Brush' },
@@ -170,7 +172,7 @@ export default function XPToolbar({
 					justifyContent: 'center', cursor: 'pointer', border: 'none', fontSize: '12px',
 					background: xp.bg, ...raisedStyle(),
 				}}
-			>🎲</button>
+			><span style={{ fontWeight: 'bold', fontSize: '10px', fontFamily: xp.font }}>RNG</span></button>
 
 			{/* Brush color (visible for brush/stamp/text) */}
 			{(activeTool === 'brush' || activeTool === 'stamp' || activeTool === 'text') && (
@@ -251,6 +253,18 @@ export default function XPToolbar({
 					>{MASK_LABELS[activeLayer.maskMode]}</button>
 				</div>
 			)}
+
+			{/* Start over */}
+			<button
+				title="Start over / Recomeçar"
+				onClick={onStartOver}
+				style={{
+					width: '100%', height: '24px', display: 'flex', alignItems: 'center',
+					justifyContent: 'center', cursor: 'pointer', border: 'none', fontSize: '9px',
+					background: xp.bg, fontFamily: xp.font, color: '#c62828', fontWeight: 'bold',
+					...raisedStyle(),
+				}}
+			>Start Over</button>
 
 			{/* Spacer */}
 			<div style={{ flex: 1 }} />

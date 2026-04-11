@@ -9,8 +9,30 @@ const versionInfo = getVersionInfo();
 export const metadata: Metadata = {
   title: 'Made in Bugs - Indie Game Studio',
   description: 'Made in Bugs indie game studio - Embracing the chaotic nature of game development with perseverance and creativity.',
+  metadataBase: new URL('https://www.madeinbugs.com.br'),
   other: {
     'mib-version': versionInfo.version,
+  },
+  openGraph: {
+    title: 'Made in Bugs - Indie Game Studio',
+    description: 'Embracing the chaotic nature of game development with perseverance and creativity.',
+    url: 'https://www.madeinbugs.com.br',
+    siteName: 'Made in Bugs',
+    type: 'website',
+    locale: 'pt_BR',
+    images: [
+      {
+        url: '/android-chrome-512x512.png',
+        width: 512,
+        height: 512,
+        alt: 'Made in Bugs',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Made in Bugs - Indie Game Studio',
+    description: 'Embracing the chaotic nature of game development with perseverance and creativity.',
   },
   icons: {
     icon: [

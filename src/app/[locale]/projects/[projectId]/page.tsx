@@ -43,8 +43,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const description = project.description?.[locale] || project.description?.['en'] || subtitle;
 	const fullTitle = `${title} - Made in Bugs`;
 
-	// Pick the best image: bannerImage > first 'both'/'thumbnail' image > first image
-	const ogImage = project.bannerImage
+	// Pick the best image: embedImage > bannerImage > first 'both'/'thumbnail' image > first image
+	const ogImage = project.embedImage
+		|| project.bannerImage
 		|| project.images.find(img => img.type === 'both' || img.type === 'thumbnail')?.src
 		|| project.images[0]?.src;
 

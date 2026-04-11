@@ -26,6 +26,7 @@ export interface ProjectData {
 	category?: string;
 	hide?: boolean;
 	bannerImage?: string;
+	embedImage?: string;
 	titleImage?: string;
 	description?: {
 		en: string;
@@ -269,6 +270,7 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 		category: 'unity',
 		bannerImage: '/assets/projects/asumi/banner2.png',
 		titleImage: '/assets/projects/asumi/title.png',
+		embedImage: '/assets/projects/asumi/embed.png'
 	},
 	{
 		id: 'fungalore',

@@ -9,13 +9,16 @@ import {
 	FaAppStore,
 	FaGooglePlay,
 	FaYoutube,
+	FaInstagram,
 	FaTwitter,
 	FaDiscord,
 	FaLinkedin,
 	FaFigma,
 	FaBook
 } from 'react-icons/fa';
-import { SiItchdotio, SiUnity, SiUnrealengine, SiRoblox } from 'react-icons/si'; interface ProjectLinksProps {
+import { SiItchdotio, SiUnity, SiUnrealengine, SiRoblox, SiTiktok } from 'react-icons/si';
+
+interface ProjectLinksProps {
 	links: {
 		website?: string;
 		steam?: string;
@@ -24,6 +27,8 @@ import { SiItchdotio, SiUnity, SiUnrealengine, SiRoblox } from 'react-icons/si';
 		playStore?: string;
 		appStore?: string;
 		youtube?: string;
+		instagram?: string;
+		tiktok?: string;
 		twitter?: string;
 		discord?: string;
 		linkedin?: string;
@@ -91,6 +96,22 @@ const linkConfig = {
 		bgColor: 'bg-red-100',
 		borderColor: 'border-red-200',
 		hoverBg: 'hover:bg-red-200'
+	},
+	instagram: {
+		icon: FaInstagram,
+		label: { en: 'Instagram', 'pt-BR': 'Instagram' },
+		color: 'text-pink-600',
+		bgColor: 'bg-pink-100',
+		borderColor: 'border-pink-200',
+		hoverBg: 'hover:bg-pink-200'
+	},
+	tiktok: {
+		icon: SiTiktok,
+		label: { en: 'TikTok', 'pt-BR': 'TikTok' },
+		color: 'text-slate-700',
+		bgColor: 'bg-slate-100',
+		borderColor: 'border-slate-200',
+		hoverBg: 'hover:bg-slate-200'
 	},
 	twitter: {
 		icon: FaTwitter,

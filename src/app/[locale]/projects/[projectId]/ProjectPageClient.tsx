@@ -15,6 +15,7 @@ import {
 	FaAppStore,
 	FaGooglePlay,
 	FaYoutube,
+	FaInstagram,
 	FaTwitter,
 	FaDiscord,
 	FaLinkedin,
@@ -23,7 +24,7 @@ import {
 	FaAndroid,
 	FaDownload
 } from 'react-icons/fa';
-import { SiItchdotio, SiRoblox, SiIos } from 'react-icons/si';
+import { SiItchdotio, SiRoblox, SiIos, SiTiktok } from 'react-icons/si';
 
 interface ProjectPageClientProps {
 	project: ProjectData;
@@ -354,6 +355,8 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 													case 'playStore': return FaGooglePlay;
 													case 'appStore': return FaAppStore;
 													case 'youtube': return FaYoutube;
+													case 'instagram': return FaInstagram;
+													case 'tiktok': return SiTiktok;
 													case 'twitter': return FaTwitter;
 													case 'discord': return FaDiscord;
 													case 'linkedin': return FaLinkedin;
@@ -374,6 +377,8 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 													case 'playStore': return 'Google Play';
 													case 'appStore': return 'App Store';
 													case 'youtube': return locale === 'en' ? 'Gameplay Trailer' : 'Gameplay Trailer';
+													case 'instagram': return 'Instagram';
+													case 'tiktok': return 'TikTok';
 													case 'twitter': return 'Twitter';
 													case 'discord': return 'Discord';
 													case 'linkedin': return 'LinkedIn';
@@ -395,6 +400,24 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 															text: 'text-red-700',
 															icon: 'text-red-600',
 															arrow: 'text-red-600'
+														};
+													case 'instagram':
+														return {
+															bg: 'bg-pink-50',
+															hoverBg: 'hover:bg-pink-100',
+															border: 'border-pink-200',
+															text: 'text-pink-700',
+															icon: 'text-pink-600',
+															arrow: 'text-pink-600'
+														};
+													case 'tiktok':
+														return {
+															bg: 'bg-slate-50',
+															hoverBg: 'hover:bg-slate-100',
+															border: 'border-slate-200',
+															text: 'text-slate-700',
+															icon: 'text-slate-600',
+															arrow: 'text-slate-600'
 														};
 													case 'build':
 														return {

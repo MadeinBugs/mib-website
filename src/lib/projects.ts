@@ -58,6 +58,8 @@ export interface ProjectData {
 		playStore?: string;
 		appStore?: string;
 		youtube?: string;
+		instagram?: string;
+		tiktok?: string;
 		twitter?: string;
 		discord?: string;
 		linkedin?: string;
@@ -180,6 +182,8 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 		projectType: 'studio',
 		links: {
 			youtube: 'https://youtu.be/6QbVCweByhw',
+			instagram: 'https://www.instagram.com/playasumi/',
+			tiktok: 'https://www.tiktok.com/@play.asumi',
 			figma: 'https://www.figma.com/design/Pk52yH6ZwmdJxX6CwUtRb1/Asumi-%7C-Portf%C3%B3lio?node-id=0-1&p=f&t=2UqtblEiXyFUiK3E-0',
 			discord: 'https://discord.gg/YX9aDaYwnx',
 			build: 'https://drive.google.com/drive/folders/1Tsry9Qw7GuEvOCrDyeYwoagVOfSzLF3Q?usp=sharing'

@@ -33,5 +33,25 @@
 			"portuguese": "Português",
 			"english": "English"
 		}
+	},
+	"newsletter": {
+		"title": "Fique por Dentro",
+		"subtitle": "Seja o primeiro a saber sobre atualizações, playtests e novidades do Asumi.",
+		"placeholder": "seu@email.com",
+		"submit": "Inscrever-se",
+		"submitting": "Inscrevendo...",
+		"invalidEmail": "Por favor, insira um email válido.",
+		"error": "Algo deu errado. Tente novamente.",
+		"successTitle": "Inscrição realizada! ✅",
+		"successMessage": "Verifique sua caixa de entrada para confirmar a inscrição.",
+		"preferencesTitle": "Quer receber ainda mais?",
+		"preferencesDescription": "Escolha quais listas você gostaria de participar:",
+		"studioLabel": "Novidades do Estúdio",
+		"studioDescription": "Atualizações sobre a Made in Bugs e todos os nossos projetos.",
+		"devlogLabel": "Devlog",
+		"devlogDescription": "Posts dos bastidores do desenvolvimento.",
+		"preferencesConfirm": "Sim, quero!",
+		"preferencesDismiss": "Não, obrigado",
+		"done": "Tudo certo! Verifique sua caixa de entrada para confirmar."
 	}
 }

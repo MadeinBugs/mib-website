@@ -33,5 +33,25 @@
 			"portuguese": "Português",
 			"english": "English"
 		}
+	},
+	"newsletter": {
+		"title": "Stay in the Loop",
+		"subtitle": "Be the first to know about Asumi updates, playtests, and launch news.",
+		"placeholder": "your@email.com",
+		"submit": "Subscribe",
+		"submitting": "Subscribing...",
+		"invalidEmail": "Please enter a valid email address.",
+		"error": "Something went wrong. Please try again.",
+		"successTitle": "You're in! ✅",
+		"successMessage": "Check your inbox to confirm your subscription.",
+		"preferencesTitle": "Want even more?",
+		"preferencesDescription": "Choose which lists you'd like to join:",
+		"studioLabel": "Studio News",
+		"studioDescription": "Updates about Made in Bugs and all our projects.",
+		"devlogLabel": "Devlog",
+		"devlogDescription": "Behind-the-scenes development posts.",
+		"preferencesConfirm": "Yes, sign me up!",
+		"preferencesDismiss": "No thanks",
+		"done": "All set! Check your inbox to confirm."
 	}
 }

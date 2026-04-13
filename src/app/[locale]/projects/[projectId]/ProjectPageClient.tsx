@@ -25,6 +25,7 @@ import {
 	FaDownload
 } from 'react-icons/fa';
 import { SiItchdotio, SiRoblox, SiIos, SiTiktok } from 'react-icons/si';
+import NewsletterSection from '../../../../components/newsletter/NewsletterSection';
 
 interface ProjectPageClientProps {
 	project: ProjectData;
@@ -177,7 +178,10 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 							</div>
 						);
 					})()}
-
+					{/* Newsletter signup — only on Asumi page, before markdown content */}
+					{project.id === 'asumi' && (
+						<NewsletterSection locale={locale} />
+					)}
 					{/* Project Details */}
 					<div className="grid md:grid-cols-[70%_30%] gap-8">
 						{/* Left Column - Description */}

@@ -39,7 +39,7 @@ export function getConfirmationEmailSubject(locale: 'pt-BR' | 'en'): string {
 
 export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmailParams): string {
 	const t = strings[locale];
-	const logoUrl = `${SITE_URL}/assets/mail/MiB-Mail-Logo2.png`;
+	const logoUrl = `${SITE_URL}/assets/mail/MiB-Mail-Logo3.png`;
 	const bannerUrl = `${SITE_URL}/assets/mail/MiB-Mail-Banner1.png`;
 
 	return `<!DOCTYPE html>
@@ -74,7 +74,7 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 <!-- Logo row below banner, left-aligned -->
 <tr>
 <td style="padding:16px 24px 12px;background-color:#ffffff;">
-<img src="${logoUrl}" alt="Made in Bugs" height="40" style="display:block;height:40px;width:auto;border:0;"/>
+<img src="${logoUrl}" alt="Made in Bugs" height="56" style="display:block;height:56px;width:auto;border:0;"/>
 </td>
 </tr>
 </table>

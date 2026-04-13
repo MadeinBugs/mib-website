@@ -96,8 +96,8 @@ export const projectsDatabase: ProjectData[] = [
 			'pt-BR': 'Little Things'
 		},
 		description: {
-			en: 'A cozy exploration game where you live alongside exotic animals on your own island.',
-			'pt-BR': 'Um jogo de exploração cozy onde você convive com os animais exóticos da sua própria ilha.'
+			en: 'A cozy game for PC and consoles where you live, feed, and photograph animals on a mysterious island.',
+			'pt-BR': 'Um jogo cozy para PC e consoles sobre onde você convive, alimenta e tira fotos de animais em uma ilha misteriosa.'
 		},
 		longDescription: {
 			en:
@@ -136,22 +136,23 @@ You have your trusty tome, your diary, your adventurer's journal, and it is your
 
 				`## Faça Amizade com os Habitantes da Ilha
 
-Como espírito da floresta recém-desperto, você se encontra em uma ilha cheia de pássaros, insetos e todo tipo de animal.
+Como um espírito da floresta que acabou de despertar, você se encontra em uma ilha cheia de animais.
 
-Explore esta ilha profunda, atravessando florestas, selvas, praias e cavernas. Descubra mais sobre sua nova casa enquanto também faz amizades e cresce como um pequeno espírito.
+Explore esta ilha, suas florestas, selvas, praias e cavernas. Descubra mais sobre sua nova casa enquanto faz amizades e cuida desses animais.
 
 [asumi-6.png | asumi-7.png]
 
 ## Registre Tudo
 
-Use sua câmera caseira para registrar momentos incríveis e descobrir mais sobre como o ecossistema funciona. Conforme você tira fotos, ganha conhecimento precioso para avançar.
+Use sua câmera especial para registrar momentos incríveis. Conforme você tira fotos, ganha conhecimento precioso para avançar.
 
 [asumi-taking-pictures.jpg]
 [asumi-8.png]
 
 ## Complete o Tomo
 
-Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu dever completar as descrições de todos os animais da ilha, para ganhar seus emblemas e sua confiança.
+Você tem o seu diário de aventureiro chamado de Tomo, onde todas as suas fotos e conhecimentos vão parar. Aqui você pode ver seu progresso, as comidas que os animais comem, suas conquistas e até suas missões.
+Ganhe emblemas especiais para cada animal ao completar suas descrições e ganhar sua confiança.
 
 [asumi-2.png]
 

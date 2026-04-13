@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getContact, updateContact } from '../../../../lib/brevo';
 
-const TOKEN_TTL_MS = 48 * 60 * 60 * 1000; // 48 hours
+const TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 function getSiteUrl(): string {
 	return process.env.NEXT_PUBLIC_SITE_URL || 'https://www.madeinbugs.com.br';

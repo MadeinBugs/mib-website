@@ -165,15 +165,11 @@ Você tem seu tomo confiável, seu diário, seu diário de aventureiro, e é seu
 [asumi-11.png]
 `
 		},
-		platform: ['Android', 'iOS'],
+		platform: ['Steam'],
 		platformMessages: {
-			android: {
-				en: 'Coming later this year...',
-				'pt-BR': 'Chegando ainda este ano...'
-			},
-			ios: {
-				en: 'Coming later this year...',
-				'pt-BR': 'Chegando ainda este ano...'
+			steam: {
+				en: 'Coming soon...',
+				'pt-BR': 'Em breve...'
 			}
 		},
 		status: 'development',

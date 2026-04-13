@@ -6,7 +6,8 @@ import {
 	FaApple,
 	FaLinux,
 	FaAndroid,
-	FaGlobe
+	FaGlobe,
+	FaSteam
 } from 'react-icons/fa';
 import { SiRoblox, SiIos } from 'react-icons/si';
 
@@ -81,7 +82,7 @@ const platformConfig = {
 		hoverBg: 'hover:bg-red-200'
 	},
 	steam: {
-		icon: FaGlobe, // Using globe as fallback for Steam platform
+		icon: FaSteam,
 		label: { en: 'Steam', 'pt-BR': 'Steam' },
 		color: 'text-blue-700',
 		bgColor: 'bg-blue-100',

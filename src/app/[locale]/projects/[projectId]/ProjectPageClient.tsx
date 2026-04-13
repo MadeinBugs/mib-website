@@ -289,6 +289,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 												const pl = p.toLowerCase();
 												if (pl.includes('android')) return FaAndroid;
 												if (pl.includes('ios')) return SiIos;
+												if (pl.includes('steam')) return FaSteam;
 												if (pl.includes('windows')) return FaGlobe;
 												if (pl.includes('mac')) return FaGlobe;
 												if (pl.includes('linux')) return FaGlobe;

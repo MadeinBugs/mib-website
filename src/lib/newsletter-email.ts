@@ -39,7 +39,7 @@ export function getConfirmationEmailSubject(locale: 'pt-BR' | 'en'): string {
 
 export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmailParams): string {
 	const t = strings[locale];
-	const logoUrl = `${SITE_URL}/assets/mail/MiB-Mail-Logo.png`;
+	const logoUrl = `${SITE_URL}/assets/mail/MiB-Mail-Logo2.png`;
 	const bannerUrl = `${SITE_URL}/assets/mail/MiB-Mail-Banner1.png`;
 
 	return `<!DOCTYPE html>

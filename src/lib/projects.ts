@@ -96,7 +96,7 @@ export const projectsDatabase: ProjectData[] = [
 			'pt-BR': 'Little Things'
 		},
 		description: {
-			en: 'A cozy game for PC and consoles where you live, feed, and photograph animals on a mysterious island.',
+			en: 'A cozy game for PC and consoles where you live alongside, feed, and photograph animals on a mysterious island.',
 			'pt-BR': 'Um jogo cozy para PC e consoles sobre onde você convive, alimenta e tira fotos de animais em uma ilha misteriosa.'
 		},
 		longDescription: {
@@ -104,22 +104,23 @@ export const projectsDatabase: ProjectData[] = [
 
 				`## Befriend the Inhabitants of the Island
 
-As a spirit of the forest just awoken from a deep slumber, you find yourself on an island full of birds, insects, and all kinds of animals.
+As a forest spirit that has just awakened, you find yourself on an island full of animals.
 
-Explore this deep island, traversing forests, jungles, beaches and caverns. Discover more about your new home as you make friends and grow as a little spirit.
+Explore this island through its forests, jungles, beaches, and caves. Discover more about your new home while making friends and caring for them.
 
 [asumi-6.png | asumi-7.png]
 
 ## Register Everything
 
-Use your trusty homemade Camera to register important moments and discover more about how the ecosystem works. As you take pictures, you gain precious knowledge to progress.
+Use your special camera to capture amazing moments. As you take photos, you gain precious knowledge to progress.
 
 [asumi-taking-pictures.jpg]
 [asumi-8.png]
 
 ## Complete the Tome
 
-You have your trusty tome, your diary, your adventurer's journal, and it is your duty to complete the descriptions of all of the animals on the island, to earn their badges and their trust.
+You have your adventurer's diary called the Tome, where all your photos and knowledge are stored. Here, you can see your progress, the foods animals eat, your achievements, and even your missions.
+Earn special badges for each animal by completing their descriptions and gaining their trust.
 
 [asumi-2.png]
 
@@ -138,7 +139,7 @@ You have your trusty tome, your diary, your adventurer's journal, and it is your
 
 Como um espírito da floresta que acabou de despertar, você se encontra em uma ilha cheia de animais.
 
-Explore esta ilha, suas florestas, selvas, praias e cavernas. Descubra mais sobre sua nova casa enquanto faz amizades e cuida desses animais.
+Explore esta ilha, suas florestas, selvas, praias e cavernas. Descubra mais sobre sua nova casa enquanto faz amigos.
 
 [asumi-6.png | asumi-7.png]
 

@@ -1,6 +1,6 @@
 // DEV ONLY — delete before production deploy.
 // Preview rendered email HTML in the browser.
-// Usage: GET /api/dev/preview-email?template=welcome&locale=pt-BR
+// Usage: GET /api/dev/preview-email?template=welcome&locale=pt-BR&devlog=1&studio=1
 
 import { NextRequest, NextResponse } from 'next/server';
 import { renderEmail } from '../../../../emails/render';
@@ -15,8 +15,20 @@ export async function GET(request: NextRequest) {
 	const localeParam = searchParams.get('locale');
 	const locale: 'pt-BR' | 'en' = localeParam === 'pt-BR' ? 'pt-BR' : 'en';
 
+	// Collect all other query params as template variables
+	const variables: Record<string, string> = {};
+	searchParams.forEach((value, key) => {
+		if (key !== 'template' && key !== 'locale') {
+			variables[key] = value;
+		}
+	});
+
 	try {
-		const { htmlContent, subject } = renderEmail(template, locale);
+		const { htmlContent, subject } = renderEmail(
+			template,
+			locale,
+			Object.keys(variables).length > 0 ? variables : undefined
+		);
 		return new NextResponse(
 			`<!-- Subject: ${subject} -->\n${htmlContent}`,
 			{ headers: { 'Content-Type': 'text/html; charset=utf-8' } }

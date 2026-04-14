@@ -190,11 +190,23 @@ export function renderEmail(
 		throw new Error(`Email template not found: ${filePath}`);
 	}
 
-	// Apply variable substitutions if provided
+	// Process conditional blocks: {{#flag}}content{{/flag}}
+	// If variables[flag] is truthy, keep the content; otherwise remove the block.
 	if (variables) {
+		raw = raw.replace(
+			/\{\{#([a-zA-Z_][a-zA-Z0-9_]*)\}\}([\s\S]*?)\{\{\/\1\}\}/g,
+			(_, key, content) => (variables[key] ? content : '')
+		);
+		// Simple value substitutions: {{key}} → value
 		for (const [key, value] of Object.entries(variables)) {
 			raw = raw.split(`{{${key}}}`).join(value);
 		}
+	} else {
+		// No variables — strip all conditional blocks
+		raw = raw.replace(
+			/\{\{#([a-zA-Z_][a-zA-Z0-9_]*)\}\}[\s\S]*?\{\{\/\1\}\}/g,
+			''
+		);
 	}
 
 	// Parse frontmatter

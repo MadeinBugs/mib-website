@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getContact, updateContact, sendTransactionalEmail } from '../../../../lib/brevo';
+import { getContact, updateContact, sendTransactionalEmail, BREVO_LISTS } from '../../../../lib/brevo';
 import { renderEmail } from '../../../../emails/render';
 
 const TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
@@ -65,7 +65,12 @@ export async function GET(request: NextRequest) {
 
 		// Send welcome email (non-blocking — don't prevent redirect on failure)
 		try {
-			const { subject, htmlContent, textContent } = renderEmail('welcome', locale);
+			const lists = contact.listIds || [];
+			const welcomeVars: Record<string, string> = {};
+			if (lists.includes(BREVO_LISTS.DEVLOG)) welcomeVars.devlog = '1';
+			if (lists.includes(BREVO_LISTS.STUDIO)) welcomeVars.studio = '1';
+
+			const { subject, htmlContent, textContent } = renderEmail('welcome', locale, welcomeVars);
 			await sendTransactionalEmail({
 				to: [{ email }],
 				subject,

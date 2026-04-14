@@ -13,12 +13,12 @@ interface BaseTemplateParams {
 
 const footerStrings = {
 	en: {
-		studio: 'Made in Bugs · Game Studio',
+		studio: 'Made in Bugs · Bugsletter',
 		unsubscribe: 'You received this because you subscribed to Made in Bugs updates.',
 		rights: '© 2026 Made in Bugs. All rights reserved.',
 	},
 	'pt-BR': {
-		studio: 'Made in Bugs · Game Studio',
+		studio: 'Made in Bugs · Bugsletter',
 		unsubscribe: 'Você recebeu este email porque se inscreveu para novidades da Made in Bugs.',
 		rights: '© 2026 Made in Bugs. Todos os direitos reservados.',
 	},

@@ -1,22 +1,22 @@
 ---
-subject: "🎮 Welcome! You're on the Asumi list"
+subject: "Welcome! You're on the Asumi list"
 preheader: "Thanks for subscribing! Stay tuned for updates."
 ---
 
-# Hey! 👋
+## Hey there
 
 Thanks for subscribing. You'll get news about **Asumi** straight to your inbox.
 
-## What to expect
+### What to expect
 
-- 📢 Important announcements (release date, trailers, demos)
-- 🎮 Steam page updates
+- Important announcements (release date, trailers, demos)
+- Steam page updates
 
-> No spam. Only what matters.
+*No spam. Only what matters.*
 
-## In the meantime
+### In the meantime
 
-- [Check out the Asumi page](https://www.madeinbugs.com.br/en/projects/asumi)
+[Check out our last trailer](https://www.youtube.com/watch?v=6QbVCweByhw&feature=youtube)
 
 See you soon,
 **Made in Bugs Team**

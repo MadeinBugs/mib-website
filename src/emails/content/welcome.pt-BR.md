@@ -3,20 +3,20 @@ subject: "🎮 Bem-vindo! Você está na lista do Asumi"
 preheader: "Obrigado por se inscrever! Fique de olho nas novidades."
 ---
 
-# Ei! 👋
+## Olá
 
 Obrigado por se inscrever. Você vai receber novidades sobre o **Asumi** direto no seu email.
 
-## O que esperar
+### O que esperar
 
-- 📢 Anúncios importantes (data de lançamento, trailers, demos)
-- 🎮 Atualizações da página da Steam
+- Anúncios importantes (data de lançamento, trailers, demos)
+- Atualizações da página da Steam
 
-> Sem spam. Só o que importa.
+*Sem spam. Só o que importa.*
 
-## Enquanto isso
+### Enquanto isso
 
-- [Veja a página do Asumi](https://www.madeinbugs.com.br/pt-BR/projects/asumi)
+[Confira nosso último trailer](https://www.youtube.com/watch?v=6QbVCweByhw&feature=youtube)
 
 Até breve,
 **Equipe Made in Bugs**

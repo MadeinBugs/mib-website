@@ -4,6 +4,17 @@
 const SITE_URL = 'https://www.madeinbugs.com.br';
 const LOGO_URL = `${SITE_URL}/assets/mail/MiB-Mail-Logo3.png`;
 const BANNER_URL = `${SITE_URL}/assets/mail/MiB-Mail-Banner1.png`;
+const ICONS_URL = `${SITE_URL}/assets/mail/icons`;
+
+// Social links in footer — update URLs to match the studio's actual handles
+const SOCIAL_LINKS = [
+	{ name: 'Instagram', href: 'https://www.instagram.com/madeinbugs/', icon: `${ICONS_URL}/instagram.png` },
+	{ name: 'TikTok', href: 'https://www.tiktok.com/@madeinbugs', icon: `${ICONS_URL}/tiktok.png` },
+	{ name: 'YouTube', href: 'https://www.youtube.com/@madeinbugs', icon: `${ICONS_URL}/youtube.png` },
+	{ name: 'X', href: 'https://x.com/madeinbugs', icon: `${ICONS_URL}/x.png` },
+	{ name: 'Bluesky', href: 'https://bsky.app/profile/madeinbugs.com.br', icon: `${ICONS_URL}/bluesky.png` },
+	{ name: 'Website', href: SITE_URL, icon: `${ICONS_URL}/website.png` },
+];
 
 interface BaseTemplateParams {
 	body: string;
@@ -73,20 +84,14 @@ ${body}
 <tr>
 <td style="padding:24px 28px;background-color:#12121f;border-top:1px solid #2d2d44;">
 
-<!-- Social Links -->
+<!-- Social Icons -->
 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
 <tr>
-<td style="padding:0 8px;">
-<a href="https://www.instagram.com/madeinbugs/" target="_blank" style="color:#9ca3af;font-size:13px;text-decoration:none;">Instagram</a>
-</td>
-<td style="color:#4a4a5a;font-size:13px;">·</td>
-<td style="padding:0 8px;">
-<a href="https://www.tiktok.com/@madeinbugs" target="_blank" style="color:#9ca3af;font-size:13px;text-decoration:none;">TikTok</a>
-</td>
-<td style="color:#4a4a5a;font-size:13px;">·</td>
-<td style="padding:0 8px;">
-<a href="${SITE_URL}" target="_blank" style="color:#9ca3af;font-size:13px;text-decoration:none;">Website</a>
-</td>
+${SOCIAL_LINKS.map(({ name, href, icon }) => `<td style="padding:0 6px;">
+<a href="${href}" target="_blank" title="${name}" style="display:block;line-height:0;">
+<img src="${icon}" alt="${name}" width="28" height="28" style="display:block;width:28px;height:28px;border:0;opacity:0.65;"/>
+</a>
+</td>`).join('\n')}
 </tr>
 </table>
 

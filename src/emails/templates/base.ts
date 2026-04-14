@@ -4,16 +4,16 @@
 const SITE_URL = 'https://www.madeinbugs.com.br';
 const LOGO_URL = `${SITE_URL}/assets/mail/MiB-Mail-Logo3.png`;
 const BANNER_URL = `${SITE_URL}/assets/mail/MiB-Mail-Banner1.png`;
-const ICONS_URL = `${SITE_URL}/assets/mail/icons`;
+const SOCIAL_URL = `${SITE_URL}/assets/social-media`;
 
 // Social links in footer — update URLs to match the studio's actual handles
 const SOCIAL_LINKS = [
-	{ name: 'Instagram', href: 'https://www.instagram.com/madeinbugs/', icon: `${ICONS_URL}/instagram.png` },
-	{ name: 'TikTok', href: 'https://www.tiktok.com/@madeinbugs', icon: `${ICONS_URL}/tiktok.png` },
-	{ name: 'YouTube', href: 'https://www.youtube.com/@madeinbugs', icon: `${ICONS_URL}/youtube.png` },
-	{ name: 'X', href: 'https://x.com/madeinbugs', icon: `${ICONS_URL}/x.png` },
-	{ name: 'Bluesky', href: 'https://bsky.app/profile/madeinbugs.com.br', icon: `${ICONS_URL}/bluesky.png` },
-	{ name: 'Website', href: SITE_URL, icon: `${ICONS_URL}/website.png` },
+	{ name: 'Instagram', href: 'https://www.instagram.com/madeinbugs/', icon: `${SOCIAL_URL}/instagram.png` },
+	{ name: 'TikTok', href: 'https://www.tiktok.com/@madeinbugs', icon: `${SOCIAL_URL}/tiktok.png` },
+	{ name: 'YouTube', href: 'https://www.youtube.com/@madeinbugs', icon: `${SOCIAL_URL}/youtube.png` },
+	{ name: 'X', href: 'https://x.com/madeinbugs', icon: `${SOCIAL_URL}/x.png` },
+	{ name: 'Bluesky', href: 'https://bsky.app/profile/madeinbugs.com.br', icon: `${SOCIAL_URL}/bluesky.png` },
+	{ name: 'Website', href: SITE_URL, icon: LOGO_URL },
 ];
 
 interface BaseTemplateParams {
@@ -88,8 +88,8 @@ ${body}
 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
 <tr>
 ${SOCIAL_LINKS.map(({ name, href, icon }) => `<td style="padding:0 6px;">
-<a href="${href}" target="_blank" title="${name}" style="display:block;line-height:0;">
-<img src="${icon}" alt="${name}" width="28" height="28" style="display:block;width:28px;height:28px;border:0;opacity:0.65;"/>
+<a href="${href}" target="_blank" title="${name}" style="display:inline-block;line-height:0;font-size:12px;color:#9ca3af;text-decoration:none;">
+<img src="${icon}" alt="${name}" width="24" height="24" style="display:block;width:24px;height:24px;border:0;opacity:0.65;"/>
 </a>
 </td>`).join('\n')}
 </tr>

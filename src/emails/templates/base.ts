@@ -10,6 +10,7 @@ const SOCIAL_URL = `${SITE_URL}/assets/social-media`;
 const SOCIAL_LINKS = [
 	{ name: 'Instagram', href: 'https://www.instagram.com/madeinbugs/', icon: `${SOCIAL_URL}/instagram.png` },
 	{ name: 'YouTube', href: 'https://www.youtube.com/@madeinbugs', icon: `${SOCIAL_URL}/youtube.png` },
+	{ name: 'LinkedIn', href: 'https://www.linkedin.com/company/madeinbugs', icon: `${SOCIAL_URL}/linkedin.png` },
 	{ name: 'X', href: 'https://x.com/madeinbugs', icon: `${SOCIAL_URL}/x.png` },
 	{ name: 'Bluesky', href: 'https://bsky.app/profile/madeinbugs.com.br', icon: `${SOCIAL_URL}/bluesky.png` },
 

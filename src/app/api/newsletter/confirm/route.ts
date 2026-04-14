@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getContact, updateContact } from '../../../../lib/brevo';
+import { getContact, updateContact, sendTransactionalEmail } from '../../../../lib/brevo';
+import { renderEmail } from '../../../../emails/render';
 
 const TOKEN_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
@@ -61,6 +62,20 @@ export async function GET(request: NextRequest) {
 				CONFIRMATION_CREATED_AT: '',
 			},
 		});
+
+		// Send welcome email (non-blocking — don't prevent redirect on failure)
+		try {
+			const { subject, htmlContent, textContent } = renderEmail('welcome', locale);
+			await sendTransactionalEmail({
+				to: [{ email }],
+				subject,
+				htmlContent,
+				textContent,
+				sender: { name: 'Made in Bugs', email: 'noreply@madeinbugs.com.br' },
+			});
+		} catch (welcomeError) {
+			console.error('[newsletter/confirm] Failed to send welcome email:', welcomeError);
+		}
 
 		return redirect(locale, 'success');
 	} catch (error) {

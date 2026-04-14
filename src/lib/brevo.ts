@@ -112,17 +112,23 @@ export async function sendTransactionalEmail(params: {
 	to: { email: string }[];
 	subject: string;
 	htmlContent: string;
+	textContent?: string;
 	sender: { name: string; email: string };
 }): Promise<void> {
+	const body: Record<string, unknown> = {
+		to: params.to,
+		subject: params.subject,
+		htmlContent: params.htmlContent,
+		sender: params.sender,
+	};
+	if (params.textContent) {
+		body.textContent = params.textContent;
+	}
+
 	const res = await fetch(`${BREVO_API_URL}/smtp/email`, {
 		method: 'POST',
 		headers: headers(),
-		body: JSON.stringify({
-			to: params.to,
-			subject: params.subject,
-			htmlContent: params.htmlContent,
-			sender: params.sender,
-		}),
+		body: JSON.stringify(body),
 	});
 
 	if (!res.ok) {

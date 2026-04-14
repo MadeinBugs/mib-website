@@ -7,7 +7,7 @@ preheader: "Thanks for subscribing! Stay tuned for updates."
 
 Thanks for subscribing to the Bugsletter! You'll be the first to know about new updates about our games.
 
-### What to expect
+### What to expect:
 
 - Important announcements (release date, trailers, demos)
 - Steam page updates
@@ -16,7 +16,7 @@ Thanks for subscribing to the Bugsletter! You'll be the first to know about new 
 {{/studio}}
 *No spam. Only what matters.*
 
-### In the meantime
+### In the meantime...
 
 [Check out our last trailer](https://www.youtube.com/watch?v=6QbVCweByhw&feature=youtube)
 

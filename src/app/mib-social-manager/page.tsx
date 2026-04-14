@@ -10,6 +10,10 @@ export default function MibSocialManagerPage() {
 		<main className="min-h-screen bg-white flex flex-col items-center justify-center px-6">
 			<div className="max-w-sm w-full text-center space-y-8">
 				<h1 className="text-3xl font-bold text-neutral-800">MiB Social Manager</h1>
+				<p className="text-neutral-600 leading-relaxed">
+					This is an internal Made in Bugs tool used to manage and schedule social media
+					content across our official channels.
+				</p>
 
 				<div className="flex flex-col gap-3">
 					<Link

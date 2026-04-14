@@ -130,6 +130,6 @@ async function sendConfirmationEmail(
 		to: [{ email }],
 		subject,
 		htmlContent,
-		sender: { name: 'Made in Bugs', email: 'noreply@madeinbugs.com.br' },
+		sender: { name: process.env.BREVO_SENDER_NAME!, email: process.env.BREVO_SENDER_EMAIL! },
 	});
 }

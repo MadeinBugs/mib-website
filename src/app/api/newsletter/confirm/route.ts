@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
 				subject,
 				htmlContent,
 				textContent,
-				sender: { name: 'Made in Bugs', email: 'noreply@madeinbugs.com.br' },
+				sender: { name: process.env.BREVO_SENDER_NAME!, email: process.env.BREVO_SENDER_EMAIL! },
 			});
 		} catch (welcomeError) {
 			console.error('[newsletter/confirm] Failed to send welcome email:', welcomeError);

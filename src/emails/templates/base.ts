@@ -9,11 +9,10 @@ const SOCIAL_URL = `${SITE_URL}/assets/social-media`;
 // Social links in footer — update URLs to match the studio's actual handles
 const SOCIAL_LINKS = [
 	{ name: 'Instagram', href: 'https://www.instagram.com/madeinbugs/', icon: `${SOCIAL_URL}/instagram.png` },
-	{ name: 'TikTok', href: 'https://www.tiktok.com/@madeinbugs', icon: `${SOCIAL_URL}/tiktok.png` },
 	{ name: 'YouTube', href: 'https://www.youtube.com/@madeinbugs', icon: `${SOCIAL_URL}/youtube.png` },
 	{ name: 'X', href: 'https://x.com/madeinbugs', icon: `${SOCIAL_URL}/x.png` },
 	{ name: 'Bluesky', href: 'https://bsky.app/profile/madeinbugs.com.br', icon: `${SOCIAL_URL}/bluesky.png` },
-	{ name: 'Website', href: SITE_URL, icon: LOGO_URL },
+
 ];
 
 interface BaseTemplateParams {

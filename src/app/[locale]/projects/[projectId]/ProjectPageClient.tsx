@@ -25,7 +25,7 @@ import {
 	FaDownload
 } from 'react-icons/fa';
 import { SiItchdotio, SiRoblox, SiIos, SiTiktok } from 'react-icons/si';
-import NewsletterSection from '../../../../components/newsletter/NewsletterSection';
+import NewsletterSignup from '../../../../components/newsletter/NewsletterSignup';
 
 interface ProjectPageClientProps {
 	project: ProjectData;
@@ -180,7 +180,17 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 					})()}
 					{/* Newsletter signup — only on Asumi page, before markdown content */}
 					{project.id === 'asumi' && (
-						<NewsletterSection locale={locale} />
+						<div className="content-card space-y-4">
+							<h2 className="font-h2 text-xl font-bold text-neutral-800">
+								{locale === 'en' ? 'Stay in the Loop' : 'Fique por Dentro'}
+							</h2>
+							<p className="font-body text-gray-600">
+								{locale === 'en'
+									? 'Be the first to know when the Steam page goes live.'
+									: 'Seja o primeiro a saber quando a página da Steam estiver no ar.'}
+							</p>
+							<NewsletterSignup locale={locale} />
+						</div>
 					)}
 					{/* Project Details */}
 					<div className="grid md:grid-cols-[70%_30%] gap-8">

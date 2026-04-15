@@ -36,22 +36,21 @@
 	},
 	"newsletter": {
 		"title": "Fique por Dentro",
-		"subtitle": "Seja o primeiro a saber sobre atualizações, playtests e novidades do Asumi.",
+		"subtitle": "Seja o primeiro a saber quando a página da Steam estiver no ar.",
 		"placeholder": "seu@email.com",
 		"submit": "Inscrever-se",
 		"submitting": "Inscrevendo...",
 		"invalidEmail": "Por favor, insira um email válido.",
 		"error": "Algo deu errado. Tente novamente.",
-		"successTitle": "Inscrição realizada! ✅",
-		"successMessage": "Verifique sua caixa de entrada para confirmar a inscrição.",
-		"preferencesTitle": "Quer receber ainda mais?",
-		"preferencesDescription": "Escolha quais listas você gostaria de participar:",
-		"studioLabel": "Novidades do Estúdio",
-		"studioDescription": "Atualizações sobre a Made in Bugs e todos os nossos projetos.",
-		"devlogLabel": "Devlog",
-		"devlogDescription": "Posts dos bastidores do desenvolvimento.",
-		"preferencesConfirm": "Sim, quero!",
-		"preferencesDismiss": "Não, obrigado",
-		"done": "Tudo certo! Verifique sua caixa de entrada para confirmar."
+		"rateLimit": "Muitas tentativas. Tente novamente em alguns minutos.",
+		"success": "Deu certo! Verifique sua caixa de entrada 📬"
+	},
+	"bugsletter": {
+		"title": "Asumi Bugsletter",
+		"description": "Oiê! Você foi convidado para se juntar à nossa mailing list! Enviamos atualizações mensais, como lançamento da página da Steam, lançamento da Demo, e eventos futuros! Se isso parece interessante, insira o seu e-mail abaixo. Você pode cancelar a qualquer momento.",
+		"reassurance": "Sem spam. Só novidades importantes.",
+		"signature": "— Andress & Bela",
+		"backToSite": "← Voltar ao site",
+		"ogDescription": "Inscreva-se na Bugsletter do Asumi — seja o primeiro a saber quando a página da Steam estiver no ar."
 	}
 }

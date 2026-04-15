@@ -11,9 +11,8 @@ Thanks for subscribing to the Bugsletter! You'll be the first to know about new 
 
 - Important announcements (release date, trailers, demos)
 - Steam page updates
-{{#devlog}}- Behind-the-scenes devlog
-{{/devlog}}{{#studio}}- News from the studio
-{{/studio}}
+- Behind-the-scenes devlog
+- News from the studio
 *No spam. Only what matters.*
 
 ### In the meantime...

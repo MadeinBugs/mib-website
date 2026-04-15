@@ -36,22 +36,21 @@
 	},
 	"newsletter": {
 		"title": "Stay in the Loop",
-		"subtitle": "Be the first to know about Asumi updates, playtests, and launch news.",
+		"subtitle": "Be the first to know when the Steam page goes live.",
 		"placeholder": "your@email.com",
 		"submit": "Subscribe",
 		"submitting": "Subscribing...",
 		"invalidEmail": "Please enter a valid email address.",
 		"error": "Something went wrong. Please try again.",
-		"successTitle": "You're in! ✅",
-		"successMessage": "Check your inbox to confirm your subscription.",
-		"preferencesTitle": "Want even more?",
-		"preferencesDescription": "Choose which lists you'd like to join:",
-		"studioLabel": "Studio News",
-		"studioDescription": "Updates about Made in Bugs and all our projects.",
-		"devlogLabel": "Devlog",
-		"devlogDescription": "Behind-the-scenes development posts.",
-		"preferencesConfirm": "Yes, sign me up!",
-		"preferencesDismiss": "No thanks",
-		"done": "All set! Check your inbox to confirm."
+		"rateLimit": "Too many attempts. Please try again in a few minutes.",
+		"success": "You're in! Check your inbox 📬"
+	},
+	"bugsletter": {
+		"title": "Asumi Bugsletter",
+		"description": "Hey there! You've been invited to join our mailing list! We send monthly updates, like the Steam page launch, Demo release, and upcoming events! If that sounds interesting, enter your email below. You can unsubscribe anytime.",
+		"reassurance": "No spam. Only important updates.",
+		"signature": "— Andress & Bela",
+		"backToSite": "← Back to site",
+		"ogDescription": "Sign up for the Asumi Bugsletter — be the first to know when the Steam page goes live."
 	}
 }

@@ -11,9 +11,8 @@ Obrigado por se inscrever na Bugsletter! Você será o primeiro a saber de novid
 
 - Anúncios importantes (data de lançamento, trailers, demos)
 - Atualizações da página da Steam
-{{#devlog}}- Bastidores e devlogs
-{{/devlog}}{{#studio}}- Novidades do estúdio
-{{/studio}}
+- Bastidores e devlogs
+- Novidades do estúdio
 *Sem spam. Só o que importa.*
 
 ### Enquanto isso...

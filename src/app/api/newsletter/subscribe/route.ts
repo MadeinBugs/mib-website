@@ -40,14 +40,14 @@ export async function POST(request: NextRequest) {
 		}
 
 		const body = await request.json();
-		const { email, locale, honeypot } = body as {
+		const { email, locale, company } = body as {
 			email?: string;
 			locale?: string;
-			honeypot?: string;
+			company?: string;
 		};
 
 		// Honeypot check — if filled, silently succeed
-		if (honeypot) {
+		if (company) {
 			return NextResponse.json({ success: true });
 		}
 
@@ -107,6 +107,7 @@ export async function POST(request: NextRequest) {
 
 		await sendConfirmationEmail(normalizedEmail, token, normalizedLocale);
 
+		console.log('[Newsletter] Subscribe success:', normalizedEmail);
 		return NextResponse.json({ success: true });
 	} catch (error) {
 		console.error('[newsletter/subscribe] Error:', error);

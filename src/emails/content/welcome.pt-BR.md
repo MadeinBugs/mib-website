@@ -10,10 +10,7 @@ Obrigado por se inscrever na Bugsletter! Você será o primeiro a saber de novid
 ### O que esperar:
 
 - Anúncios importantes (data de lançamento, trailers, demos)
-- Atualizações da página da Steam
 - Bastidores e devlogs
-- Novidades do estúdio
-*Sem spam. Só o que importa.*
 
 ### Enquanto isso...
 

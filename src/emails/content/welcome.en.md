@@ -10,10 +10,7 @@ Thanks for subscribing to the Bugsletter! You'll be the first to know about new 
 ### What to expect:
 
 - Important announcements (release date, trailers, demos)
-- Steam page updates
-- Behind-the-scenes devlog
-- News from the studio
-*No spam. Only what matters.*
+- Behind-the-scenes devlogs
 
 ### In the meantime...
 

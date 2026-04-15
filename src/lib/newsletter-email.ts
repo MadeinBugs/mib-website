@@ -73,8 +73,8 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 </tr>
 <!-- Logo row below banner, overlapping -->
 <tr>
-<td style="padding:0 24px 12px;background-color:#f1ffe3;">
-<div style="margin-top:-28px;">
+<td style="padding:0 24px 4px;background-color:#f1ffe3;">
+<div style="margin-top:-24px;">
 <img src="${logoUrl}" alt="Made in Bugs" height="56" style="display:block;height:56px;width:auto;border:0;"/>
 </div>
 </td>
@@ -85,7 +85,7 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 
 <!-- Body -->
 <tr>
-<td style="padding:8px 28px 32px;">
+<td style="padding:0 28px 32px;">
 <h2 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#1a1a1a;">${t.heading}</h2>
 <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#4a4a4a;">${t.body}</p>
 
@@ -105,7 +105,7 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 
 <!-- Footer -->
 <tr>
-<td style="padding:20px 28px;background-color:#e8f5dc;border-top:1px solid #d4e8c8;">
+<td style="padding:20px 28px;background-color:#edf7e4;border-top:1px solid #d4e8c8;">
 <p style="margin:0 0 8px;font-size:12px;color:#888888;text-align:center;">${t.unsubscribe}</p>
 <p style="margin:0;font-size:12px;color:#888888;text-align:center;">${t.footer}</p>
 </td>

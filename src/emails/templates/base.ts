@@ -62,7 +62,7 @@ ${preheaderHtml}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;">
 <tr><td align="center" style="padding:40px 16px;">
 
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#f4ffeb;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#f7fff0;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
 
 <!-- Header: Banner -->
 <tr>
@@ -73,8 +73,8 @@ ${preheaderHtml}
 
 <!-- Header: Logo (overlaps banner) -->
 <tr>
-<td style="padding:0 24px 12px;background-color:#f4ffeb;">
-<div style="margin-top:-56px;">
+<td style="padding:0 24px 4px;background-color:#f7fff0;">
+<div style="margin-top:-48px;">
 <img src="${LOGO_URL}" alt="Made in Bugs" height="96" style="display:block;height:96px;width:auto;border:0;"/>
 </div>
 </td>
@@ -82,14 +82,14 @@ ${preheaderHtml}
 
 <!-- Body -->
 <tr>
-<td style="padding:1px 28px 32px;">
+<td style="padding:0 28px 32px;">
 ${body}
 </td>
 </tr>
 
 <!-- Footer -->
 <tr>
-<td style="padding:24px 28px;background-color:#e8f5dc;border-top:1px solid #d4e8c8;">
+<td style="padding:24px 28px;background-color:#edf7e4;border-top:1px solid #d4e8c8;">
 
 <!-- Social Icons -->
 <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">

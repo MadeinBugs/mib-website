@@ -107,7 +107,7 @@ export default async function BugsletterPage({ params }: Props) {
 				/>
 
 				{/* Card body */}
-				<div className="p-8" style={{ backgroundColor: '#f4ffeb' }}>
+				<div className="p-8" style={{ backgroundColor: '#f7fff0' }}>
 					{/* Header — (avoids h1 global !important override) */}
 					<div role="heading" aria-level={1} className="text-center mb-4" style={{ fontFamily: "'Amatic SC', cursive", fontSize: '4rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 						{t.title}

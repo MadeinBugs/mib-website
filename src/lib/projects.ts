@@ -51,22 +51,10 @@ export interface ProjectData {
 	teamSize?: number;
 	projectType?: 'studio' | 'client';
 	links?: {
-		website?: string;
-		steam?: string;
-		itchio?: string;
-		github?: string;
-		playStore?: string;
-		appStore?: string;
-		youtube?: string;
-		instagram?: string;
-		tiktok?: string;
-		twitter?: string;
-		discord?: string;
-		linkedin?: string;
-		figma?: string;
-		roblox?: string;
-		wiki?: string;
-		build?: string;
+		[key: string]: {
+			url: string;
+			label: { en: string; 'pt-BR': string };
+		};
 	};
 	videos?: string[];
 	awards?: {
@@ -179,12 +167,30 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 		teamSize: 6,
 		projectType: 'studio',
 		links: {
-			youtube: 'https://youtu.be/6QbVCweByhw',
-			instagram: 'https://www.instagram.com/playasumi/',
-			tiktok: 'https://www.tiktok.com/@play.asumi',
-			figma: 'https://www.figma.com/design/Pk52yH6ZwmdJxX6CwUtRb1/Asumi-%7C-Portf%C3%B3lio?node-id=0-1&p=f&t=2UqtblEiXyFUiK3E-0',
-			discord: 'https://discord.gg/YX9aDaYwnx',
-			build: 'https://drive.google.com/drive/folders/1Tsry9Qw7GuEvOCrDyeYwoagVOfSzLF3Q?usp=sharing'
+			youtube: {
+				url: 'https://go.madeinbugs.com.br/asumipage-youtube',
+				label: { en: 'Gameplay Trailer', 'pt-BR': 'Trailer de Gameplay' }
+			},
+			instagram: {
+				url: 'https://go.madeinbugs.com.br/asumipage-instagram',
+				label: { en: 'Instagram', 'pt-BR': 'Instagram' }
+			},
+			tiktok: {
+				url: 'https://go.madeinbugs.com.br/asumipage-tiktok',
+				label: { en: 'TikTok', 'pt-BR': 'TikTok' }
+			},
+			figma: {
+				url: 'https://go.madeinbugs.com.br/asumipage-artbible',
+				label: { en: 'Art Bible', 'pt-BR': 'Art Bible' }
+			},
+			discord: {
+				url: 'https://go.madeinbugs.com.br/asumipage-discord',
+				label: { en: 'Discord', 'pt-BR': 'Discord' }
+			},
+			build: {
+				url: 'https://go.madeinbugs.com.br/asumipage-build',
+				label: { en: 'Build', 'pt-BR': 'Build' }
+			}
 		},
 		videos: ['https://youtu.be/6QbVCweByhw'],
 		features: {
@@ -402,8 +408,14 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 		platform: ['Android', 'iOS'],
 		hide: true,
 		links: {
-			itchio: 'https://madeinbugs.itch.io/nik-mussarela',
-			playStore: 'https://play.google.com/store/apps/details?id=com.madeinbugs.pizza'
+			itchio: {
+				url: 'https://madeinbugs.itch.io/nik-mussarela',
+				label: { en: 'itch.io', 'pt-BR': 'itch.io' }
+			},
+			playStore: {
+				url: 'https://play.google.com/store/apps/details?id=com.madeinbugs.pizza',
+				label: { en: 'Google Play', 'pt-BR': 'Google Play' }
+			}
 		}
 	},
 	{
@@ -570,8 +582,14 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 			android: 'https://play.google.com/store/apps/details?id=com.P3TGaming.Elementales&hl=pt_BR'
 		},
 		links: {
-			wiki: 'https://cyber-father-c4f.notion.site/Elementales-Wiki-76245a98df0b4e8485e88a166c985e03',
-			youtube: 'https://youtu.be/hgqBdjWYWuM?si=bORz4uAQiXIQmfY5'
+			wiki: {
+				url: 'https://cyber-father-c4f.notion.site/Elementales-Wiki-76245a98df0b4e8485e88a166c985e03',
+				label: { en: 'Wiki', 'pt-BR': 'Wiki' }
+			},
+			youtube: {
+				url: 'https://youtu.be/hgqBdjWYWuM?si=bORz4uAQiXIQmfY5',
+				label: { en: 'Gameplay Trailer', 'pt-BR': 'Trailer de Gameplay' }
+			}
 		},
 		teamSize: 3,
 		projectType: 'client',

@@ -20,21 +20,10 @@ import { SiItchdotio, SiUnity, SiUnrealengine, SiRoblox, SiTiktok } from 'react-
 
 interface ProjectLinksProps {
 	links: {
-		website?: string;
-		steam?: string;
-		itchio?: string;
-		github?: string;
-		playStore?: string;
-		appStore?: string;
-		youtube?: string;
-		instagram?: string;
-		tiktok?: string;
-		twitter?: string;
-		discord?: string;
-		linkedin?: string;
-		figma?: string;
-		roblox?: string;
-		wiki?: string;
+		[key: string]: {
+			url: string;
+			label: { en: string; 'pt-BR': string };
+		};
 	};
 	locale: string;
 }
@@ -165,7 +154,7 @@ const linkConfig = {
 
 export default function ProjectLinks({ links, locale }: ProjectLinksProps) {
 	// Filter out empty links
-	const availableLinks = Object.entries(links).filter(([_, url]) => url && url.trim() !== '');
+	const availableLinks = Object.entries(links).filter(([_, linkData]) => linkData && linkData.url.trim() !== '');
 
 	if (availableLinks.length === 0) {
 		return null;
@@ -177,17 +166,17 @@ export default function ProjectLinks({ links, locale }: ProjectLinksProps) {
 				{locale === 'en' ? 'Extras' : 'Extras'}
 			</h3>
 			<div className="flex flex-wrap gap-3">
-				{availableLinks.map(([linkType, url]) => {
+				{availableLinks.map(([linkType, linkData]) => {
 					const config = linkConfig[linkType as keyof typeof linkConfig];
 					if (!config) return null;
 
 					const Icon = config.icon;
-					const label = config.label[locale as 'en' | 'pt-BR'] || config.label.en;
+					const label = linkData.label[locale as 'en' | 'pt-BR'];
 
 					return (
 						<a
 							key={linkType}
-							href={url}
+							href={linkData.url}
 							target="_blank"
 							rel="noopener noreferrer"
 							className={`

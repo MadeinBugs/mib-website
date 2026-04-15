@@ -350,7 +350,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 										})}
 
 										{/* Project Links */}
-										{project.links && Object.entries(project.links).filter(([_, url]) => url && url.trim() !== '').map(([linkType, url]) => {
+										{project.links && Object.entries(project.links).filter(([_, linkData]) => linkData && linkData.url.trim() !== '').map(([linkType, linkData]) => {
 											const getLinkIcon = (type: string) => {
 												switch (type) {
 													case 'website': return FaGlobe;
@@ -370,28 +370,6 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 													case 'wiki': return FaBook;
 													case 'build': return FaDownload;
 													default: return FaGlobe;
-												}
-											};
-
-											const getLinkLabel = (type: string) => {
-												switch (type) {
-													case 'website': return locale === 'en' ? 'Website' : 'Website';
-													case 'github': return 'GitHub';
-													case 'steam': return 'Steam';
-													case 'itchio': return 'itch.io';
-													case 'playStore': return 'Google Play';
-													case 'appStore': return 'App Store';
-													case 'youtube': return locale === 'en' ? 'Gameplay Trailer' : 'Gameplay Trailer';
-													case 'instagram': return 'Instagram';
-													case 'tiktok': return 'TikTok';
-													case 'twitter': return 'Twitter';
-													case 'discord': return 'Discord';
-													case 'linkedin': return 'LinkedIn';
-													case 'figma': return 'Art Bible';
-													case 'roblox': return 'Roblox';
-													case 'wiki': return 'Wiki';
-													case 'build': return locale === 'en' ? 'Build' : 'Build';
-													default: return type;
 												}
 											};
 
@@ -447,18 +425,19 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 
 											const Icon = getLinkIcon(linkType);
 											const colors = getLinkColors(linkType);
+											const label = linkData.label[locale as 'en' | 'pt-BR'];
 
 											return (
 												<a
 													key={`link-${linkType}`}
-													href={url}
+													href={linkData.url}
 													target="_blank"
 													rel="noopener noreferrer"
 													className={`flex items-center justify-between w-full px-3 py-2 ${colors.bg} ${colors.hoverBg} border ${colors.border} rounded-lg transition-all duration-200 hover:shadow-md group`}
 												>
 													<span className={`flex items-center gap-2 text-sm font-medium ${colors.text}`}>
 														<Icon className={`text-base flex-shrink-0 ${colors.icon}`} />
-														{getLinkLabel(linkType)}
+														{label}
 													</span>
 													<svg className={`w-3 h-3 ${colors.arrow} group-hover:translate-x-1 transition-transform`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
 														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />

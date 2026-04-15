@@ -78,6 +78,11 @@ export default function NewsletterSignup({
 
 			// Always treat as success (server returns 200 even for duplicates)
 			setStatus('success');
+
+			// Track newsletter subscription
+			if (typeof window !== 'undefined' && (window as any).umami) {
+				(window as any).umami.track('newsletter_subscribe');
+			}
 		} catch {
 			setErrorMsg(t.error);
 			setStatus('error');

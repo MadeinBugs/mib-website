@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import Script from 'next/script';
 import { getMetadataAssetPath } from '../lib/metadataPaths';
 import { getVersionInfo } from '../lib/version';
 import VersionLogger from '../components/VersionLogger';
@@ -65,6 +66,12 @@ export default function RootLayout({
       <body className="font-sans text-neutral-800">
         <VersionLogger />
         {children}
+        <Script
+          defer
+          src={`${process.env.NEXT_PUBLIC_UMAMI_URL}/script.js`}
+          data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

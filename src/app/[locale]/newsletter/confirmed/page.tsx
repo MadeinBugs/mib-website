@@ -16,7 +16,7 @@ const messages = {
 		expired: { text: 'Link expired. It happens! Please subscribe again.' },
 		invalid: { text: 'Invalid or expired link.' },
 		error: { text: 'Something went wrong. Please try subscribing again.' },
-		back: 'Back to Asumi',
+		back: 'Homepage',
 	},
 	'pt-BR': {
 		success: { text: 'Inscrição confirmada! Você receberá novidades em breve.' },
@@ -24,7 +24,7 @@ const messages = {
 		expired: { text: 'Link expirado. Acontece! Por favor, inscreva-se novamente.' },
 		invalid: { text: 'Link inválido ou expirado.' },
 		error: { text: 'Algo deu errado. Tente se inscrever novamente.' },
-		back: 'Voltar para o Asumi',
+		back: 'Página inicial',
 	},
 } as const;
 
@@ -92,7 +92,7 @@ export default async function NewsletterConfirmedPage({ params, searchParams }: 
 			<div className={`max-w-md w-full space-y-6 p-6 rounded-lg border-2 ${colors.border}`}>
 				<p className={`text-lg ${colors.text} leading-relaxed`}>{msg.text}</p>
 				<Link
-					href={`/${locale}/projects/asumi`}
+					href={`/${locale}`}
 					className={`inline-block px-6 py-3 rounded-lg ${colors.button} text-white font-semibold ${colors.buttonHover} transition-colors`}
 				>
 					{t.back}

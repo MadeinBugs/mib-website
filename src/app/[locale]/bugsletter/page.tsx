@@ -70,7 +70,7 @@ export default async function BugsletterPage({ params }: Props) {
 	const descriptionHtml = marked.parse(t.description) as string;
 
 	return (
-		<main className="relative min-h-screen flex items-center justify-center" style={{ backgroundColor: '#952020' }}>
+		<main className="relative min-h-screen flex items-center justify-center" style={{ backgroundColor: '#1c1c1c' }}>
 			{/* Background image */}
 			<Image
 				src={BG_IMAGE_PATH}

@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
-						content: `⚠️ Alguém solicitou o reenvio de confirmação da Bugsletter.`,
+						content: `⚠️ Reenvio de confirmação solicitado\nEmail: ${normalizedEmail}`,
 					}),
 				}).catch(() => { });
 			}
@@ -124,7 +124,7 @@ export async function POST(request: NextRequest) {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
-					content: `📬 Nova inscrição na Bugsletter!`,
+					content: `📬 Nova inscrição na Bugsletter!\nEmail: ${normalizedEmail}`,
 				}),
 			}).catch(() => { });
 		}

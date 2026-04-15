@@ -63,6 +63,17 @@ export async function GET(request: NextRequest) {
 			},
 		});
 
+		// Discord notification
+		if (process.env.DISCORD_NOTIF_WEBHOOK_URL) {
+			await fetch(process.env.DISCORD_NOTIF_WEBHOOK_URL, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					content: `✅ Email confirmado na Bugsletter!\nEmail: ${email}`,
+				}),
+			}).catch(() => { });
+		}
+
 		// Send welcome email (non-blocking — don't prevent redirect on failure)
 		try {
 			const { subject, htmlContent, textContent } = renderEmail('welcome', locale, undefined, email);

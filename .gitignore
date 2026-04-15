@@ -114,3 +114,5 @@ temp/
 *.njsproj
 *.sln
 *.sw?
+# For testing purposes
+src/app/api/dev/preview-confirm/route.ts

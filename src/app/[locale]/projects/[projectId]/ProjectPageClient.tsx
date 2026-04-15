@@ -182,12 +182,10 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 					{project.id === 'asumi' && (
 						<div className="content-card space-y-4">
 							<h2 className="font-h2 text-xl font-bold text-neutral-800">
-								{locale === 'en' ? 'Stay in the Loop' : 'Fique por Dentro'}
+								{translations?.newsletter?.title}
 							</h2>
 							<p className="font-body text-gray-600">
-								{locale === 'en'
-									? 'Be the first to know when the Steam page goes live.'
-									: 'Seja o primeiro a saber quando a página da Steam estiver no ar.'}
+								{translations?.newsletter?.subtitle}
 							</p>
 							<NewsletterSignup locale={locale} />
 						</div>

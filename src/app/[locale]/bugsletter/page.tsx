@@ -18,6 +18,7 @@ interface BugsletterStrings {
 	title: string;
 	description: string;
 	reassurance: string;
+	confirmationNotice: string;
 	signature: string;
 	backToSite: string;
 	ogDescription: string;
@@ -118,6 +119,11 @@ export default async function BugsletterPage({ params }: Props) {
 
 					{/* Subscribe form */}
 					<NewsletterSignup locale={locale} accentColor="#36c8ab" />
+
+					{/* Confirmation notice */}
+					<p className="font-body text-xs text-neutral-400 text-center mt-3 italic">
+						{t.confirmationNotice}
+					</p>
 
 					{/* Signature */}
 					<p className="font-body text-xs text-neutral-400 text-right mt-4 italic">

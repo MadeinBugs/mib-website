@@ -36,7 +36,7 @@
 	},
 	"newsletter": {
 		"title": "Stay in the Loop",
-		"subtitle": "Be the first to know when the Steam page goes live.",
+		"subtitle": "Subscribe to our mailing list to receive updates and news.",
 		"placeholder": "your@email.com",
 		"submit": "Subscribe",
 		"submitting": "Subscribing...",
@@ -49,8 +49,9 @@
 		"title": "Asumi Bugsletter",
 		"description": "Hey there! You've been invited to join our mailing list! We send monthly updates, like the Steam page launch, Demo release, and upcoming events! If that sounds interesting, enter your email below. You can unsubscribe anytime.",
 		"reassurance": "No spam. Only important updates.",
+		"confirmationNotice": "We'll send you a confirmation email.",
 		"signature": "— Andress & Bela",
 		"backToSite": "← Back to site",
-		"ogDescription": "Sign up for the Asumi Bugsletter — be the first to know when the Steam page goes live."
+		"ogDescription": "Sign up for the Asumi mailing list to receive updates and news."
 	}
 }

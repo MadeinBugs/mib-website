@@ -69,7 +69,7 @@ export async function createContact(params: {
 			email: params.email,
 			listIds: params.listIds,
 			attributes: params.attributes,
-			updateEnabled: false,
+			updateEnabled: true,
 		}),
 	});
 

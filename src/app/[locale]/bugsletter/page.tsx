@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { marked } from 'marked';
 import Image from 'next/image';
 import Link from 'next/link';
 import NewsletterSignup from '../../../components/newsletter/NewsletterSignup';
@@ -42,8 +43,7 @@ interface Props {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { locale: rawLocale } = await params;
 	const locale = normalizeLocale(rawLocale) as 'en' | 'pt-BR';
-	const t = await getBugsletterStrings(locale);
-
+	const t = await getBugsletterStrings(locale); const descriptionHtml = marked.parse(t.description) as string;
 	return {
 		title: t.title,
 		description: t.ogDescription,
@@ -67,6 +67,7 @@ export default async function BugsletterPage({ params }: Props) {
 	const { locale: rawLocale } = await params;
 	const locale = normalizeLocale(rawLocale) as 'en' | 'pt-BR';
 	const t = await getBugsletterStrings(locale);
+	const descriptionHtml = marked.parse(t.description) as string;
 
 	return (
 		<main className="relative min-h-screen flex items-center justify-center" style={{ backgroundColor: '#952020' }}>
@@ -113,9 +114,10 @@ export default async function BugsletterPage({ params }: Props) {
 					</div>
 
 					{/* Description */}
-					<p className="font-body text-sm text-neutral-700 text-center leading-relaxed mb-6">
-						{t.description}
-					</p>
+					<div
+						className="font-body text-sm text-neutral-700 text-center leading-relaxed mb-6 [&>p]:mb-3 [&>p:last-child]:mb-0"
+						dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+					/>
 
 					{/* Subscribe form */}
 					<NewsletterSignup locale={locale} accentColor="#36c8ab" />

@@ -20,22 +20,27 @@ interface BaseTemplateParams {
 	body: string;
 	preheader?: string;
 	locale: 'pt-BR' | 'en';
+	unsubscribeUrl?: string;
 }
 
 const footerStrings = {
 	en: {
 		studio: 'Made in Bugs · Bugsletter',
 		unsubscribe: 'You received this because you subscribed to Made in Bugs updates.',
+		unsubscribePrompt: "Don't want to receive emails?",
+		unsubscribeLink: 'Unsubscribe',
 		rights: '© 2026 Made in Bugs. All rights reserved.',
 	},
 	'pt-BR': {
 		studio: 'Made in Bugs · Bugsletter',
 		unsubscribe: 'Você recebeu este email porque se inscreveu para novidades da Made in Bugs.',
+		unsubscribePrompt: 'Não quer mais receber emails?',
+		unsubscribeLink: 'Cancelar inscrição',
 		rights: '© 2026 Made in Bugs. Todos os direitos reservados.',
 	},
 };
 
-export function wrapInBaseTemplate({ body, preheader, locale }: BaseTemplateParams): string {
+export function wrapInBaseTemplate({ body, preheader, locale, unsubscribeUrl }: BaseTemplateParams): string {
 	const f = footerStrings[locale];
 
 	const preheaderHtml = preheader
@@ -97,6 +102,7 @@ ${SOCIAL_LINKS.map(({ name, href, icon }) => `<td style="padding:0 6px;">
 
 <p style="margin:0 0 8px;font-size:13px;color:#6b7280;text-align:center;">${f.studio}</p>
 <p style="margin:0 0 8px;font-size:11px;color:#4b5563;text-align:center;">${f.unsubscribe}</p>
+${unsubscribeUrl ? `<p style="margin:0 0 8px;font-size:11px;color:#4b5563;text-align:center;">${f.unsubscribePrompt} <a href="${unsubscribeUrl}" target="_blank" style="color:#9ca3af;text-decoration:underline;">${f.unsubscribeLink}</a></p>` : ''}
 <p style="margin:0;font-size:11px;color:#4b5563;text-align:center;">${f.rights}</p>
 </td>
 </tr>

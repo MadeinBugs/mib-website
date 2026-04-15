@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
 			if (lists.includes(BREVO_LISTS.DEVLOG)) welcomeVars.devlog = '1';
 			if (lists.includes(BREVO_LISTS.STUDIO)) welcomeVars.studio = '1';
 
-			const { subject, htmlContent, textContent } = renderEmail('welcome', locale, welcomeVars);
+			const { subject, htmlContent, textContent } = renderEmail('welcome', locale, welcomeVars, email);
 			await sendTransactionalEmail({
 				to: [{ email }],
 				subject,

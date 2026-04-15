@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { Marked, Renderer } from 'marked';
 import { wrapInBaseTemplate } from './templates/base';
+import { generateUnsubscribeUrl } from '../lib/unsubscribe';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -172,7 +173,8 @@ const marked = new Marked();
 export function renderEmail(
 	templateName: string,
 	locale: 'pt-BR' | 'en',
-	variables?: Record<string, string>
+	variables?: Record<string, string>,
+	recipientEmail?: string
 ): RenderResult {
 	// Read the markdown content file
 	const filePath = path.join(
@@ -221,7 +223,8 @@ export function renderEmail(
 	const bodyHtml = marked.parse(body) as string;
 
 	// Wrap in base template
-	const htmlContent = wrapInBaseTemplate({ body: bodyHtml, preheader, locale });
+	const unsubscribeUrl = recipientEmail ? generateUnsubscribeUrl(recipientEmail, locale) : undefined;
+	const htmlContent = wrapInBaseTemplate({ body: bodyHtml, preheader, locale, unsubscribeUrl });
 
 	// Generate plain text
 	const textContent = markdownToPlainText(body);

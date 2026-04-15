@@ -68,7 +68,7 @@ export default async function BugsletterPage({ params }: Props) {
 	const t = await getBugsletterStrings(locale);
 
 	return (
-		<main className="relative min-h-screen flex items-center justify-center" style={{ backgroundColor: '#e8ffd4' }}>
+		<main className="relative min-h-screen flex items-center justify-center" style={{ backgroundColor: '#952020' }}>
 			{/* Background image */}
 			<Image
 				src={BG_IMAGE_PATH}
@@ -105,11 +105,11 @@ export default async function BugsletterPage({ params }: Props) {
 				/>
 
 				{/* Card body */}
-				<div className="p-8 bg-white">
-					{/* Header — using Amatic SC (swap to Pangolin: font-family: 'Pangolin', cursive) */}
-					<h1 className="text-center mb-4" style={{ fontFamily: "'Pangolin', cursive", fontSize: '2rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+				<div className="p-8" style={{ backgroundColor: '#effee0' }}>
+					{/* Header — (avoids h1 global !important override) */}
+					<div role="heading" aria-level={1} className="text-center mb-4" style={{ fontFamily: "'Amatic SC', cursive", fontSize: '4rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 						{t.title}
-					</h1>
+					</div>
 
 					{/* Description */}
 					<p className="font-body text-sm text-neutral-700 text-center leading-relaxed mb-6">

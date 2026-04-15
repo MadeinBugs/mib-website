@@ -2,6 +2,15 @@
 // Inline CSS for maximum email client compatibility.
 
 const SITE_URL = 'https://www.madeinbugs.com.br';
+const SOCIAL_URL = `${SITE_URL}/assets/social-media`;
+
+const SOCIAL_LINKS = [
+	{ name: 'Instagram', href: 'https://www.instagram.com/madeinbugs/', icon: `${SOCIAL_URL}/instagram.png` },
+	{ name: 'YouTube', href: 'https://www.youtube.com/@madeinbugs', icon: `${SOCIAL_URL}/youtube.png` },
+	{ name: 'LinkedIn', href: 'https://www.linkedin.com/company/madeinbugs', icon: `${SOCIAL_URL}/linkedin.png` },
+	{ name: 'X', href: 'https://x.com/madeinbugs', icon: `${SOCIAL_URL}/x.png` },
+	{ name: 'Bluesky', href: 'https://bsky.app/profile/madeinbugs.com.br', icon: `${SOCIAL_URL}/bluesky.png` },
+];
 
 interface ConfirmationEmailParams {
 	confirmUrl: string;
@@ -17,8 +26,10 @@ const strings = {
 		button: 'Confirm',
 		expire: 'This link expires in 7 days.',
 		ignore: "If you didn't sign up, you can safely ignore this email.",
-		footer: '© 2026 Made in Bugs. All rights reserved.',
-		unsubscribe: 'If you no longer wish to receive emails, simply ignore this message.',
+		studio: 'Made in Bugs · Bugsletter',
+		unsubscribe: 'You received this because you subscribed to Made in Bugs updates.',
+		unsubscribePrompt: 'If you no longer wish to receive emails, simply ignore this message.',
+		rights: '© 2026 Made in Bugs. All rights reserved.',
 	},
 	'pt-BR': {
 		subject: 'Confirme sua inscrição — Made in Bugs',
@@ -28,8 +39,10 @@ const strings = {
 		button: 'Confirmar',
 		expire: 'Este link expira em 7 dias.',
 		ignore: 'Se você não se inscreveu, pode ignorar este email.',
-		footer: '© 2026 Made in Bugs. Todos os direitos reservados.',
-		unsubscribe: 'Se não deseja receber emails, basta ignorar esta mensagem.',
+		studio: 'Made in Bugs · Bugsletter',
+		unsubscribe: 'Você recebeu este email porque se inscreveu para novidades da Made in Bugs.',
+		unsubscribePrompt: 'Se não deseja receber emails, basta ignorar esta mensagem.',
+		rights: '© 2026 Made in Bugs. Todos os direitos reservados.',
 	},
 };
 
@@ -39,7 +52,7 @@ export function getConfirmationEmailSubject(locale: 'pt-BR' | 'en'): string {
 
 export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmailParams): string {
 	const t = strings[locale];
-	const logoUrl = `${SITE_URL}/assets/mail/MiB-Mail-Logo3.png`;
+	const logoUrl = `${SITE_URL}/assets/mail/MiB-Mail-Logo2.png`;
 	const bannerUrl = `${SITE_URL}/assets/mail/MiB-Mail-Banner1.png`;
 
 	return `<!DOCTYPE html>
@@ -59,27 +72,21 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;">
 <tr><td align="center" style="padding:40px 16px;">
 
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#f1ffe3;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#f7fff0;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
 
-<!-- Header: logo on left, banner as background -->
+<!-- Header: Banner -->
 <tr>
-<td style="padding:0;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-<tr>
-<!-- Banner image (full width) -->
 <td style="padding:0;line-height:0;font-size:0;">
 <img src="${bannerUrl}" alt="Made in Bugs" width="520" style="display:block;width:100%;max-width:520px;height:auto;border:0;"/>
 </td>
 </tr>
-<!-- Logo row below banner, overlapping -->
+
+<!-- Header: Logo (overlaps banner) -->
 <tr>
-<td style="padding:0 24px 4px;background-color:#f1ffe3;">
-<div style="margin-top:-24px;">
-<img src="${logoUrl}" alt="Made in Bugs" height="56" style="display:block;height:56px;width:auto;border:0;"/>
+<td style="padding:0 24px 4px;background-color:#f7fff0;">
+<div style="margin-top:-48px;">
+<img src="${logoUrl}" alt="Made in Bugs" height="96" style="display:block;height:96px;width:auto;border:0;"/>
 </div>
-</td>
-</tr>
-</table>
 </td>
 </tr>
 
@@ -105,9 +112,23 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 
 <!-- Footer -->
 <tr>
-<td style="padding:20px 28px;background-color:#edf7e4;border-top:1px solid #d4e8c8;">
-<p style="margin:0 0 8px;font-size:12px;color:#888888;text-align:center;">${t.unsubscribe}</p>
-<p style="margin:0;font-size:12px;color:#888888;text-align:center;">${t.footer}</p>
+<td style="padding:24px 28px;background-color:#edf7e4;border-top:1px solid #d4e8c8;">
+
+<!-- Social Icons -->
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 16px;">
+<tr>
+${SOCIAL_LINKS.map(({ name, href, icon }) => `<td style="padding:0 6px;">
+<a href="${href}" target="_blank" title="${name}" style="display:inline-block;line-height:0;font-size:12px;color:#666666;text-decoration:none;">
+<img src="${icon}" alt="${name}" width="24" height="24" style="display:block;width:24px;height:24px;border:0;opacity:0.7;"/>
+</a>
+</td>`).join('\n')}
+</tr>
+</table>
+
+<p style="margin:0 0 8px;font-size:13px;color:#666666;text-align:center;">${t.studio}</p>
+<p style="margin:0 0 8px;font-size:11px;color:#888888;text-align:center;">${t.unsubscribe}</p>
+<p style="margin:0 0 8px;font-size:11px;color:#888888;text-align:center;">${t.unsubscribePrompt}</p>
+<p style="margin:0;font-size:11px;color:#888888;text-align:center;">${t.rights}</p>
 </td>
 </tr>
 

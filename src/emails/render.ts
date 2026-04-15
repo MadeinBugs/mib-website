@@ -70,9 +70,9 @@ function createEmailRenderer(): Renderer {
 	renderer.heading = function ({ tokens, depth }) {
 		const text = this.parser.parseInline(tokens);
 		const styles: Record<number, string> = {
-			1: 'color:#ffffff;font-size:24px;font-weight:700;line-height:1.3;margin:0 0 16px;',
-			2: 'color:#ffffff;font-size:20px;font-weight:600;line-height:1.3;margin:24px 0 12px;',
-			3: 'color:#e5e7eb;font-size:17px;font-weight:600;line-height:1.3;margin:20px 0 10px;',
+			1: 'color:#1f1f1f;font-size:24px;font-weight:700;line-height:1.3;margin:0 0 16px;',
+			2: 'color:#1f1f1f;font-size:20px;font-weight:600;line-height:1.3;margin:24px 0 12px;',
+			3: 'color:#333333;font-size:17px;font-weight:600;line-height:1.3;margin:20px 0 10px;',
 		};
 		const style = styles[depth] || styles[3];
 		return `<h${depth} style="${style}">${text}</h${depth}>\n`;
@@ -85,19 +85,19 @@ function createEmailRenderer(): Renderer {
 		if (text.startsWith('<table') || text.startsWith('<!--')) {
 			return `${text}\n`;
 		}
-		return `<p style="color:#d1d5db;font-size:15px;line-height:1.6;margin:0 0 16px;">${text}</p>\n`;
+		return `<p style="color:#4a4a4a;font-size:15px;line-height:1.6;margin:0 0 16px;">${text}</p>\n`;
 	};
 
 	renderer.link = function ({ href, text }) {
-		return `<a href="${href}" target="_blank" style="color:#00c69c;text-decoration:underline;">${text}</a>`;
+		return `<a href="${href}" target="_blank" style="color:#00c69c;text-decoration:underline;font-weight:bold;">${text}</a>`;
 	};
 
 	renderer.strong = function ({ text }) {
-		return `<strong style="color:#ffffff;font-weight:700;">${text}</strong>`;
+		return `<strong style="color:#1a1a1a;font-weight:700;">${text}</strong>`;
 	};
 
 	renderer.em = function ({ text }) {
-		return `<em style="color:#d1d5db;font-style:italic;">${text}</em>`;
+		return `<em style="color:#4a4a4a;font-style:italic;">${text}</em>`;
 	};
 
 	renderer.list = function ({ items, ordered }) {
@@ -106,19 +106,19 @@ function createEmailRenderer(): Renderer {
 			const itemText = this.listitem(item);
 			return itemText;
 		}).join('');
-		return `<${tag} style="color:#d1d5db;font-size:15px;line-height:1.6;margin:0 0 16px;padding-left:24px;">${body}</${tag}>\n`;
+		return `<${tag} style="color:#4a4a4a;font-size:15px;line-height:1.6;margin:0 0 16px;padding-left:24px;">${body}</${tag}>\n`;
 	};
 
 	renderer.listitem = function (item) {
 		let text = this.parser.parse(item.tokens);
 		// Strip wrapping <p> tags from list item content to keep items compact
 		text = text.replace(/<\/?p[^>]*>/g, '').trim();
-		return `<li style="margin:0 0 8px;color:#d1d5db;">${text}</li>\n`;
+		return `<li style="margin:0 0 8px;color:#4a4a4a;">${text}</li>\n`;
 	};
 
 	renderer.blockquote = function ({ tokens }) {
 		const body = this.parser.parse(tokens);
-		return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 16px;width:100%;"><tr><td style="border-left:3px solid #00c69c;padding:8px 16px;color:#9ca3af;font-size:14px;line-height:1.5;">${body}</td></tr></table>\n`;
+		return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 16px;width:100%;"><tr><td style="border-left:3px solid #00c69c;padding:8px 16px;color:#666666;font-size:14px;line-height:1.5;">${body}</td></tr></table>\n`;
 	};
 
 	renderer.image = function ({ href, text }) {
@@ -126,11 +126,11 @@ function createEmailRenderer(): Renderer {
 	};
 
 	renderer.hr = function () {
-		return `<hr style="border:none;border-top:1px solid #2d2d44;margin:24px 0;" />\n`;
+		return `<hr style="border:none;border-top:1px solid #d4e8c8;margin:24px 0;" />\n`;
 	};
 
 	renderer.codespan = function ({ text }) {
-		return `<code style="background-color:#2d2d44;color:#e5e7eb;padding:2px 6px;border-radius:4px;font-size:13px;">${text}</code>`;
+		return `<code style="background-color:#e8f0e0;color:#333333;padding:2px 6px;border-radius:4px;font-size:13px;">${text}</code>`;
 	};
 
 	return renderer;

@@ -13,7 +13,7 @@ const strings = {
 		subject: 'Confirm your subscription — Made in Bugs',
 		preheader: 'One click to confirm your subscription to Asumi news.',
 		heading: 'Confirm your email',
-		body: 'Hi there! This is to prevent spammers and bots. Click the button below to confirm your subscription.',
+		body: 'Hi there! Click the button below to confirm your subscription.',
 		button: 'Confirm',
 		expire: 'This link expires in 7 days.',
 		ignore: "If you didn't sign up, you can safely ignore this email.",
@@ -24,7 +24,7 @@ const strings = {
 		subject: 'Confirme sua inscrição — Made in Bugs',
 		preheader: 'Um clique para confirmar sua inscrição nas novidades do Asumi.',
 		heading: 'Confirme seu email',
-		body: 'Olá! Isso é para evitar spam e bots. Clique no botão abaixo para confirmar sua inscrição.',
+		body: 'Oiê! Clique no botão abaixo para confirmar sua inscrição.',
 		button: 'Confirmar',
 		expire: 'Este link expira em 7 dias.',
 		ignore: 'Se você não se inscreveu, pode ignorar este email.',
@@ -59,7 +59,7 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;">
 <tr><td align="center" style="padding:40px 16px;">
 
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:520px;background-color:#f1ffe3;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
 
 <!-- Header: logo on left, banner as background -->
 <tr>
@@ -71,10 +71,12 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 <img src="${bannerUrl}" alt="Made in Bugs" width="520" style="display:block;width:100%;max-width:520px;height:auto;border:0;"/>
 </td>
 </tr>
-<!-- Logo row below banner, left-aligned -->
+<!-- Logo row below banner, overlapping -->
 <tr>
-<td style="padding:16px 24px 12px;background-color:#ffffff;">
+<td style="padding:0 24px 12px;background-color:#f1ffe3;">
+<div style="margin-top:-28px;">
 <img src="${logoUrl}" alt="Made in Bugs" height="56" style="display:block;height:56px;width:auto;border:0;"/>
+</div>
 </td>
 </tr>
 </table>
@@ -103,9 +105,9 @@ export function buildConfirmationEmail({ confirmUrl, locale }: ConfirmationEmail
 
 <!-- Footer -->
 <tr>
-<td style="padding:20px 28px;background-color:#f9f9f9;border-top:1px solid #eeeeee;">
-<p style="margin:0 0 8px;font-size:12px;color:#999999;text-align:center;">${t.unsubscribe}</p>
-<p style="margin:0;font-size:12px;color:#999999;text-align:center;">${t.footer}</p>
+<td style="padding:20px 28px;background-color:#e8f5dc;border-top:1px solid #d4e8c8;">
+<p style="margin:0 0 8px;font-size:12px;color:#888888;text-align:center;">${t.unsubscribe}</p>
+<p style="margin:0;font-size:12px;color:#888888;text-align:center;">${t.footer}</p>
 </td>
 </tr>
 

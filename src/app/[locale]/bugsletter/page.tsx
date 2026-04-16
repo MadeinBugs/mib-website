@@ -11,7 +11,7 @@ import { normalizeLocale } from '../../../lib/i18n';
 const SITE_URL = 'https://www.madeinbugs.com.br';
 
 // TODO: Replace with actual Asumi key art background image
-const BG_IMAGE_PATH = '/assets/projects/asumi/asumi-bg.jpg';
+const BG_IMAGE_PATH = '/assets/projects/asumi/bugsletter_bg.png';
 const BANNER_URL = `${SITE_URL}/assets/mail/MiB-Mail-Banner1.png`;
 const OG_IMAGE_PATH = '/assets/projects/asumi/asumi-og.jpg';
 
@@ -80,9 +80,6 @@ export default async function BugsletterPage({ params }: Props) {
 				className="object-cover"
 				sizes="100vw"
 			/>
-
-			{/* Dark overlay for readability */}
-			<div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/70" />
 
 			{/* Language switcher */}
 			<div className="absolute top-4 right-4 z-20">

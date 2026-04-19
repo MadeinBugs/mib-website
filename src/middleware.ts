@@ -5,13 +5,15 @@ export async function middleware(request: NextRequest) {
 	let supabaseResponse = NextResponse.next({ request });
 	const pathname = request.nextUrl.pathname;
 
-	// Determine which Supabase project to use based on the route
-	const isPictureContestGallery = /^\/(en|pt-BR)\/picture-contest\/(gallery|login|logout)/.test(pathname);
+	const isPictureContestRoute = /^\/(en|pt-BR)\/picture-contest/.test(pathname);
+	const isPictureContestAdmin = /^\/(en|pt-BR)\/picture-contest\/(gallery|login|logout)/.test(pathname);
+	const isMascotRoute = pathname.startsWith('/mascot');
 
-	const supabaseUrl = isPictureContestGallery
+	// Choose which Supabase project to authenticate against
+	const supabaseUrl = (isPictureContestAdmin)
 		? process.env.NEXT_PUBLIC_PICTURE_CONTEST_SUPABASE_URL!
 		: process.env.NEXT_PUBLIC_SUPABASE_URL!;
-	const supabaseAnonKey = isPictureContestGallery
+	const supabaseAnonKey = (isPictureContestAdmin)
 		? process.env.NEXT_PUBLIC_PICTURE_CONTEST_SUPABASE_ANON_KEY!
 		: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
@@ -41,7 +43,40 @@ export async function middleware(request: NextRequest) {
 		data: { user },
 	} = await supabase.auth.getUser();
 
-	if (isPictureContestGallery) {
+	// --- PICTURE_CONTEST_LIVE gate ---
+	// Public picture-contest routes (not admin) are blocked when not live,
+	// unless the user is an authenticated admin.
+	if (isPictureContestRoute && !isPictureContestAdmin) {
+		const isLive = process.env.PICTURE_CONTEST_LIVE === 'true';
+
+		if (!isLive) {
+			// Check admin auth against the picture-contest Supabase project
+			const adminSupabase = createServerClient(
+				process.env.NEXT_PUBLIC_PICTURE_CONTEST_SUPABASE_URL!,
+				process.env.NEXT_PUBLIC_PICTURE_CONTEST_SUPABASE_ANON_KEY!,
+				{
+					cookies: {
+						getAll() {
+							return request.cookies.getAll();
+						},
+						setAll() { },
+					},
+				}
+			);
+			const { data: { user: adminUser } } = await adminSupabase.auth.getUser();
+
+			if (!adminUser) {
+				// Not live and not admin → redirect to home
+				const url = request.nextUrl.clone();
+				url.pathname = '/';
+				return NextResponse.redirect(url);
+			}
+		}
+
+		return supabaseResponse;
+	}
+
+	if (isPictureContestAdmin) {
 		// --- Picture Contest admin gallery auth ---
 		const localeMatch = pathname.match(/^\/(en|pt-BR)/);
 		const locale = localeMatch ? localeMatch[1] : 'pt-BR';
@@ -59,7 +94,7 @@ export async function middleware(request: NextRequest) {
 			url.pathname = `/${locale}/picture-contest/gallery`;
 			return NextResponse.redirect(url);
 		}
-	} else {
+	} else if (isMascotRoute) {
 		// --- Mascot auth ---
 		const isPublicRoute =
 			pathname.startsWith('/mascot/login') ||
@@ -89,11 +124,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
 	matcher: [
 		'/mascot/:path*',
-		'/en/picture-contest/gallery/:path*',
-		'/en/picture-contest/login',
-		'/en/picture-contest/logout',
-		'/pt-BR/picture-contest/gallery/:path*',
-		'/pt-BR/picture-contest/login',
-		'/pt-BR/picture-contest/logout',
+		'/en/picture-contest',
+		'/en/picture-contest/:path*',
+		'/pt-BR/picture-contest',
+		'/pt-BR/picture-contest/:path*',
 	],
 };

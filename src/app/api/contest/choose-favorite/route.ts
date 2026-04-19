@@ -75,6 +75,10 @@ export async function POST(request: NextRequest) {
 		});
 
 	if (insertError) {
+		// Handle race condition: PK constraint (unique_id, favorite_slot) catches duplicates
+		if (insertError.code === '23505') {
+			return NextResponse.json({ error: 'already_two_favorites' }, { status: 409 });
+		}
 		console.error('Failed to insert favorite:', insertError);
 		return NextResponse.json({ error: 'insert_failed' }, { status: 500 });
 	}

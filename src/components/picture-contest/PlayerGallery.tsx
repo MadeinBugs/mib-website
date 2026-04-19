@@ -32,6 +32,7 @@ export default function PlayerGallery({
 	const [localPictures, setLocalPictures] = useState(pictures);
 	const [favCount, setFavCount] = useState(initialFavoriteCount);
 	const [choosing, setChoosing] = useState(false);
+	const [successPictureId, setSuccessPictureId] = useState<number | null>(null);
 
 	function getFavoriteSlot(pic: PictureData): number | null {
 		if (pic.is_favorite_1) return 1;
@@ -74,6 +75,8 @@ export default function PlayerGallery({
 				)
 			);
 			setFavCount((c) => c + 1);
+			setSuccessPictureId(picture.id);
+			setTimeout(() => setSuccessPictureId(null), 3000);
 		} catch {
 			alert(t.favoriteError);
 		} finally {
@@ -136,6 +139,11 @@ export default function PlayerGallery({
 								{!isFavorite && favCount >= 2 && (
 									<p className="text-xs text-neutral-400 font-body">
 										{t.favoriteSlotsFull}
+									</p>
+								)}
+								{successPictureId === picture.id && (
+									<p className="text-xs text-green-600 font-body font-semibold animate-pulse">
+										{t.favoriteSuccess}
 									</p>
 								)}
 							</div>

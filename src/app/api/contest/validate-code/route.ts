@@ -1,5 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
+import { createPictureContestServiceClient } from '@/lib/supabase/picture-contest-service';
 
 const CODE_REGEX = /^[BCDFGHJKLMNPRSTVWZ][AEIOU][BCDFGHJKLMNPRSTVWZ][AEIOU][BCDFGHJKLMNPRSTVWZ]$/;
 
@@ -10,10 +10,7 @@ export async function GET(request: NextRequest) {
 		return NextResponse.json({ exists: false });
 	}
 
-	const supabase = createClient(
-		process.env.NEXT_PUBLIC_PICTURE_CONTEST_SUPABASE_URL!,
-		process.env.NEXT_PUBLIC_PICTURE_CONTEST_SUPABASE_ANON_KEY!
-	);
+	const supabase = createPictureContestServiceClient();
 
 	const { data } = await supabase
 		.from('contest_sessions')

@@ -104,7 +104,7 @@ export default async function AdminGalleryPage({
 function AdminGalleryHeader({ locale }: { locale: string }) {
 	return (
 		<div className="flex items-center justify-between mb-8">
-			<div role="heading" aria-level={1} style={{ fontFamily: "'Amatic SC', cursive", fontSize: '4rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+			<div role="heading" aria-level={1} style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(2rem, 6vw, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 				{locale === 'en' ? 'Gallery' : 'Galeria'}
 			</div>
 			<a

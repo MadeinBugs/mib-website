@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import PolaroidCard from './PolaroidCard';
 import PictureModal from './PictureModal';
 import ConfirmFavoriteModal from './ConfirmFavoriteModal';
@@ -97,7 +96,7 @@ export default function PlayerGallery({
 	return (
 		<>
 			<div className="mb-8">
-				<div role="heading" aria-level={1} className="text-center sm:text-left" style={{ fontFamily: "'Amatic SC', cursive", fontSize: '4rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+				<div role="heading" aria-level={1} className="text-center sm:text-left" style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(2rem, 6vw, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 					{t.playerGalleryTitle(uniqueId)}
 				</div>
 				<p className="text-sm text-neutral-500 font-body mt-2">
@@ -123,9 +122,9 @@ export default function PlayerGallery({
 								onClick={() => setSelectedPicture(picture)}
 								overlay={
 									<>
-										{/* Heart sticker for favorites (top-left, inside polaroid wrapper) */}
+										{/* Heart sticker for favorites (top-left) */}
 										{isFavorite && (
-											<Image
+											<img
 												src="/assets/picture-contest/heart.png"
 												alt=""
 												width={64}
@@ -136,26 +135,26 @@ export default function PlayerGallery({
 
 										{/* "Already favorited" label for favorites (bottom-right) */}
 										{isFavorite && (
-											<span className="absolute -bottom-4 -right-2 z-20 whitespace-nowrap text-sm font-body font-bold text-[#ed7171] pointer-events-none">
+											<span className="absolute bottom-1 right-1 z-20 whitespace-nowrap text-sm font-body font-bold text-[#ed7171] pointer-events-none">
 												{t.alreadyFavorited}
 											</span>
 										)}
 
-										{/* Star sticker button (bottom-right, inside polaroid wrapper) */}
+										{/* Star sticker button (bottom-right) */}
 										{canChoose && (
 											<div
-												className="group/star absolute -bottom-4 -right-4 z-20 flex items-center cursor-pointer"
+												className="group/star absolute bottom-0 -right-4 z-20 flex items-center cursor-pointer"
 												onClick={(e) => { e.stopPropagation(); setConfirmPicture(picture); }}
 											>
 												<span className="whitespace-nowrap text-sm font-body font-bold text-[#FFBD43] opacity-0 group-hover/star:opacity-100 transition-opacity duration-300 ease-out mr-1">
 													{t.favoriteLabel}
 												</span>
-												<Image
+												<img
 													src="/assets/picture-contest/star.png"
 													alt={t.favoriteLabel}
 													width={64}
 													height={64}
-													className="transition-transform duration-500 ease-out group-hover/star:rotate-90 drop-shadow-lg"
+													className="transition-transform duration-500 ease-out group-hover/star:rotate-[180deg] drop-shadow-lg"
 												/>
 											</div>
 										)}

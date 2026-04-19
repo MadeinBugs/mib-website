@@ -8,7 +8,7 @@ function getRotation(id: string): number {
 }
 
 interface PolaroidCardProps {
-	imageUrl: string;
+	imageUrl: string | null;
 	label: string;
 	id: string;
 	onClick?: () => void;
@@ -40,14 +40,18 @@ export default function PolaroidCard({ imageUrl, label, id, onClick }: PolaroidC
 			>
 				{/* Image area */}
 				<div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-100">
-					<Image
-						src={imageUrl}
-						alt={label}
-						fill
-						className="object-cover"
-						loading="lazy"
-						sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-					/>
+					{imageUrl ? (
+						<Image
+							src={imageUrl}
+							alt={label}
+							fill
+							className="object-cover"
+							loading="lazy"
+							sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+						/>
+					) : (
+						<div className="w-full h-full bg-neutral-200 animate-pulse" />
+					)}
 				</div>
 
 				{/* Label area (polaroid bottom) */}

@@ -9,7 +9,7 @@ import { usePictureContestLocale } from './PictureContestLocaleContext';
 interface PictureData {
 	id: number;
 	filename: string;
-	signedUrl: string;
+	signedUrl: string | null;
 	picture_index: number;
 	taken_at: string | null;
 	metadata: Record<string, unknown> | null;

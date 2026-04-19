@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { usePictureContestLocale } from './PictureContestLocaleContext';
 
 interface PictureModalProps {
-	imageUrl: string;
+	imageUrl: string | null;
 	filename: string;
 	takenAt: string | null;
 	metadata: Record<string, unknown> | null;
@@ -111,16 +111,20 @@ export default function PictureModal({
 									<div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
 								</div>
 							)}
-							<Image
-								src={imageUrl}
-								alt={filename}
-								width={1920}
-								height={1080}
-								className={`max-w-full max-h-[60vh] w-auto h-auto object-contain transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'
-									}`}
-								onLoad={() => setImageLoaded(true)}
-								priority
-							/>
+							{imageUrl ? (
+								<Image
+									src={imageUrl}
+									alt={filename}
+									width={1920}
+									height={1080}
+									className={`max-w-full max-h-[60vh] w-auto h-auto object-contain transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+										}`}
+									onLoad={() => setImageLoaded(true)}
+									priority
+								/>
+							) : (
+								<div className="w-full min-h-[300px] bg-neutral-800 animate-pulse" />
+							)}
 						</div>
 
 						{/* Info panel */}

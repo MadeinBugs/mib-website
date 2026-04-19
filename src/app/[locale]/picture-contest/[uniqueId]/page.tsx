@@ -40,24 +40,20 @@ export default async function PlayerPage({
 	const storagePaths = (pictures ?? []).map((p) => p.storage_path);
 	const signedUrlMap = new Map<string, string>();
 
-	if (storagePaths.length > 0) {
-		const { data: signedUrls } = await supabase.storage
+	storagePaths.forEach((path) => {
+		const { data } = supabase.storage
 			.from('contest-pictures')
-			.createSignedUrls(storagePaths, 3600); // 1 hour
+			.getPublicUrl(path);
 
-		if (signedUrls) {
-			signedUrls.forEach((item) => {
-				if (item.signedUrl && item.path) {
-					signedUrlMap.set(item.path, item.signedUrl);
-				}
-			});
+		if (data?.publicUrl) {
+			signedUrlMap.set(path, data.publicUrl);
 		}
-	}
+	});
 
 	const picturesWithUrls = (pictures ?? []).map((picture) => ({
 		id: picture.id,
 		filename: picture.filename,
-		signedUrl: signedUrlMap.get(picture.storage_path) ?? '',
+		signedUrl: signedUrlMap.get(picture.storage_path) ?? null,
 		picture_index: picture.picture_index,
 		taken_at: picture.taken_at,
 		metadata: picture.metadata as Record<string, unknown> | null,

@@ -1,12 +1,45 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
+const VALID_LOCALES = ['en', 'pt-BR'] as const;
+type ValidLocale = typeof VALID_LOCALES[number];
+
+function normalizeLocale(raw: string): ValidLocale | null {
+	const lower = raw.toLowerCase();
+	if (lower === 'en') return 'en';
+	if (lower === 'pt-br') return 'pt-BR';
+	return null;
+}
+
 export async function middleware(request: NextRequest) {
 	let supabaseResponse = NextResponse.next({ request });
 	const pathname = request.nextUrl.pathname;
 
-	const isPictureContestRoute = /^\/(en|pt-br)\/picture-contest/i.test(pathname);
-	const isPictureContestAdmin = /^\/(en|pt-br)\/picture-contest\/(gallery|login|logout)/i.test(pathname);
+	// --- Locale normalization for picture-contest routes ---
+	// Accepts any case variation (e.g. /pt-br, /pt-Br, /PT-BR) and redirects
+	// to the canonical form (/pt-BR). Unknown locales redirect to home for
+	// consistency with the PICTURE_CONTEST_LIVE gate below.
+	const pcLocaleMatch = pathname.match(/^\/([^/]+)(\/picture-contest(?:\/.*)?)$/);
+	if (pcLocaleMatch) {
+		const rawLocale = pcLocaleMatch[1];
+		const rest = pcLocaleMatch[2];
+		const canonical = normalizeLocale(rawLocale);
+
+		if (canonical === null) {
+			const url = request.nextUrl.clone();
+			url.pathname = '/';
+			return NextResponse.redirect(url);
+		}
+
+		if (rawLocale !== canonical) {
+			const url = request.nextUrl.clone();
+			url.pathname = `/${canonical}${rest}`;
+			return NextResponse.redirect(url, 308);
+		}
+	}
+
+	const isPictureContestRoute = /^\/(en|pt-BR)\/picture-contest/.test(pathname);
+	const isPictureContestAdmin = /^\/(en|pt-BR)\/picture-contest\/(gallery|login|logout)/.test(pathname);
 	const isMascotRoute = pathname.startsWith('/mascot');
 
 	// Choose which Supabase project to authenticate against
@@ -78,10 +111,10 @@ export async function middleware(request: NextRequest) {
 
 	if (isPictureContestAdmin) {
 		// --- Picture Contest admin gallery auth ---
-		const localeMatch = pathname.match(/^\/(en|pt-br)/i);
+		const localeMatch = pathname.match(/^\/(en|pt-BR)/);
 		const locale = localeMatch ? localeMatch[1] : 'pt-BR';
 
-		const isLoginRoute = /^\/(en|pt-br)\/picture-contest\/login/i.test(pathname);
+		const isLoginRoute = /^\/(en|pt-BR)\/picture-contest\/login/.test(pathname);
 
 		if (!user && !isLoginRoute) {
 			const url = request.nextUrl.clone();
@@ -124,9 +157,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
 	matcher: [
 		'/mascot/:path*',
-		'/en/picture-contest',
-		'/en/picture-contest/:path*',
-		'/pt-BR/picture-contest',
-		'/pt-BR/picture-contest/:path*',
+		// Catch any case variation of the locale segment; the middleware
+		// validates and normalizes it to the canonical form.
+		'/:locale/picture-contest',
+		'/:locale/picture-contest/:path*',
 	],
 };

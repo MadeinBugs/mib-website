@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import PolaroidCard from './PolaroidCard';
-import PictureModal from './PictureModal';
 import ConfirmFavoriteModal from './ConfirmFavoriteModal';
 import { usePictureContestLocale } from './PictureContestLocaleContext';
 
@@ -27,7 +26,6 @@ export default function PlayerGallery({
 	favoriteCount: number;
 }) {
 	const { t } = usePictureContestLocale();
-	const [selectedPicture, setSelectedPicture] = useState<PictureData | null>(null);
 	const [confirmPicture, setConfirmPicture] = useState<PictureData | null>(null);
 	const [localPictures, setLocalPictures] = useState(pictures);
 	const [favCount, setFavCount] = useState(initialFavoriteCount);
@@ -119,7 +117,11 @@ export default function PlayerGallery({
 								imageUrl={picture.signedUrl}
 								label={picture.filename}
 								id={picture.id.toString()}
-								onClick={() => setSelectedPicture(picture)}
+								onClick={() => {
+									if (canChoose) {
+										setConfirmPicture(picture);
+									}
+								}}
 								overlay={
 									<>
 										{/* Heart sticker for favorites (top-left) */}
@@ -146,7 +148,7 @@ export default function PlayerGallery({
 												className="group/star absolute bottom-0 -right-4 z-20 flex items-center cursor-pointer"
 												onClick={(e) => { e.stopPropagation(); setConfirmPicture(picture); }}
 											>
-												<span className="whitespace-nowrap text-sm font-body font-bold text-[#FFBD43] opacity-0 group-hover/star:opacity-100 transition-opacity duration-300 ease-out mr-1">
+												<span className="whitespace-nowrap text-sm font-body font-bold text-[#FFBD43] opacity-100 md:opacity-0 md:group-hover/star:opacity-100 transition-opacity duration-300 ease-out mr-1">
 													{t.favoriteLabel}
 												</span>
 												<img
@@ -172,18 +174,6 @@ export default function PlayerGallery({
 					);
 				})}
 			</div>
-
-			{/* Image modal */}
-			{selectedPicture && (
-				<PictureModal
-					imageUrl={selectedPicture.signedUrl}
-					filename={selectedPicture.filename}
-					takenAt={selectedPicture.taken_at}
-					metadata={selectedPicture.metadata}
-					isOpen={!!selectedPicture}
-					onClose={() => setSelectedPicture(null)}
-				/>
-			)}
 
 			{/* Confirmation modal */}
 			{confirmPicture && (

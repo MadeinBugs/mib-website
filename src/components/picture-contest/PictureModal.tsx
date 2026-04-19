@@ -29,6 +29,26 @@ function formatMetadataKey(key: string): string {
 		.replace(/^\w/, (c) => c.toUpperCase());
 }
 
+/**
+ * Safely resolve metadata: if it's a string, try JSON.parse;
+ * if it's already an object, return it; otherwise return null.
+ */
+function resolveMetadata(raw: Record<string, unknown> | null): Record<string, unknown> | null {
+	if (raw === null || raw === undefined) return null;
+	if (typeof raw === 'string') {
+		try {
+			const parsed = JSON.parse(raw);
+			if (typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)) {
+				return parsed as Record<string, unknown>;
+			}
+			return null;
+		} catch {
+			return null;
+		}
+	}
+	return raw;
+}
+
 export default function PictureModal({
 	imageUrl,
 	filename,
@@ -68,6 +88,8 @@ export default function PictureModal({
 		})
 		: null;
 
+	const resolvedMetadata = resolveMetadata(metadata);
+
 	return (
 		<AnimatePresence>
 			{isOpen && (
@@ -105,9 +127,9 @@ export default function PictureModal({
 						onClick={(e) => e.stopPropagation()}
 					>
 						{/* Image */}
-						<div className="relative w-full flex items-center justify-center bg-black min-h-[300px]">
+						<div className="relative w-full flex items-center justify-center bg-black">
 							{!imageLoaded && (
-								<div className="absolute inset-0 flex items-center justify-center">
+								<div className="absolute inset-0 flex items-center justify-center min-h-[300px]">
 									<div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin" />
 								</div>
 							)}
@@ -115,20 +137,20 @@ export default function PictureModal({
 								<Image
 									src={imageUrl}
 									alt={filename}
-									width={1920}
+									width={1080}
 									height={1080}
-									className={`max-w-full max-h-[60vh] w-auto h-auto object-contain transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'
+									className={`max-w-full max-h-[55vh] w-auto h-auto object-contain transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'
 										}`}
 									onLoad={() => setImageLoaded(true)}
 									priority
 								/>
 							) : (
-								<div className="w-full min-h-[300px] bg-neutral-800 animate-pulse" />
+								<div className="w-full aspect-square max-h-[55vh] bg-neutral-800 animate-pulse" />
 							)}
 						</div>
 
 						{/* Info panel */}
-						<div className="p-6 space-y-4">
+						<div className="p-4 sm:p-6 space-y-3">
 							{/* Filename & date */}
 							<div>
 								<p className="text-white font-body text-sm font-mono">{filename}</p>
@@ -140,13 +162,13 @@ export default function PictureModal({
 							</div>
 
 							{/* Metadata */}
-							{metadata && Object.keys(metadata).length > 0 && (
+							{resolvedMetadata && Object.keys(resolvedMetadata).length > 0 && (
 								<div>
 									<h3 className="text-amber-400 font-h2 text-sm font-bold mb-2">
 										{t.metadata}
 									</h3>
 									<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-										{Object.entries(metadata).map(([key, value]) => (
+										{Object.entries(resolvedMetadata).map(([key, value]) => (
 											<div
 												key={key}
 												className="bg-neutral-800 rounded px-3 py-2"

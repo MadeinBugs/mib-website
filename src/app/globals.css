@@ -379,6 +379,17 @@ h1,
     }
   }
 
+  /* Shake animation for error panels */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    15% { transform: translateX(-6px); }
+    30% { transform: translateX(5px); }
+    45% { transform: translateX(-4px); }
+    60% { transform: translateX(3px); }
+    75% { transform: translateX(-2px); }
+    90% { transform: translateX(1px); }
+  }
+
   /* Hover effect */
   .floating-card:hover.floating-active {
     animation-play-state: paused;

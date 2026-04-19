@@ -44,6 +44,7 @@ export const pictureContestTranslations = {
 		// Favorites
 		chooseFavorite: 'Escolher como favorita',
 		favoriteLabel: 'Favoritar',
+		alreadyFavorited: 'Já favoritada',
 		favorite: (slot: number) => `Favorita ${slot}`,
 		favoriteSlotsFull: 'Você já escolheu suas 2 favoritas',
 		favoritedCountText: (favorited: number, remaining: number) =>
@@ -102,6 +103,7 @@ export const pictureContestTranslations = {
 		// Favorites
 		chooseFavorite: 'Choose as favorite',
 		favoriteLabel: 'Favorite',
+		alreadyFavorited: 'Already favorited',
 		favorite: (slot: number) => `Favorite ${slot}`,
 		favoriteSlotsFull: 'You already chose your 2 favorites',
 		favoritedCountText: (favorited: number, remaining: number) =>

@@ -9,6 +9,7 @@ const CODE_REGEX = /^[BCDFGHJKLMNPRSTVWZ][AEIOU][BCDFGHJKLMNPRSTVWZ][AEIOU][BCDF
 export default function CodeEntryForm({ locale }: { locale: string }) {
 	const [code, setCode] = useState('');
 	const [error, setError] = useState<string | null>(null);
+	const [errorKey, setErrorKey] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const router = useRouter();
 	const { t } = usePictureContestLocale();
@@ -21,6 +22,7 @@ export default function CodeEntryForm({ locale }: { locale: string }) {
 
 		if (!CODE_REGEX.test(normalizedCode)) {
 			setError(t.codeInvalid);
+			setErrorKey((k) => k + 1);
 			return;
 		}
 
@@ -32,6 +34,7 @@ export default function CodeEntryForm({ locale }: { locale: string }) {
 
 			if (!data.exists) {
 				setError(t.codeNotFound);
+				setErrorKey((k) => k + 1);
 				setLoading(false);
 				return;
 			}
@@ -39,14 +42,15 @@ export default function CodeEntryForm({ locale }: { locale: string }) {
 			router.push(`/${locale}/picture-contest/${normalizedCode}`);
 		} catch {
 			setError(t.codeNotFound);
+			setErrorKey((k) => k + 1);
 			setLoading(false);
 		}
 	}
 
 	return (
 		<div className="w-full max-w-md bg-[#f7fff0] rounded-crayon border-2 border-[#1e6259] shadow-xl p-8">
-			<div role="heading" aria-level={1} className="text-center mb-2" style={{ fontFamily: "'Amatic SC', cursive", fontSize: '2.5rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
-				📸 {t.entryTitle}
+			<div role="heading" aria-level={1} className="text-center mb-2" style={{ fontFamily: "'Amatic SC', cursive", fontSize: '4rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+				{t.entryTitle}
 			</div>
 			<p className="text-center text-neutral-600 font-body mb-8">
 				{t.entrySubtitle}
@@ -68,7 +72,10 @@ export default function CodeEntryForm({ locale }: { locale: string }) {
 				</div>
 
 				{error && (
-					<p className="text-red-600 text-sm font-body bg-red-50 p-3 rounded-lg border border-red-200 text-center">
+					<p
+						key={errorKey}
+						className="text-red-600 text-sm font-body bg-red-50 p-3 rounded-lg border border-red-200 text-center animate-[shake_0.4s_ease-in-out]"
+					>
 						{error}
 					</p>
 				)}

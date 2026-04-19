@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { createPictureContestClient } from '@/lib/supabase/picture-contest-server';
 import PlayerGallery from '@/components/picture-contest/PlayerGallery';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 export default async function PlayerPage({
 	params,
@@ -20,7 +20,7 @@ export default async function PlayerPage({
 		.single();
 
 	if (!session) {
-		notFound();
+		redirect(`/${locale}/picture-contest`);
 	}
 
 	// Fetch all pictures in this session

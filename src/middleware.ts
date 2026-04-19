@@ -5,8 +5,8 @@ export async function middleware(request: NextRequest) {
 	let supabaseResponse = NextResponse.next({ request });
 	const pathname = request.nextUrl.pathname;
 
-	const isPictureContestRoute = /^\/(en|pt-BR)\/picture-contest/.test(pathname);
-	const isPictureContestAdmin = /^\/(en|pt-BR)\/picture-contest\/(gallery|login|logout)/.test(pathname);
+	const isPictureContestRoute = /^\/(en|pt-br)\/picture-contest/i.test(pathname);
+	const isPictureContestAdmin = /^\/(en|pt-br)\/picture-contest\/(gallery|login|logout)/i.test(pathname);
 	const isMascotRoute = pathname.startsWith('/mascot');
 
 	// Choose which Supabase project to authenticate against
@@ -78,10 +78,10 @@ export async function middleware(request: NextRequest) {
 
 	if (isPictureContestAdmin) {
 		// --- Picture Contest admin gallery auth ---
-		const localeMatch = pathname.match(/^\/(en|pt-BR)/);
+		const localeMatch = pathname.match(/^\/(en|pt-br)/i);
 		const locale = localeMatch ? localeMatch[1] : 'pt-BR';
 
-		const isLoginRoute = /^\/(en|pt-BR)\/picture-contest\/login/.test(pathname);
+		const isLoginRoute = /^\/(en|pt-br)\/picture-contest\/login/i.test(pathname);
 
 		if (!user && !isLoginRoute) {
 			const url = request.nextUrl.clone();

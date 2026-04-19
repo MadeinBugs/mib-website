@@ -134,6 +134,13 @@ export default function PlayerGallery({
 											/>
 										)}
 
+										{/* "Already favorited" label for favorites (bottom-right) */}
+										{isFavorite && (
+											<span className="absolute -bottom-4 -right-2 z-20 whitespace-nowrap text-sm font-body font-bold text-[#ed7171] pointer-events-none">
+												{t.alreadyFavorited}
+											</span>
+										)}
+
 										{/* Star sticker button (bottom-right, inside polaroid wrapper) */}
 										{canChoose && (
 											<div

@@ -1,9 +1,8 @@
-import { createPictureContestClient } from '@/lib/supabase/picture-contest-server';
 import PictureContestLayoutClient from '@/components/picture-contest/PictureContestLayoutClient';
 
 export const metadata = {
-	title: 'Photo Contest Gallery — Made in Bugs',
-	description: 'Admin gallery for photo contest submissions',
+	title: 'Photo Contest — Made in Bugs',
+	description: 'Photo contest gallery',
 };
 
 export default async function PictureContestLayout({
@@ -14,11 +13,9 @@ export default async function PictureContestLayout({
 	params: Promise<{ locale: string }>;
 }) {
 	const { locale } = await params;
-	const supabase = await createPictureContestClient();
-	const { data: { user } } = await supabase.auth.getUser();
 
 	return (
-		<PictureContestLayoutClient isLoggedIn={!!user} locale={locale}>
+		<PictureContestLayoutClient locale={locale}>
 			{children}
 		</PictureContestLayoutClient>
 	);

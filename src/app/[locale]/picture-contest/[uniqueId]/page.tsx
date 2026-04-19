@@ -1,37 +1,49 @@
 import Link from 'next/link';
 import { createPictureContestClient } from '@/lib/supabase/picture-contest-server';
-import PictureGallery from '@/components/picture-contest/PictureGallery';
+import PlayerGallery from '@/components/picture-contest/PlayerGallery';
+import { notFound } from 'next/navigation';
 
-export default async function SessionPage({
+export default async function PlayerPage({
 	params,
 }: {
 	params: Promise<{ locale: string; uniqueId: string }>;
 }) {
 	const { locale, uniqueId } = await params;
+	const code = uniqueId.toUpperCase();
 	const supabase = await createPictureContestClient();
 
 	// Fetch session info
 	const { data: session } = await supabase
 		.from('contest_sessions')
-		.select('unique_id, created_at, machine_id, game_version')
-		.eq('unique_id', uniqueId)
+		.select('unique_id, created_at')
+		.eq('unique_id', code)
 		.single();
+
+	if (!session) {
+		notFound();
+	}
 
 	// Fetch all pictures in this session
 	const { data: pictures } = await supabase
 		.from('contest_pictures')
-		.select('id, unique_id, filename, storage_path, picture_index, taken_at, metadata')
-		.eq('unique_id', uniqueId)
+		.select('id, unique_id, filename, storage_path, picture_index, taken_at, metadata, is_favorite_1, is_favorite_2')
+		.eq('unique_id', code)
 		.order('picture_index', { ascending: true });
+
+	// Fetch existing favorites
+	const { data: favorites } = await supabase
+		.from('contest_favorites')
+		.select('picture_id, favorite_slot')
+		.eq('unique_id', code);
 
 	// Generate signed URLs for all pictures in one request
 	const storagePaths = (pictures ?? []).map((p) => p.storage_path);
-	let signedUrlMap = new Map<string, string>();
+	const signedUrlMap = new Map<string, string>();
 
 	if (storagePaths.length > 0) {
 		const { data: signedUrls } = await supabase.storage
 			.from('contest-pictures')
-			.createSignedUrls(storagePaths, 604800); // 7 days
+			.createSignedUrls(storagePaths, 3600); // 1 hour
 
 		if (signedUrls) {
 			signedUrls.forEach((item) => {
@@ -49,17 +61,11 @@ export default async function SessionPage({
 		picture_index: picture.picture_index,
 		taken_at: picture.taken_at,
 		metadata: picture.metadata as Record<string, unknown> | null,
+		is_favorite_1: picture.is_favorite_1 ?? false,
+		is_favorite_2: picture.is_favorite_2 ?? false,
 	}));
 
-	const formattedDate = session
-		? new Date(session.created_at).toLocaleDateString(locale === 'en' ? 'en-US' : 'pt-BR', {
-			day: '2-digit',
-			month: '2-digit',
-			year: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit',
-		})
-		: '';
+	const favoriteCount = favorites?.length ?? 0;
 
 	return (
 		<div className="max-w-7xl mx-auto px-6 py-10">
@@ -71,21 +77,11 @@ export default async function SessionPage({
 				&larr; {locale === 'en' ? 'Back' : 'Voltar'}
 			</Link>
 
-			{/* Session header */}
-			{session && (
-				<div className="mb-8">
-					<h1 className="font-h2 text-3xl font-bold text-neutral-800">
-						{locale === 'en' ? 'Session' : 'Sessão'} {session.unique_id}
-					</h1>
-					<div className="flex flex-wrap gap-4 mt-2 text-sm text-neutral-500 font-body">
-						<span>{formattedDate}</span>
-						<span>Booth: {session.machine_id}</span>
-						{session.game_version && <span>v{session.game_version}</span>}
-					</div>
-				</div>
-			)}
-
-			<PictureGallery pictures={picturesWithUrls} />
+			<PlayerGallery
+				pictures={picturesWithUrls}
+				uniqueId={code}
+				favoriteCount={favoriteCount}
+			/>
 		</div>
 	);
 }

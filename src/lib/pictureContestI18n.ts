@@ -2,7 +2,7 @@ export type PictureContestLocale = 'pt-BR' | 'en';
 
 export const pictureContestTranslations = {
 	'pt-BR': {
-		// Login
+		// Login (admin)
 		loginTitle: 'Login de Administrador',
 		loginSubtitle: 'Acesso restrito à equipe',
 		emailLabel: 'Email',
@@ -17,24 +17,47 @@ export const pictureContestTranslations = {
 		headerTitle: 'Photo Contest',
 		signOut: 'Sair',
 
-		// Gallery
-		galleryTitle: 'Galeria do Photo Contest',
+		// Admin gallery
+		adminGalleryTitle: 'Galeria Admin',
 		sessionsCount: (count: number) => `${count} sessões`,
-		picturesCount: (count: number) => `${count} fotos`,
 		noSessions: 'Nenhuma sessão ainda',
-		back: 'Voltar',
 		booth: 'Booth',
+
+		// Entry page
+		entryTitle: 'Photo Contest',
+		entrySubtitle: 'Digite seu código de 5 letras para ver suas fotos',
+		codePlaceholder: 'Ex: BUVEV',
+		viewPhotos: 'Ver minhas fotos',
+		codeNotFound: 'Código não encontrado. Verifique com um membro da equipe.',
+		codeInvalid: 'Código inválido. Deve ter 5 letras no padrão correto.',
+		searching: 'Buscando...',
+
+		// Player gallery
+		playerGalleryTitle: (code: string) => `Fotos de ${code}`,
+		picturesCount: (count: number) => `${count} fotos`,
+		noPictures: 'Nenhuma foto nesta sessão',
+		back: 'Voltar',
 		takenAt: 'Tirada em',
 		loading: 'Carregando...',
 		metadata: 'Metadados',
-		logout: 'Sair',
 
-		// Session
+		// Favorites
+		chooseFavorite: 'Escolher como favorita',
+		favorite: (slot: number) => `Favorita ${slot}`,
+		favoriteSlotsFull: 'Você já escolheu suas 2 favoritas',
+		confirmTitle: 'Confirmar escolha',
+		confirmMessage: 'Tem certeza? Sua foto será postada no Discord da comunidade para votação. Esta escolha não pode ser desfeita.',
+		confirmYes: 'Sim, escolher!',
+		confirmCancel: 'Cancelar',
+		favoriteSuccess: 'Foto escolhida como favorita!',
+		favoriteError: 'Erro ao escolher favorita. Tente novamente.',
+		choosing: 'Enviando...',
+
+		// Session detail (admin)
 		sessionTitle: (uniqueId: string) => `Sessão ${uniqueId}`,
-		noPictures: 'Nenhuma foto nesta sessão',
 	},
 	en: {
-		// Login
+		// Login (admin)
 		loginTitle: 'Admin Login',
 		loginSubtitle: 'Restricted access',
 		emailLabel: 'Email',
@@ -49,21 +72,44 @@ export const pictureContestTranslations = {
 		headerTitle: 'Photo Contest',
 		signOut: 'Sign out',
 
-		// Gallery
-		galleryTitle: 'Photo Contest Gallery',
+		// Admin gallery
+		adminGalleryTitle: 'Admin Gallery',
 		sessionsCount: (count: number) => `${count} sessions`,
-		picturesCount: (count: number) => `${count} pictures`,
 		noSessions: 'No sessions yet',
-		back: 'Back',
 		booth: 'Booth',
+
+		// Entry page
+		entryTitle: 'Photo Contest',
+		entrySubtitle: 'Enter your 5-letter code to see your photos',
+		codePlaceholder: 'E.g.: BUVEV',
+		viewPhotos: 'View my photos',
+		codeNotFound: 'Code not found. Check with a team member.',
+		codeInvalid: 'Invalid code. Must be 5 letters in the correct pattern.',
+		searching: 'Searching...',
+
+		// Player gallery
+		playerGalleryTitle: (code: string) => `Photos by ${code}`,
+		picturesCount: (count: number) => `${count} pictures`,
+		noPictures: 'No pictures in this session',
+		back: 'Back',
 		takenAt: 'Taken at',
 		loading: 'Loading...',
 		metadata: 'Metadata',
-		logout: 'Sign out',
 
-		// Session
+		// Favorites
+		chooseFavorite: 'Choose as favorite',
+		favorite: (slot: number) => `Favorite ${slot}`,
+		favoriteSlotsFull: 'You already chose your 2 favorites',
+		confirmTitle: 'Confirm choice',
+		confirmMessage: 'Are you sure? Your photo will be posted on the community Discord for voting. This choice cannot be undone.',
+		confirmYes: 'Yes, choose!',
+		confirmCancel: 'Cancel',
+		favoriteSuccess: 'Photo chosen as favorite!',
+		favoriteError: 'Error choosing favorite. Try again.',
+		choosing: 'Sending...',
+
+		// Session detail (admin)
 		sessionTitle: (uniqueId: string) => `Session ${uniqueId}`,
-		noPictures: 'No pictures in this session',
 	},
 };
 

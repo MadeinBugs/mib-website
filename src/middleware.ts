@@ -6,12 +6,12 @@ export async function middleware(request: NextRequest) {
 	const pathname = request.nextUrl.pathname;
 
 	// Determine which Supabase project to use based on the route
-	const isPictureContestRoute = /^\/(en|pt-BR)\/picture-contest/.test(pathname);
+	const isPictureContestGallery = /^\/(en|pt-BR)\/picture-contest\/(gallery|login|logout)/.test(pathname);
 
-	const supabaseUrl = isPictureContestRoute
+	const supabaseUrl = isPictureContestGallery
 		? process.env.NEXT_PUBLIC_PICTURE_CONTEST_SUPABASE_URL!
 		: process.env.NEXT_PUBLIC_SUPABASE_URL!;
-	const supabaseAnonKey = isPictureContestRoute
+	const supabaseAnonKey = isPictureContestGallery
 		? process.env.NEXT_PUBLIC_PICTURE_CONTEST_SUPABASE_ANON_KEY!
 		: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
@@ -41,22 +41,22 @@ export async function middleware(request: NextRequest) {
 		data: { user },
 	} = await supabase.auth.getUser();
 
-	if (isPictureContestRoute) {
-		// --- Picture Contest auth ---
+	if (isPictureContestGallery) {
+		// --- Picture Contest admin gallery auth ---
 		const localeMatch = pathname.match(/^\/(en|pt-BR)/);
 		const locale = localeMatch ? localeMatch[1] : 'pt-BR';
 
-		const isPublicRoute = /^\/(en|pt-BR)\/picture-contest\/login/.test(pathname);
+		const isLoginRoute = /^\/(en|pt-BR)\/picture-contest\/login/.test(pathname);
 
-		if (!user && !isPublicRoute) {
+		if (!user && !isLoginRoute) {
 			const url = request.nextUrl.clone();
 			url.pathname = `/${locale}/picture-contest/login`;
 			return NextResponse.redirect(url);
 		}
 
-		if (user && isPublicRoute) {
+		if (user && isLoginRoute) {
 			const url = request.nextUrl.clone();
-			url.pathname = `/${locale}/picture-contest`;
+			url.pathname = `/${locale}/picture-contest/gallery`;
 			return NextResponse.redirect(url);
 		}
 	} else {
@@ -89,7 +89,11 @@ export async function middleware(request: NextRequest) {
 export const config = {
 	matcher: [
 		'/mascot/:path*',
-		'/en/picture-contest/:path*',
-		'/pt-BR/picture-contest/:path*',
+		'/en/picture-contest/gallery/:path*',
+		'/en/picture-contest/login',
+		'/en/picture-contest/logout',
+		'/pt-BR/picture-contest/gallery/:path*',
+		'/pt-BR/picture-contest/login',
+		'/pt-BR/picture-contest/logout',
 	],
 };

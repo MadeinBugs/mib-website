@@ -34,7 +34,7 @@ export default function LoginForm() {
 			return;
 		}
 
-		router.push(`/${locale}/picture-contest`);
+		router.push(`/${locale}/picture-contest/gallery`);
 		router.refresh();
 	}
 

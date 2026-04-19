@@ -49,7 +49,7 @@ export default function CodeEntryForm({ locale }: { locale: string }) {
 
 	return (
 		<div className="w-full max-w-md bg-[#f7fff0] rounded-crayon border-2 border-[#1e6259] shadow-xl p-8">
-			<div role="heading" aria-level={1} className="text-center mb-2" style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(2rem, 6vw, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+			<div role="heading" aria-level={1} className="text-center mb-2" style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(3rem, 4vw + 1rem, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 				{t.entryTitle}
 			</div>
 			<p className="text-center text-neutral-600 font-body mb-8">

@@ -96,7 +96,7 @@ export default function PlayerGallery({
 	return (
 		<>
 			<div className="mb-8">
-				<div role="heading" aria-level={1} className="text-center sm:text-left" style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(2rem, 6vw, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+				<div role="heading" aria-level={1} className="text-center sm:text-left" style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(3rem, 4vw + 1rem, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 					{t.playerGalleryTitle(uniqueId)}
 				</div>
 				<p className="text-sm text-neutral-500 font-body mt-2">

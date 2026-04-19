@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import PolaroidCard from './PolaroidCard';
 import PictureModal from './PictureModal';
 import ConfirmFavoriteModal from './ConfirmFavoriteModal';
@@ -96,11 +97,14 @@ export default function PlayerGallery({
 	return (
 		<>
 			<div className="mb-8">
-				<h1 className="font-h2 text-3xl font-bold text-neutral-800">
+				<div role="heading" aria-level={1} className="text-center sm:text-left" style={{ fontFamily: "'Amatic SC', cursive", fontSize: '4rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 					{t.playerGalleryTitle(uniqueId)}
-				</h1>
+				</div>
 				<p className="text-sm text-neutral-500 font-body mt-2">
 					{t.picturesCount(localPictures.length)}
+				</p>
+				<p className="text-sm text-neutral-600 font-body mt-1">
+					{t.favoritedCountText(favCount, 2 - favCount)}
 				</p>
 			</div>
 
@@ -112,41 +116,52 @@ export default function PlayerGallery({
 
 					return (
 						<div key={picture.id} className="relative">
-							{/* Favorite badge */}
-							{isFavorite && (
-								<div className="absolute -top-3 -right-3 z-10 bg-amber-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
-									⭐ {t.favorite(slot!)}
-								</div>
-							)}
-
 							<PolaroidCard
 								imageUrl={picture.signedUrl}
 								label={picture.filename}
 								id={picture.id.toString()}
 								onClick={() => setSelectedPicture(picture)}
+								overlay={
+									<>
+										{/* Heart sticker for favorites (top-left, inside polaroid wrapper) */}
+										{isFavorite && (
+											<Image
+												src="/assets/picture-contest/heart.png"
+												alt=""
+												width={64}
+												height={64}
+												className="absolute -top-6 -left-6 z-20 drop-shadow-lg pointer-events-none"
+											/>
+										)}
+
+										{/* Star sticker button (bottom-right, inside polaroid wrapper) */}
+										{canChoose && (
+											<div
+												className="group/star absolute -bottom-4 -right-4 z-20 flex items-center cursor-pointer"
+												onClick={(e) => { e.stopPropagation(); setConfirmPicture(picture); }}
+											>
+												<span className="whitespace-nowrap text-sm font-body font-bold text-[#FFBD43] opacity-0 group-hover/star:opacity-100 transition-opacity duration-300 ease-out mr-1">
+													{t.favoriteLabel}
+												</span>
+												<Image
+													src="/assets/picture-contest/star.png"
+													alt={t.favoriteLabel}
+													width={64}
+													height={64}
+													className="transition-transform duration-500 ease-out group-hover/star:rotate-90 drop-shadow-lg"
+												/>
+											</div>
+										)}
+									</>
+								}
 							/>
 
-							{/* Favorite button */}
-							<div className="mt-2 text-center">
-								{canChoose && (
-									<button
-										onClick={() => setConfirmPicture(picture)}
-										className="text-sm font-body text-amber-700 hover:text-amber-800 font-semibold bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-lg transition-colors"
-									>
-										⭐ {t.chooseFavorite}
-									</button>
-								)}
-								{!isFavorite && favCount >= 2 && (
-									<p className="text-xs text-neutral-400 font-body">
-										{t.favoriteSlotsFull}
-									</p>
-								)}
-								{successPictureId === picture.id && (
-									<p className="text-xs text-green-600 font-body font-semibold animate-pulse">
-										{t.favoriteSuccess}
-									</p>
-								)}
-							</div>
+							{/* Success toast */}
+							{successPictureId === picture.id && (
+								<p className="text-xs text-green-600 font-body font-semibold animate-pulse mt-2 text-center">
+									{t.favoriteSuccess}
+								</p>
+							)}
 						</div>
 					);
 				})}

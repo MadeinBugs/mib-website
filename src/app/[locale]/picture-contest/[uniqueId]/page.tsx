@@ -68,7 +68,7 @@ export default async function PlayerPage({
 			{/* Back link */}
 			<Link
 				href={`/${locale}/picture-contest`}
-				className="inline-flex items-center text-amber-700 hover:text-amber-800 font-body font-semibold mb-6 transition-colors"
+				className="inline-flex items-center text-[#04c597] hover:text-[#36c8ab] font-body font-semibold mb-6 transition-colors"
 			>
 				&larr; {locale === 'en' ? 'Back' : 'Voltar'}
 			</Link>

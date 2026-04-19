@@ -1,39 +1,42 @@
 'use client';
 
 import { type ReactNode } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { PictureContestLocaleProvider, usePictureContestLocale } from './PictureContestLocaleContext';
 import type { PictureContestLocale } from '@/lib/pictureContestI18n';
 
 function LanguageSwitcher() {
 	const { locale } = usePictureContestLocale();
 	const pathname = usePathname();
+	const router = useRouter();
 
-	function switchedPath(targetLocale: PictureContestLocale) {
-		return pathname.replace(/^\/(en|pt-BR)/, `/${targetLocale}`);
+	function switchLanguage(targetLocale: PictureContestLocale) {
+		const newPath = pathname.replace(/^\/(en|pt-br)/i, `/${targetLocale}`);
+		router.push(newPath);
 	}
 
 	return (
 		<div className="flex gap-2">
-			<Link
-				href={switchedPath('pt-BR')}
-				className={`px-2 py-1 text-xs font-bold rounded transition-colors ${locale === 'pt-BR'
-					? 'bg-green-600 text-white'
-					: 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
+			<button
+				onClick={() => switchLanguage('pt-BR')}
+				className={`flag-button flex items-center justify-center text-white font-bold ${locale === 'pt-BR'
+					? 'bg-green-600 ring-2 ring-green-300'
+					: 'bg-green-500 hover:bg-green-600'
 					}`}
+				title="Português (Brasil)"
 			>
-				PT
-			</Link>
-			<Link
-				href={switchedPath('en')}
-				className={`px-2 py-1 text-xs font-bold rounded transition-colors ${locale === 'en'
-					? 'bg-blue-600 text-white'
-					: 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
+				🇧🇷
+			</button>
+			<button
+				onClick={() => switchLanguage('en')}
+				className={`flag-button flex items-center justify-center text-white font-bold ${locale === 'en'
+					? 'bg-blue-600 ring-2 ring-blue-300'
+					: 'bg-blue-500 hover:bg-blue-600'
 					}`}
+				title="English"
 			>
-				EN
-			</Link>
+				🇺🇸
+			</button>
 		</div>
 	);
 }
@@ -49,8 +52,8 @@ export default function PictureContestLayoutClient({
 
 	return (
 		<PictureContestLocaleProvider locale={validLocale}>
-			<div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
-				<div className="absolute top-4 right-4 z-10">
+			<div className="min-h-screen bg-[#f7fff0]">
+				<div className="fixed top-4 right-4 z-50">
 					<LanguageSwitcher />
 				</div>
 				<main>{children}</main>

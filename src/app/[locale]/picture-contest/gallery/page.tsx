@@ -56,24 +56,20 @@ export default async function AdminGalleryPage({
 		}
 	});
 
-	// Generate signed URLs for all previews in a single request
+	// Generate public URLs for all previews
 	const signedUrlMap = new Map<number, string>();
-	if (previewPaths.length > 0) {
-		const { data: signedUrls } = await supabase.storage
+	previewPaths.forEach((path) => {
+		const { data } = supabase.storage
 			.from('contest-pictures')
-			.createSignedUrls(previewPaths, 604800); // 7 days
+			.getPublicUrl(path);
 
-		if (signedUrls) {
-			signedUrls.forEach((item) => {
-				if (item.signedUrl) {
-					const sessionIndex = pathToSessionIndex.get(item.path!);
-					if (sessionIndex !== undefined) {
-						signedUrlMap.set(sessionIndex, item.signedUrl);
-					}
-				}
-			});
+		if (data?.publicUrl) {
+			const sessionIndex = pathToSessionIndex.get(path);
+			if (sessionIndex !== undefined) {
+				signedUrlMap.set(sessionIndex, data.publicUrl);
+			}
 		}
-	}
+	});
 
 	type PictureRow = {
 		id: number;
@@ -108,12 +104,12 @@ export default async function AdminGalleryPage({
 function AdminGalleryHeader({ locale }: { locale: string }) {
 	return (
 		<div className="flex items-center justify-between mb-8">
-			<h1 className="font-h2 text-3xl font-bold text-neutral-800">
-				{locale === 'en' ? 'Admin Gallery' : 'Galeria Admin'}
-			</h1>
+			<div role="heading" aria-level={1} style={{ fontFamily: "'Amatic SC', cursive", fontSize: '4rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+				{locale === 'en' ? 'Gallery' : 'Galeria'}
+			</div>
 			<a
 				href={`/${locale}/picture-contest/logout`}
-				className="text-sm font-body text-primary-500 hover:text-primary-600 font-semibold transition-colors"
+				className="text-sm font-body text-[#04c597] hover:text-[#36c8ab] font-semibold transition-colors"
 			>
 				{locale === 'en' ? 'Sign out' : 'Sair'}
 			</a>

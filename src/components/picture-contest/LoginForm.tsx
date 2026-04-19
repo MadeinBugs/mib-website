@@ -40,11 +40,11 @@ export default function LoginForm() {
 
 	return (
 		<div className="min-h-screen flex items-center justify-center p-4">
-			<div className="w-full max-w-md bg-white rounded-crayon border-2 border-amber-300 shadow-xl p-8">
-				<h2 className="font-h2 text-2xl font-bold text-center text-neutral-800 mb-2">
+			<div className="w-full max-w-md bg-[#f7fff0] rounded-crayon border-2 border-[#1e6259] shadow-xl p-8">
+				<div role="heading" aria-level={1} className="text-center mb-2" style={{ fontFamily: "'Amatic SC', cursive", fontSize: '4rem', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 					{t.loginTitle}
-				</h2>
-				<p className="text-center text-neutral-500 font-body mb-8">
+				</div>
+				<p className="text-center text-neutral-600 font-body mb-8">
 					{t.loginSubtitle}
 				</p>
 
@@ -59,7 +59,7 @@ export default function LoginForm() {
 							required
 							value={email}
 							onChange={(e) => setEmail(e.target.value)}
-							className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:border-primary-400 focus:outline-none transition-colors font-body"
+							className="w-full px-4 py-2 border-2 border-[#1e6259]/30 rounded-lg focus:border-[#04c597] focus:outline-none transition-colors font-body"
 							placeholder={t.emailPlaceholder}
 						/>
 					</div>
@@ -74,7 +74,7 @@ export default function LoginForm() {
 							required
 							value={password}
 							onChange={(e) => setPassword(e.target.value)}
-							className="w-full px-4 py-2 border-2 border-neutral-300 rounded-lg focus:border-primary-400 focus:outline-none transition-colors font-body"
+							className="w-full px-4 py-2 border-2 border-[#1e6259]/30 rounded-lg focus:border-[#04c597] focus:outline-none transition-colors font-body"
 							placeholder={t.passwordPlaceholder}
 						/>
 					</div>
@@ -88,7 +88,7 @@ export default function LoginForm() {
 					<button
 						type="submit"
 						disabled={loading}
-						className="w-full inline-block px-6 py-3 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 transition-colors duration-200 hover:scale-105 transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+						className="w-full inline-block px-6 py-3 bg-[#04c597] text-white font-semibold rounded-lg hover:bg-[#036b54] transition-colors duration-200 hover:scale-105 transform disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
 					>
 						{loading ? t.signingIn : t.signIn}
 					</button>

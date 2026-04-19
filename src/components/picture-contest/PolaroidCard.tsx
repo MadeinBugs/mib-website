@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { type ReactNode } from 'react';
 
 function getRotation(id: string): number {
 	const hash = id.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
@@ -12,15 +13,17 @@ interface PolaroidCardProps {
 	label: string;
 	id: string;
 	onClick?: () => void;
+	/** Rendered inside the rotating wrapper, positioned absolutely */
+	overlay?: ReactNode;
 }
 
-export default function PolaroidCard({ imageUrl, label, id, onClick }: PolaroidCardProps) {
+export default function PolaroidCard({ imageUrl, label, id, onClick, overlay }: PolaroidCardProps) {
 	const rotation = getRotation(id);
 
 	return (
 		<div
 			onClick={onClick}
-			className="group cursor-pointer transition-all duration-300 ease-out hover:scale-105 hover:z-10"
+			className="group cursor-pointer transition-all duration-300 ease-out hover:scale-105 hover:z-10 relative"
 			style={{
 				transform: `rotate(${rotation}deg)`,
 			}}
@@ -31,6 +34,7 @@ export default function PolaroidCard({ imageUrl, label, id, onClick }: PolaroidC
 				e.currentTarget.style.transform = `rotate(${rotation}deg)`;
 			}}
 		>
+			{overlay}
 			<div
 				className="bg-white shadow-md group-hover:shadow-xl transition-shadow duration-300"
 				style={{

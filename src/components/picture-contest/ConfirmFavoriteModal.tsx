@@ -36,7 +36,7 @@ export default function ConfirmFavoriteModal({
 						animate={{ opacity: 1, scale: 1, y: 0 }}
 						exit={{ opacity: 0, scale: 0.9, y: 20 }}
 						transition={{ duration: 0.3 }}
-						className="relative bg-white rounded-crayon border-2 border-amber-300 shadow-2xl p-8 max-w-md w-full"
+						className="relative bg-[#f7fff0] rounded-crayon border-2 border-[#1e6259] shadow-2xl p-8 max-w-md w-full"
 						onClick={(e) => e.stopPropagation()}
 					>
 						<h3 className="font-h2 text-xl font-bold text-neutral-800 mb-3">
@@ -57,7 +57,7 @@ export default function ConfirmFavoriteModal({
 							<button
 								onClick={onConfirm}
 								disabled={loading}
-								className="flex-1 px-4 py-2 bg-amber-600 text-white font-semibold rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+								className="flex-1 px-4 py-2 bg-[#04c597] text-white font-semibold rounded-lg hover:bg-[#036b54] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 							>
 								{loading ? t.choosing : t.confirmYes}
 							</button>

@@ -12,6 +12,15 @@ export async function middleware(request: NextRequest) {
 		return NextResponse.redirect(url, 308);
 	}
 
+	// Bare /terms or /privacy → detect locale from Accept-Language header
+	if (pathname === '/terms' || pathname === '/privacy') {
+		const acceptLang = request.headers.get('accept-language') ?? '';
+		const locale = /\ben\b/.test(acceptLang.split(',')[0] ?? '') ? 'en' : 'pt-BR';
+		const url = request.nextUrl.clone();
+		url.pathname = `/${locale}${pathname}`;
+		return NextResponse.redirect(url, 302);
+	}
+
 	// Legal pages don't need auth — only locale normalization (handled above)
 	if (/^\/(en|pt-BR)\/(terms|privacy)/.test(pathname)) {
 		return supabaseResponse;
@@ -142,7 +151,13 @@ export const config = {
 		'/pt-BR/picture-contest/:path*',
 		'/pt-br/picture-contest',
 		'/pt-br/picture-contest/:path*',
+		'/en/terms/:path*',
+		'/en/privacy/:path*',
+		'/pt-BR/terms/:path*',
+		'/pt-BR/privacy/:path*',
 		'/pt-br/terms/:path*',
 		'/pt-br/privacy/:path*',
+		'/terms',
+		'/privacy',
 	],
 };

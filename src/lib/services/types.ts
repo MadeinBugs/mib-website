@@ -18,7 +18,7 @@ export type ServiceCategory =
 	| 'crm'
 	| 'marketing'
 	| 'analytics'
-	| 'internal-tools'
+	| 'team-management'
 	| 'social-media'
 	| 'web-gamedev';
 

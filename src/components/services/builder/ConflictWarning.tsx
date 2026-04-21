@@ -1,6 +1,7 @@
 'use client';
 
 import type { Locale } from '../../../lib/services/types';
+import { FaExclamationTriangle } from 'react-icons/fa';
 
 interface ConflictWarningProps {
 	locale: Locale;
@@ -14,7 +15,7 @@ export default function ConflictWarning({ locale, conflictingServiceNames }: Con
 
 	return (
 		<div className="flex items-start gap-2 text-xs text-red-700 bg-red-50 rounded-md px-3 py-2 border border-red-200">
-			<span className="shrink-0">⚠️</span>
+			<FaExclamationTriangle className="shrink-0 mt-0.5" />
 			<span>
 				{locale === 'en'
 					? `Conflicts with: ${names}. Remove the conflicting service first.`

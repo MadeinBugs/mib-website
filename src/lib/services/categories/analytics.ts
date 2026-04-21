@@ -27,7 +27,57 @@ export const analyticsServices: ServiceItem[] = [
 			price: { BRL: 70, USD: 16 },
 		},
 		estimatedSetupDays: 1,
-		requires: ['cloud-server'],
+		configurations: [
+			{
+				id: 'hosting-choice',
+				label: {
+					en: 'Hosting',
+					'pt-BR': 'Hospedagem',
+				},
+				type: 'single-select',
+				required: true,
+				defaultOptionId: 'self-hosted',
+				options: [
+					{
+						id: 'self-hosted',
+						label: {
+							en: 'Self-hosted (Umami)',
+							'pt-BR': 'Auto-hospedado (Umami)',
+						},
+						description: {
+							en: 'Full control on your own server. No data sharing.',
+							'pt-BR': 'Controle total no seu próprio servidor. Sem compartilhamento de dados.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+						additionalRequires: ['cloud-server'],
+					},
+					{
+						id: 'plausible',
+						label: {
+							en: 'Plausible Analytics',
+							'pt-BR': 'Plausible Analytics',
+						},
+						description: {
+							en: 'Platform costs not included. Privacy-friendly.',
+							'pt-BR': 'Custos de plataforma não inclusos. Amigável à privacidade.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'google-analytics',
+						label: {
+							en: 'Google Analytics',
+							'pt-BR': 'Google Analytics',
+						},
+						description: {
+							en: 'Free. Requires cookie consent banner.',
+							'pt-BR': 'Gratuito. Requer banner de consentimento de cookies.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+				],
+			},
+		],
 		clientDeliverables: [DELIVERABLE_WEBSITES_TO_TRACK],
 		active: true,
 	},
@@ -53,8 +103,56 @@ export const analyticsServices: ServiceItem[] = [
 			price: { BRL: 60, USD: 14 },
 		},
 		estimatedSetupDays: 1,
-		requires: ['cloud-server', 'domain-setup'],
 		configurations: [
+			{
+				id: 'hosting-choice',
+				label: {
+					en: 'Hosting',
+					'pt-BR': 'Hospedagem',
+				},
+				type: 'single-select',
+				required: true,
+				defaultOptionId: 'self-hosted',
+				options: [
+					{
+						id: 'self-hosted',
+						label: {
+							en: 'Self-hosted (Shlink)',
+							'pt-BR': 'Auto-hospedado (Shlink)',
+						},
+						description: {
+							en: 'Full control on your own server. Requires a custom domain.',
+							'pt-BR': 'Controle total no seu próprio servidor. Requer domínio customizado.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+						additionalRequires: ['cloud-server', 'domain-setup'],
+					},
+					{
+						id: 'bitly',
+						label: {
+							en: 'Bitly',
+							'pt-BR': 'Bitly',
+						},
+						description: {
+							en: 'Platform costs not included. Free tier available.',
+							'pt-BR': 'Custos de plataforma não inclusos. Plano gratuito disponível.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'short-io',
+						label: {
+							en: 'Short.io',
+							'pt-BR': 'Short.io',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+				],
+			},
 			{
 				id: 'shortlink-subdomain-preference',
 				label: {
@@ -125,7 +223,57 @@ export const analyticsServices: ServiceItem[] = [
 			price: { BRL: 50, USD: 12 },
 		},
 		estimatedSetupDays: 0.5,
-		requires: ['cloud-server'],
+		configurations: [
+			{
+				id: 'hosting-choice',
+				label: {
+					en: 'Hosting',
+					'pt-BR': 'Hospedagem',
+				},
+				type: 'single-select',
+				required: true,
+				defaultOptionId: 'self-hosted',
+				options: [
+					{
+						id: 'self-hosted',
+						label: {
+							en: 'Self-hosted (Uptime Kuma)',
+							'pt-BR': 'Auto-hospedado (Uptime Kuma)',
+						},
+						description: {
+							en: 'Full control on your own server.',
+							'pt-BR': 'Controle total no seu próprio servidor.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+						additionalRequires: ['cloud-server'],
+					},
+					{
+						id: 'uptimerobot',
+						label: {
+							en: 'UptimeRobot',
+							'pt-BR': 'UptimeRobot',
+						},
+						description: {
+							en: 'Platform costs not included. Free tier available.',
+							'pt-BR': 'Custos de plataforma não inclusos. Plano gratuito disponível.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'better-uptime',
+						label: {
+							en: 'Better Uptime',
+							'pt-BR': 'Better Uptime',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+				],
+			},
+		],
 		clientDeliverables: [DELIVERABLE_SERVICES_TO_MONITOR, DELIVERABLE_ALERT_DESTINATIONS],
 		active: true,
 	},

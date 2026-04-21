@@ -1,7 +1,7 @@
-import type { ServiceItem } from './types';
+import type { ServiceItem, SelectedServiceItem } from './types';
 import type { BuilderState, BuilderAction } from './builder-types';
 import { buildDefaultSelection } from './builder-types';
-import { resolveDependencies, findDependents } from './dependencies';
+import { resolveDependencies } from './dependencies';
 
 /**
  * Collect the selectedOptionIds map for a service from the builder state.
@@ -16,21 +16,89 @@ function getOptionIdsMap(state: BuilderState, serviceId: string): Record<string,
 	return map;
 }
 
-function findAllDependentsTransitive(
+/**
+ * Check whether a selected service actually requires `depId` given its
+ * current configuration selections.
+ */
+function serviceActuallyRequires(
 	catalog: ServiceItem[],
-	serviceId: string,
-	currentlySelected: Set<string>
+	selectedItem: SelectedServiceItem,
+	depId: string
+): boolean {
+	const service = catalog.find((s) => s.id === selectedItem.serviceId);
+	if (!service) return false;
+
+	// Hard requires
+	if (service.requires?.includes(depId)) return true;
+
+	// Config-driven additionalRequires (only for actually selected options)
+	if (service.configurations) {
+		for (const config of service.configurations) {
+			const selectedConfig = selectedItem.configurations.find(
+				(c) => c.configurationId === config.id
+			);
+			if (!selectedConfig) continue;
+			for (const optionId of selectedConfig.selectedOptionIds) {
+				const option = config.options.find((o) => o.id === optionId);
+				if (option?.additionalRequires?.includes(depId)) return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Smart deselect: remove the service and cascade-remove orphaned dependencies.
+ *
+ * For each auto-added dependency, check if any other remaining selected service
+ * still requires it. If not, remove it too (and recurse for its own deps).
+ * For non-auto-added services that hard-depend on the removed service, cascade-remove them.
+ */
+function computeSmartRemoval(
+	catalog: ServiceItem[],
+	state: BuilderState,
+	serviceId: string
 ): Set<string> {
-	const toRemove = new Set<string>();
+	const toRemove = new Set<string>([serviceId]);
 	const queue = [serviceId];
+	const remaining = new Set(Object.keys(state.selectedItems));
 
 	while (queue.length > 0) {
 		const current = queue.shift()!;
-		const directDependents = findDependents(catalog, current, currentlySelected);
-		for (const dep of directDependents) {
-			if (!toRemove.has(dep)) {
-				toRemove.add(dep);
-				queue.push(dep);
+		remaining.delete(current);
+
+		// 1. Find services that were auto-added by `current` — remove if orphaned
+		for (const [depId, addedBy] of Object.entries(state.autoAdded)) {
+			if (addedBy !== current) continue;
+			if (toRemove.has(depId)) continue;
+
+			// Check if any other remaining service still needs depId
+			let stillNeeded = false;
+			for (const otherId of remaining) {
+				if (toRemove.has(otherId)) continue;
+				const otherItem = state.selectedItems[otherId];
+				if (!otherItem) continue;
+				if (serviceActuallyRequires(catalog, otherItem, depId)) {
+					stillNeeded = true;
+					break;
+				}
+			}
+
+			if (!stillNeeded) {
+				toRemove.add(depId);
+				queue.push(depId);
+			}
+		}
+
+		// 2. Find services that hard-require `current` — must be removed
+		for (const otherId of remaining) {
+			if (toRemove.has(otherId)) continue;
+			const otherItem = state.selectedItems[otherId];
+			if (!otherItem) continue;
+			if (serviceActuallyRequires(catalog, otherItem, current)) {
+				toRemove.add(otherId);
+				queue.push(otherId);
 			}
 		}
 	}
@@ -46,10 +114,8 @@ export function builderReducer(catalog: ServiceItem[]) {
 				const isSelected = serviceId in state.selectedItems;
 
 				if (isSelected) {
-					// Deselecting — cascade-remove transitive dependents (BFS)
-					const currentlySelected = new Set(Object.keys(state.selectedItems));
-					const transitiveDependents = findAllDependentsTransitive(catalog, serviceId, currentlySelected);
-					const toRemove = new Set([serviceId, ...transitiveDependents]);
+					// Deselecting — smart cascade-remove orphaned auto-added deps
+					const toRemove = computeSmartRemoval(catalog, state, serviceId);
 
 					const newItems = { ...state.selectedItems };
 					const newAutoAdded = { ...state.autoAdded };
@@ -127,7 +193,8 @@ export function builderReducer(catalog: ServiceItem[]) {
 				);
 
 				const updatedItem = { ...existing, configurations: updatedConfigs };
-				const newItems = { ...state.selectedItems, [serviceId]: updatedItem };
+				let newItems = { ...state.selectedItems, [serviceId]: updatedItem };
+				let newAutoAdded = { ...state.autoAdded };
 
 				// Re-resolve dependencies for the new option
 				const optionIdsMap = getOptionIdsMap(
@@ -135,8 +202,8 @@ export function builderReducer(catalog: ServiceItem[]) {
 					serviceId
 				);
 				const allRequired = resolveDependencies(catalog, serviceId, optionIdsMap);
-				const newAutoAdded = { ...state.autoAdded };
 
+				// Add any new deps
 				for (const depId of allRequired) {
 					if (depId === serviceId) continue;
 					if (depId in newItems) continue;
@@ -144,6 +211,28 @@ export function builderReducer(catalog: ServiceItem[]) {
 					if (!depService || !depService.active) continue;
 					newItems[depId] = buildDefaultSelection(depId, depService.configurations);
 					newAutoAdded[depId] = serviceId;
+				}
+
+				// Remove orphaned auto-added deps that were added by this service
+				// but are no longer required by the new configuration
+				const requiredSet = new Set(allRequired);
+				for (const [depId, addedBy] of Object.entries(newAutoAdded)) {
+					if (addedBy !== serviceId) continue;
+					if (requiredSet.has(depId)) continue;
+
+					// Check if any other service still needs it
+					let stillNeeded = false;
+					for (const [otherId, otherItem] of Object.entries(newItems)) {
+						if (otherId === serviceId || otherId === depId) continue;
+						if (serviceActuallyRequires(catalog, otherItem, depId)) {
+							stillNeeded = true;
+							break;
+						}
+					}
+					if (!stillNeeded) {
+						delete newItems[depId];
+						delete newAutoAdded[depId];
+					}
 				}
 
 				return { ...state, selectedItems: newItems, autoAdded: newAutoAdded };

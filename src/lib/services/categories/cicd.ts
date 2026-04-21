@@ -70,7 +70,69 @@ export const cicdServices: ServiceItem[] = [
 			price: { BRL: 100, USD: 23 },
 		},
 		estimatedSetupDays: 3,
-		requires: ['cloud-server'],
+		configurations: [
+			{
+				id: 'hosting-choice',
+				label: {
+					en: 'Hosting',
+					'pt-BR': 'Hospedagem',
+				},
+				type: 'single-select',
+				required: true,
+				defaultOptionId: 'self-hosted',
+				options: [
+					{
+						id: 'self-hosted',
+						label: {
+							en: 'Self-hosted (Gitea)',
+							'pt-BR': 'Auto-hospedado (Gitea)',
+						},
+						description: {
+							en: 'Full control on your own server. No per-seat fees.',
+							'pt-BR': 'Controle total no seu próprio servidor. Sem cobrança por assento.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+						additionalRequires: ['cloud-server'],
+					},
+					{
+						id: 'github',
+						label: {
+							en: 'GitHub',
+							'pt-BR': 'GitHub',
+						},
+						description: {
+							en: 'Platform costs not included. Free for public repos; paid plans for private.',
+							'pt-BR': 'Custos de plataforma não inclusos. Gratuito para repos públicos; planos pagos para privados.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'gitlab',
+						label: {
+							en: 'GitLab',
+							'pt-BR': 'GitLab',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'bitbucket',
+						label: {
+							en: 'Bitbucket',
+							'pt-BR': 'Bitbucket',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+				],
+			},
+		],
 		customFields: [
 			{
 				id: 'versioning-needs',

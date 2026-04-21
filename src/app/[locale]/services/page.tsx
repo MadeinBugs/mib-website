@@ -2,6 +2,7 @@ import { getTranslations, normalizeLocale } from '@/lib/i18n';
 import Link from 'next/link';
 import { FaServer, FaRocket, FaBolt, FaClipboardList, FaEnvelope, FaChartBar, FaWrench, FaMobileAlt, FaGamepad } from 'react-icons/fa';
 import type { IconType } from 'react-icons';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 interface Props {
 	params: Promise<{ locale: string }>;
@@ -38,6 +39,11 @@ export default async function ServicesPage({ params }: Props) {
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
+			{/* Language Switcher */}
+			<div className="flex justify-end px-6 pt-4">
+				<LanguageSwitcher />
+			</div>
+
 			{/* Hero Section */}
 			<section className="px-6 py-20 max-w-5xl mx-auto text-center">
 				<h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-6">
@@ -112,7 +118,7 @@ export default async function ServicesPage({ params }: Props) {
 							{ key: 'crm', en: 'CRM & Scheduling', pt: 'CRM & Agendamento', Icon: FaClipboardList },
 							{ key: 'marketing', en: 'Marketing & Email', pt: 'Marketing & Email', Icon: FaEnvelope },
 							{ key: 'analytics', en: 'Analytics & Insights', pt: 'Analytics & Insights', Icon: FaChartBar },
-							{ key: 'internal-tools', en: 'Internal Tools', pt: 'Ferramentas Internas', Icon: FaWrench },
+							{ key: 'team-management', en: 'Team Management', pt: 'Gestão de Equipe', Icon: FaWrench },
 							{ key: 'social-media', en: 'Social Media', pt: 'Redes Sociais', Icon: FaMobileAlt },
 							{ key: 'web-gamedev', en: 'Web & Gamedev', pt: 'Web & Gamedev', Icon: FaGamepad },
 						] as Array<{ key: string; en: string; pt: string; Icon: IconType }>).map((cat) => (

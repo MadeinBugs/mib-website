@@ -28,7 +28,69 @@ export const socialMediaServices: ServiceItem[] = [
 			price: { BRL: 100, USD: 23 },
 		},
 		estimatedSetupDays: 1.5,
-		requires: ['cloud-server'],
+		configurations: [
+			{
+				id: 'hosting-choice',
+				label: {
+					en: 'Hosting',
+					'pt-BR': 'Hospedagem',
+				},
+				type: 'single-select',
+				required: true,
+				defaultOptionId: 'self-hosted',
+				options: [
+					{
+						id: 'self-hosted',
+						label: {
+							en: 'Self-hosted (Mixpost)',
+							'pt-BR': 'Auto-hospedado (Mixpost)',
+						},
+						description: {
+							en: 'Full control on your own server. No per-seat fees.',
+							'pt-BR': 'Controle total no seu próprio servidor. Sem cobrança por assento.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+						additionalRequires: ['cloud-server'],
+					},
+					{
+						id: 'buffer',
+						label: {
+							en: 'Buffer',
+							'pt-BR': 'Buffer',
+						},
+						description: {
+							en: 'Platform costs not included. Free tier available.',
+							'pt-BR': 'Custos de plataforma não inclusos. Plano gratuito disponível.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'hootsuite',
+						label: {
+							en: 'Hootsuite',
+							'pt-BR': 'Hootsuite',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'later',
+						label: {
+							en: 'Later',
+							'pt-BR': 'Later',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+				],
+			},
+		],
 		clientDeliverables: [DELIVERABLE_SOCIAL_ACCOUNTS],
 		active: true,
 	},

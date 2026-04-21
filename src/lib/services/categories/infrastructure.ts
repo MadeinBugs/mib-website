@@ -5,12 +5,15 @@ import {
 	DELIVERABLE_DOMAIN,
 	DELIVERABLE_DOMAIN_REGISTRAR_ACCESS,
 	DELIVERABLE_LOGO_BRANDING,
+	DELIVERABLE_STORAGE_NEEDS,
+	DELIVERABLE_STORAGE_SUBDOMAIN,
 } from '../deliverables';
 import {
 	COST_CLOUD_SMALL,
 	COST_CLOUD_MEDIUM,
 	COST_CLOUD_LARGE,
 	COST_DOMAIN_REGISTRATION,
+	COST_CLOUD_STORAGE_EXTRA,
 } from '../third-party-costs';
 
 export const infrastructureServices: ServiceItem[] = [
@@ -19,23 +22,23 @@ export const infrastructureServices: ServiceItem[] = [
 		id: 'cloud-server',
 		category: 'infrastructure',
 		name: {
-			en: 'Cloud Server with Custom Domain',
-			'pt-BR': 'Servidor na Nuvem com Domínio Customizado',
+			en: 'Cloud Server',
+			'pt-BR': 'Servidor na Nuvem',
 		},
 		shortDescription: {
-			en: 'A cloud server accessible from anywhere via your own domain. Foundation for all self-hosted tools.',
-			'pt-BR': 'Um servidor na nuvem acessível de qualquer lugar pelo seu próprio domínio. Base para todas as ferramentas self-hosted.',
+			en: 'A cloud server accessible from anywhere. Foundation for all self-hosted tools.',
+			'pt-BR': 'Um servidor na nuvem acessível de qualquer lugar. Base para todas as ferramentas self-hosted.',
 		},
 		longDescription: {
-			en: 'Your own cloud server, configured from scratch with best practices for security, performance, and reliability. Accessible via your custom domain with HTTPS. This is the foundation that powers all other self-hosted services in your package — CRM, analytics, automation, and more all run here.',
-			'pt-BR': 'Seu próprio servidor na nuvem, configurado do zero com boas práticas de segurança, performance e confiabilidade. Acessível pelo seu domínio customizado com HTTPS. Esta é a base que alimenta todos os outros serviços self-hosted do seu pacote — CRM, analytics, automação e mais, tudo roda aqui.',
+			en: 'Your own cloud server, configured from scratch with best practices for security, performance, and reliability. This is the foundation that powers all other self-hosted services in your package — CRM, analytics, automation, and more all run here.',
+			'pt-BR': 'Seu próprio servidor na nuvem, configurado do zero com boas práticas de segurança, performance e confiabilidade. Esta é a base que alimenta todos os outros serviços self-hosted do seu pacote — CRM, analytics, automação e mais, tudo roda aqui.',
 		},
 		basePrice: { BRL: 1200, USD: 280 },
 		maintenance: {
 			price: { BRL: 150, USD: 35 },
 		},
 		estimatedSetupDays: 2,
-		requires: ['domain-setup'],
+		recommends: ['domain-setup'],
 		configurations: [
 			{
 				id: 'server-size',
@@ -89,7 +92,7 @@ export const infrastructureServices: ServiceItem[] = [
 				],
 			},
 		],
-		clientDeliverables: [DELIVERABLE_CLOUD_PAYMENT, DELIVERABLE_CONFIRMED_DOMAIN],
+		clientDeliverables: [DELIVERABLE_CLOUD_PAYMENT],
 		active: true,
 	},
 
@@ -112,7 +115,7 @@ export const infrastructureServices: ServiceItem[] = [
 		basePrice: { BRL: 300, USD: 70 },
 		maintenance: null,
 		estimatedSetupDays: 0.5,
-		clientDeliverables: [DELIVERABLE_DOMAIN, DELIVERABLE_DOMAIN_REGISTRAR_ACCESS],
+		clientDeliverables: [DELIVERABLE_DOMAIN, DELIVERABLE_DOMAIN_REGISTRAR_ACCESS, DELIVERABLE_CONFIRMED_DOMAIN],
 		thirdPartyCosts: [COST_DOMAIN_REGISTRATION],
 		active: true,
 	},
@@ -140,6 +143,33 @@ export const infrastructureServices: ServiceItem[] = [
 		estimatedSetupDays: 0.5,
 		requires: ['cloud-server'],
 		clientDeliverables: [DELIVERABLE_LOGO_BRANDING],
+		active: true,
+	},
+
+	// 1.4 Team Cloud Storage
+	{
+		id: 'cloud-storage',
+		category: 'infrastructure',
+		name: {
+			en: 'Team Cloud Storage',
+			'pt-BR': 'Armazenamento em Nuvem para Equipe',
+		},
+		shortDescription: {
+			en: 'Your own private cloud storage — like Google Drive or Dropbox, but on your own domain with full data ownership. Sync, share, and collaborate.',
+			'pt-BR': 'Seu próprio armazenamento em nuvem privado — como Google Drive ou Dropbox, mas no seu próprio domínio com propriedade total dos dados. Sincronize, compartilhe e colabore.',
+		},
+		longDescription: {
+			en: 'Self-hosted cloud storage (Nextcloud) on your own domain. File sync across devices, collaborative editing, file sharing with expiring links, and mobile apps. Full data ownership — your files never leave your server unless you want them to.',
+			'pt-BR': 'Armazenamento em nuvem self-hosted (Nextcloud) no seu próprio domínio. Sincronização de arquivos entre dispositivos, edição colaborativa, compartilhamento com links temporários e apps mobile. Propriedade total dos dados — seus arquivos nunca saem do seu servidor a menos que você queira.',
+		},
+		basePrice: { BRL: 1200, USD: 280 },
+		maintenance: {
+			price: { BRL: 150, USD: 35 },
+		},
+		estimatedSetupDays: 2,
+		requires: ['cloud-server'],
+		clientDeliverables: [DELIVERABLE_STORAGE_NEEDS, DELIVERABLE_STORAGE_SUBDOMAIN],
+		thirdPartyCosts: [COST_CLOUD_STORAGE_EXTRA],
 		active: true,
 	},
 ];

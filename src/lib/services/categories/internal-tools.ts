@@ -2,16 +2,13 @@ import type { ServiceItem } from '../types';
 import {
 	DELIVERABLE_TEAM_MEMBERS,
 	DELIVERABLE_INVOICE_BRANDING,
-	DELIVERABLE_STORAGE_NEEDS,
-	DELIVERABLE_STORAGE_SUBDOMAIN,
 } from '../deliverables';
-import { COST_CLOUD_STORAGE_EXTRA } from '../third-party-costs';
 
-export const internalToolsServices: ServiceItem[] = [
+export const teamManagementServices: ServiceItem[] = [
 	// 7.1 Time Tracking
 	{
 		id: 'time-logging',
-		category: 'internal-tools',
+		category: 'team-management',
 		name: {
 			en: 'Time Tracking',
 			'pt-BR': 'Rastreamento de Horas',
@@ -34,37 +31,10 @@ export const internalToolsServices: ServiceItem[] = [
 		active: true,
 	},
 
-	// 7.2 Team Cloud Storage
-	{
-		id: 'cloud-storage',
-		category: 'internal-tools',
-		name: {
-			en: 'Team Cloud Storage',
-			'pt-BR': 'Armazenamento em Nuvem para Equipe',
-		},
-		shortDescription: {
-			en: 'Your own private cloud storage — like Google Drive or Dropbox, but on your own domain with full data ownership. Sync, share, and collaborate.',
-			'pt-BR': 'Seu próprio armazenamento em nuvem privado — como Google Drive ou Dropbox, mas no seu próprio domínio com propriedade total dos dados. Sincronize, compartilhe e colabore.',
-		},
-		longDescription: {
-			en: 'Self-hosted cloud storage (Nextcloud) on your own domain. File sync across devices, collaborative editing, file sharing with expiring links, and mobile apps. Full data ownership — your files never leave your server unless you want them to.',
-			'pt-BR': 'Armazenamento em nuvem self-hosted (Nextcloud) no seu próprio domínio. Sincronização de arquivos entre dispositivos, edição colaborativa, compartilhamento com links temporários e apps mobile. Propriedade total dos dados — seus arquivos nunca saem do seu servidor a menos que você queira.',
-		},
-		basePrice: { BRL: 1200, USD: 280 },
-		maintenance: {
-			price: { BRL: 150, USD: 35 },
-		},
-		estimatedSetupDays: 2,
-		requires: ['cloud-server'],
-		clientDeliverables: [DELIVERABLE_STORAGE_NEEDS, DELIVERABLE_STORAGE_SUBDOMAIN],
-		thirdPartyCosts: [COST_CLOUD_STORAGE_EXTRA],
-		active: true,
-	},
-
-	// 7.3 Team Password Manager
+	// 7.2 Team Password Manager
 	{
 		id: 'secrets-management',
-		category: 'internal-tools',
+		category: 'team-management',
 		name: {
 			en: 'Team Password Manager',
 			'pt-BR': 'Gerenciador de Senhas da Equipe',
@@ -82,7 +52,69 @@ export const internalToolsServices: ServiceItem[] = [
 			price: { BRL: 60, USD: 14 },
 		},
 		estimatedSetupDays: 0.5,
-		requires: ['cloud-server'],
+		configurations: [
+			{
+				id: 'hosting-choice',
+				label: {
+					en: 'Hosting',
+					'pt-BR': 'Hospedagem',
+				},
+				type: 'single-select',
+				required: true,
+				defaultOptionId: 'self-hosted',
+				options: [
+					{
+						id: 'self-hosted',
+						label: {
+							en: 'Self-hosted (Vaultwarden)',
+							'pt-BR': 'Auto-hospedado (Vaultwarden)',
+						},
+						description: {
+							en: 'Full control on your own server. No per-seat fees.',
+							'pt-BR': 'Controle total no seu próprio servidor. Sem cobrança por assento.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+						additionalRequires: ['cloud-server'],
+					},
+					{
+						id: '1password',
+						label: {
+							en: '1Password',
+							'pt-BR': '1Password',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'bitwarden-cloud',
+						label: {
+							en: 'Bitwarden Cloud',
+							'pt-BR': 'Bitwarden Cloud',
+						},
+						description: {
+							en: 'Platform costs not included. Free tier available.',
+							'pt-BR': 'Custos de plataforma não inclusos. Plano gratuito disponível.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'dashlane',
+						label: {
+							en: 'Dashlane',
+							'pt-BR': 'Dashlane',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+				],
+			},
+		],
 		clientDeliverables: [DELIVERABLE_TEAM_MEMBERS],
 		active: true,
 	},

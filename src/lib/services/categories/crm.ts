@@ -29,7 +29,69 @@ export const crmServices: ServiceItem[] = [
 			price: { BRL: 120, USD: 28 },
 		},
 		estimatedSetupDays: 2,
-		requires: ['cloud-server'],
+		configurations: [
+			{
+				id: 'hosting-choice',
+				label: {
+					en: 'Hosting',
+					'pt-BR': 'Hospedagem',
+				},
+				type: 'single-select',
+				required: true,
+				defaultOptionId: 'self-hosted',
+				options: [
+					{
+						id: 'self-hosted',
+						label: {
+							en: 'Self-hosted (Twenty CRM)',
+							'pt-BR': 'Auto-hospedado (Twenty CRM)',
+						},
+						description: {
+							en: 'Full control on your own server. No per-seat fees.',
+							'pt-BR': 'Controle total no seu próprio servidor. Sem cobrança por assento.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+						additionalRequires: ['cloud-server'],
+					},
+					{
+						id: 'hubspot',
+						label: {
+							en: 'HubSpot',
+							'pt-BR': 'HubSpot',
+						},
+						description: {
+							en: 'Platform costs not included. Free tier available.',
+							'pt-BR': 'Custos de plataforma não inclusos. Plano gratuito disponível.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'pipedrive',
+						label: {
+							en: 'Pipedrive',
+							'pt-BR': 'Pipedrive',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'salesforce',
+						label: {
+							en: 'Salesforce',
+							'pt-BR': 'Salesforce',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+				],
+			},
+		],
 		clientDeliverables: [DELIVERABLE_TEAM_MEMBERS, DELIVERABLE_CRM_EXPORT],
 		active: true,
 	},
@@ -55,7 +117,57 @@ export const crmServices: ServiceItem[] = [
 			price: { BRL: 70, USD: 16 },
 		},
 		estimatedSetupDays: 1,
-		recommends: ['cloud-server'],
+		configurations: [
+			{
+				id: 'hosting-choice',
+				label: {
+					en: 'Hosting',
+					'pt-BR': 'Hospedagem',
+				},
+				type: 'single-select',
+				required: true,
+				defaultOptionId: 'self-hosted',
+				options: [
+					{
+						id: 'self-hosted',
+						label: {
+							en: 'Self-hosted (Cal.com)',
+							'pt-BR': 'Auto-hospedado (Cal.com)',
+						},
+						description: {
+							en: 'Full control on your own server. No per-seat fees.',
+							'pt-BR': 'Controle total no seu próprio servidor. Sem cobrança por assento.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+						additionalRequires: ['cloud-server'],
+					},
+					{
+						id: 'calendly',
+						label: {
+							en: 'Calendly',
+							'pt-BR': 'Calendly',
+						},
+						description: {
+							en: 'Platform costs not included. Free tier available.',
+							'pt-BR': 'Custos de plataforma não inclusos. Plano gratuito disponível.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+					{
+						id: 'savvycal',
+						label: {
+							en: 'SavvyCal',
+							'pt-BR': 'SavvyCal',
+						},
+						description: {
+							en: 'Platform costs not included.',
+							'pt-BR': 'Custos de plataforma não inclusos.',
+						},
+						priceModifier: { BRL: 0, USD: 0 },
+					},
+				],
+			},
+		],
 		clientDeliverables: [DELIVERABLE_CALENDAR_ACCESS, DELIVERABLE_MEETING_TYPES, DELIVERABLE_AVAILABILITY],
 		active: true,
 	},

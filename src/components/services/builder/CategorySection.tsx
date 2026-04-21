@@ -3,6 +3,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ServiceCategory, ServiceItem, Locale, Currency, SelectedServiceItem } from '../../../lib/services/types';
 import type { BuilderAction } from '../../../lib/services/builder-types';
+import { FaServer, FaRocket, FaBolt, FaClipboardList, FaEnvelope, FaChartBar, FaUsers, FaMobileAlt, FaGamepad } from 'react-icons/fa';
+import type { IconType } from 'react-icons';
 import ServiceCard from './ServiceCard';
 
 const CATEGORY_LABELS: Record<ServiceCategory, { en: string; 'pt-BR': string }> = {
@@ -12,21 +14,21 @@ const CATEGORY_LABELS: Record<ServiceCategory, { en: string; 'pt-BR': string }> 
 	crm: { en: 'CRM', 'pt-BR': 'CRM' },
 	marketing: { en: 'Marketing & Email', 'pt-BR': 'Marketing & Email' },
 	analytics: { en: 'Analytics & Monitoring', 'pt-BR': 'Analytics & Monitoramento' },
-	'internal-tools': { en: 'Internal Tools', 'pt-BR': 'Ferramentas Internas' },
+	'team-management': { en: 'Team Management', 'pt-BR': 'Gestão de Equipe' },
 	'social-media': { en: 'Social Media', 'pt-BR': 'Mídias Sociais' },
 	'web-gamedev': { en: 'Web & Game Dev', 'pt-BR': 'Web & Game Dev' },
 };
 
-const CATEGORY_ICONS: Record<ServiceCategory, string> = {
-	infrastructure: '🏗️',
-	cicd: '⚙️',
-	automation: '⚡',
-	crm: '📇',
-	marketing: '📧',
-	analytics: '📊',
-	'internal-tools': '🔧',
-	'social-media': '📱',
-	'web-gamedev': '🎮',
+const CATEGORY_ICONS: Record<ServiceCategory, IconType> = {
+	infrastructure: FaServer,
+	cicd: FaRocket,
+	automation: FaBolt,
+	crm: FaClipboardList,
+	marketing: FaEnvelope,
+	analytics: FaChartBar,
+	'team-management': FaUsers,
+	'social-media': FaMobileAlt,
+	'web-gamedev': FaGamepad,
 };
 
 interface CategorySectionProps {
@@ -66,7 +68,7 @@ export default function CategorySection({
 				className="w-full flex items-center justify-between px-5 py-4 hover:bg-neutral-50 transition-colors"
 			>
 				<div className="flex items-center gap-3">
-					<span className="text-xl">{CATEGORY_ICONS[category]}</span>
+					{(() => { const Icon = CATEGORY_ICONS[category]; return <Icon className="text-xl text-[#04c597]" />; })()}
 					<h2 className="font-bold text-neutral-800">
 						{CATEGORY_LABELS[category][locale]}
 					</h2>
@@ -131,6 +133,7 @@ export default function CategorySection({
 										isExpanded={expandedServices.includes(service.id)}
 										autoAddedBy={autoAddedByName}
 										conflictingNames={conflictingNames}
+										catalog={catalog}
 										dispatch={dispatch}
 									/>
 								);

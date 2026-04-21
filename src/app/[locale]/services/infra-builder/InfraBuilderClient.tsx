@@ -11,6 +11,8 @@ import SummaryPanel from '@/components/services/summary/SummaryPanel';
 import ClientDeliverablesPanel from '@/components/services/deliverables/ClientDeliverablesPanel';
 import QuoteSubmitForm from '@/components/services/form/QuoteSubmitForm';
 import Modal from '@/components/shared/Modal';
+import { FaTimes } from 'react-icons/fa';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Link from 'next/link';
 
 const STORAGE_KEY = 'mib-infra-builder-state';
@@ -185,12 +187,15 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 lg:py-8">
 				{/* Header */}
 				<div className="mb-6">
-					<Link
-						href={`/${locale}/services`}
-						className="text-sm text-[#04c597] hover:underline mb-2 inline-block"
-					>
-						{locale === 'en' ? '← Back to services' : '← Voltar aos serviços'}
-					</Link>
+					<div className="flex items-center justify-between mb-2">
+						<Link
+							href={`/${locale}/services`}
+							className="text-sm text-[#04c597] hover:underline inline-block"
+						>
+							{locale === 'en' ? '← Back to services' : '← Voltar aos serviços'}
+						</Link>
+						<LanguageSwitcher />
+					</div>
 					<h1 className="text-2xl sm:text-3xl font-bold text-neutral-800">
 						{locale === 'en' ? 'Infrastructure Builder' : 'Builder de Infraestrutura'}
 					</h1>
@@ -211,7 +216,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 							className="shrink-0 text-amber-400 hover:text-amber-600"
 							aria-label="Dismiss"
 						>
-							✕
+							<FaTimes />
 						</button>
 					</div>
 				)}
@@ -237,7 +242,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 							className="shrink-0 text-blue-400 hover:text-blue-600 text-lg leading-none"
 							aria-label="Dismiss"
 						>
-							✕
+							<FaTimes />
 						</button>
 					</div>
 				)}

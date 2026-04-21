@@ -5,7 +5,7 @@ import { automationServices } from './categories/automation';
 import { crmServices } from './categories/crm';
 import { marketingServices } from './categories/marketing';
 import { analyticsServices } from './categories/analytics';
-import { internalToolsServices } from './categories/internal-tools';
+import { teamManagementServices } from './categories/internal-tools';
 import { socialMediaServices } from './categories/social-media';
 import { webGamedevServices } from './categories/web-gamedev';
 
@@ -16,7 +16,7 @@ export const SERVICE_CATALOG: ServiceItem[] = [
 	...crmServices,
 	...marketingServices,
 	...analyticsServices,
-	...internalToolsServices,
+	...teamManagementServices,
 	...socialMediaServices,
 	...webGamedevServices,
 ];

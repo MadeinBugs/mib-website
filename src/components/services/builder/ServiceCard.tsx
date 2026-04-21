@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { ServiceItem, Locale, Currency, SelectedServiceItem } from '../../../lib/services/types';
 import type { BuilderAction } from '../../../lib/services/builder-types';
 import { formatPrice } from '../../../lib/services/format';
+import { FaLightbulb } from 'react-icons/fa';
 import ServiceConfigurator from './ServiceConfigurator';
 import CustomFieldInput from './CustomFieldInput';
 import DependencyIndicator from './DependencyIndicator';
@@ -19,6 +20,7 @@ interface ServiceCardProps {
 	autoAddedBy: string | null;
 	/** Names of conflicting services that are currently selected */
 	conflictingNames: string[];
+	catalog: ServiceItem[];
 	dispatch: React.Dispatch<BuilderAction>;
 }
 
@@ -30,6 +32,7 @@ export default function ServiceCard({
 	isExpanded,
 	autoAddedBy,
 	conflictingNames,
+	catalog,
 	dispatch,
 }: ServiceCardProps) {
 	const isSelected = selected !== null;
@@ -231,13 +234,14 @@ export default function ServiceCard({
 							{service.requires && service.requires.length > 0 && (
 								<p className="text-xs text-neutral-500">
 									{locale === 'en' ? 'Requires: ' : 'Requer: '}
-									{service.requires.join(', ')}
+									{service.requires.map((id) => catalog.find((s) => s.id === id)?.name[locale] ?? id).join(', ')}
 								</p>
 							)}
 							{service.recommends && service.recommends.length > 0 && (
-								<p className="text-xs text-blue-600">
-									💡 {locale === 'en' ? 'You may also want: ' : 'Você também pode querer: '}
-									{service.recommends.join(', ')}
+								<p className="text-xs text-blue-600 flex items-center gap-1">
+									<FaLightbulb className="shrink-0" />
+									{locale === 'en' ? 'You may also want: ' : 'Você também pode querer: '}
+									{service.recommends.map((id) => catalog.find((s) => s.id === id)?.name[locale] ?? id).join(', ')}
 								</p>
 							)}
 						</div>

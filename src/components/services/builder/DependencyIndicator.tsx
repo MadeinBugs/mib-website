@@ -1,6 +1,7 @@
 'use client';
 
 import type { Locale } from '../../../lib/services/types';
+import { FaLink } from 'react-icons/fa';
 
 interface DependencyIndicatorProps {
 	locale: Locale;
@@ -11,7 +12,7 @@ interface DependencyIndicatorProps {
 export default function DependencyIndicator({ locale, requiredByName }: DependencyIndicatorProps) {
 	return (
 		<div className="flex items-center gap-1.5 text-xs text-amber-700 bg-amber-50 rounded-md px-2 py-1">
-			<span>🔗</span>
+			<FaLink className="shrink-0" />
 			<span>
 				{locale === 'en'
 					? `Auto-added because "${requiredByName}" requires it`

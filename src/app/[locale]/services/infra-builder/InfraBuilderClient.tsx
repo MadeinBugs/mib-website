@@ -1,7 +1,7 @@
 'use client';
 
 import { useReducer, useMemo, useState, useEffect, useCallback } from 'react';
-import type { ServiceItem, ServiceCategory, Locale } from '@/lib/services/types';
+import type { ServiceItem, SelectedServiceItem, ServiceCategory, Locale } from '@/lib/services/types';
 import { createInitialState } from '@/lib/services/builder-types';
 import type { BuilderState } from '@/lib/services/builder-types';
 import { builderReducer } from '@/lib/services/builder-reducer';
@@ -33,13 +33,66 @@ function groupByCategory(catalog: ServiceItem[]): Array<{ category: ServiceCateg
 }
 
 function loadSavedState(): Partial<BuilderState> | null {
+	if (typeof window === 'undefined') return null;
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
 		if (!raw) return null;
-		return JSON.parse(raw);
+		const parsed = JSON.parse(raw);
+		if (!parsed || typeof parsed !== 'object') return null;
+		if (parsed.selectedItems && typeof parsed.selectedItems !== 'object') return null;
+		return parsed;
 	} catch {
 		return null;
 	}
+}
+
+function pruneInvalidSelections(
+	saved: Partial<BuilderState>,
+	catalog: ServiceItem[]
+): { cleaned: Partial<BuilderState>; droppedCount: number } {
+	if (!saved.selectedItems) return { cleaned: saved, droppedCount: 0 };
+
+	const cleaned: Record<string, SelectedServiceItem> = {};
+	let dropped = 0;
+
+	for (const [serviceId, item] of Object.entries(saved.selectedItems)) {
+		const service = catalog.find((s) => s.id === serviceId && s.active);
+		if (!service) {
+			dropped++;
+			continue;
+		}
+
+		const validConfigs = item.configurations.filter((c) => {
+			const configDef = service.configurations?.find((cd) => cd.id === c.configurationId);
+			if (!configDef) return false;
+			return c.selectedOptionIds.every((oid) =>
+				configDef.options.some((o) => o.id === oid)
+			);
+		});
+
+		const validCustomFields = item.customFields.filter((cf) =>
+			service.customFields?.some((fd) => fd.id === cf.customFieldId)
+		);
+
+		cleaned[serviceId] = {
+			serviceId,
+			configurations: validConfigs,
+			customFields: validCustomFields,
+		};
+	}
+
+	// Also clean autoAdded references to services that were removed
+	const cleanedAutoAdded: Record<string, string> = {};
+	for (const [id, reason] of Object.entries(saved.autoAdded ?? {})) {
+		if (id in cleaned && reason && (reason in cleaned)) {
+			cleanedAutoAdded[id] = reason as string;
+		}
+	}
+
+	return {
+		cleaned: { ...saved, selectedItems: cleaned, autoAdded: cleanedAutoAdded },
+		droppedCount: dropped,
+	};
 }
 
 function saveState(state: BuilderState) {
@@ -56,14 +109,24 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 	const [state, dispatch] = useReducer(reducer, locale, createInitialState);
 	const [showSubmitForm, setShowSubmitForm] = useState(false);
 	const [showMobileSummary, setShowMobileSummary] = useState(false);
+	const [toastMessage, setToastMessage] = useState<string | null>(null);
 
 	// Restore state from localStorage on mount
 	useEffect(() => {
 		const saved = loadSavedState();
-		if (saved && saved.selectedItems && Object.keys(saved.selectedItems).length > 0) {
-			dispatch({ type: 'RESTORE_STATE', state: saved });
+		if (!saved) return;
+
+		const { cleaned, droppedCount } = pruneInvalidSelections(saved, catalog);
+		dispatch({ type: 'RESTORE_STATE', state: cleaned });
+
+		if (droppedCount > 0) {
+			setToastMessage(
+				locale === 'en'
+					? 'Some items were no longer available and have been removed from your quote.'
+					: 'Alguns itens não estão mais disponíveis e foram removidos do seu orçamento.'
+			);
 		}
-	}, []);
+	}, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Read URL params
 	useEffect(() => {
@@ -79,10 +142,29 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 		}
 	}, []);
 
-	// Persist state changes
+	// Persist state changes (debounced)
 	useEffect(() => {
-		saveState(state);
+		const timer = setTimeout(() => saveState(state), 300);
+		return () => clearTimeout(timer);
 	}, [state]);
+
+	// Clear localStorage on successful submission
+	useEffect(() => {
+		if (state.submissionState === 'success') {
+			try {
+				localStorage.removeItem(STORAGE_KEY);
+			} catch {
+				// ignore
+			}
+		}
+	}, [state.submissionState]);
+
+	// Auto-dismiss toast
+	useEffect(() => {
+		if (!toastMessage) return;
+		const timer = setTimeout(() => setToastMessage(null), 6000);
+		return () => clearTimeout(timer);
+	}, [toastMessage]);
 
 	const groups = useMemo(() => groupByCategory(catalog), [catalog]);
 	const selectedCount = Object.keys(state.selectedItems).length;
@@ -118,6 +200,21 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 							: 'Selecione os serviços que precisa e obtenha um orçamento instantâneo.'}
 					</p>
 				</div>
+
+				{/* Toast notification */}
+				{toastMessage && (
+					<div className="mb-4 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 flex items-center justify-between gap-3 text-sm text-amber-800">
+						<span>{toastMessage}</span>
+						<button
+							type="button"
+							onClick={() => setToastMessage(null)}
+							className="shrink-0 text-amber-400 hover:text-amber-600"
+							aria-label="Dismiss"
+						>
+							✕
+						</button>
+					</div>
+				)}
 
 				{/* Banner */}
 				{!state.bannerDismissed && selectedCount === 0 && (

@@ -16,6 +16,28 @@ function getOptionIdsMap(state: BuilderState, serviceId: string): Record<string,
 	return map;
 }
 
+function findAllDependentsTransitive(
+	catalog: ServiceItem[],
+	serviceId: string,
+	currentlySelected: Set<string>
+): Set<string> {
+	const toRemove = new Set<string>();
+	const queue = [serviceId];
+
+	while (queue.length > 0) {
+		const current = queue.shift()!;
+		const directDependents = findDependents(catalog, current, currentlySelected);
+		for (const dep of directDependents) {
+			if (!toRemove.has(dep)) {
+				toRemove.add(dep);
+				queue.push(dep);
+			}
+		}
+	}
+
+	return toRemove;
+}
+
 export function builderReducer(catalog: ServiceItem[]) {
 	return function reducer(state: BuilderState, action: BuilderAction): BuilderState {
 		switch (action.type) {
@@ -24,10 +46,10 @@ export function builderReducer(catalog: ServiceItem[]) {
 				const isSelected = serviceId in state.selectedItems;
 
 				if (isSelected) {
-					// Deselecting — cascade-remove dependents
+					// Deselecting — cascade-remove transitive dependents (BFS)
 					const currentlySelected = new Set(Object.keys(state.selectedItems));
-					const dependents = findDependents(catalog, serviceId, currentlySelected);
-					const toRemove = new Set([serviceId, ...dependents]);
+					const transitiveDependents = findAllDependentsTransitive(catalog, serviceId, currentlySelected);
+					const toRemove = new Set([serviceId, ...transitiveDependents]);
 
 					const newItems = { ...state.selectedItems };
 					const newAutoAdded = { ...state.autoAdded };

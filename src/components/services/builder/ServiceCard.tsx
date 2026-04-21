@@ -46,10 +46,10 @@ export default function ServiceCard({
 	return (
 		<div
 			className={`rounded-lg border-2 transition-all duration-200 ${isSelected
-					? 'border-[#04c597] bg-[#f0fdf8] shadow-sm'
-					: hasConflict
-						? 'border-red-200 bg-red-50/30 opacity-75'
-						: 'border-neutral-200 bg-white hover:border-neutral-300'
+				? 'border-[#04c597] bg-[#f0fdf8] shadow-sm'
+				: hasConflict
+					? 'border-red-200 bg-red-50/30 opacity-75'
+					: 'border-neutral-200 bg-white hover:border-neutral-300'
 				}`}
 		>
 			{/* Header row */}
@@ -185,7 +185,11 @@ export default function ServiceCard({
 										const existing = selected!.customFields.find(
 											(cf) => cf.customFieldId === field.id
 										);
-										const values = existing?.values ?? (field.repeatable ? [] : ['']);
+										const values = existing?.values ?? (
+											field.repeatable
+												? Array(field.minItems ?? 0).fill('')
+												: ['']
+										);
 										return (
 											<CustomFieldInput
 												key={field.id}

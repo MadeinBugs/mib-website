@@ -20,8 +20,10 @@ export default function QuoteSubmitForm({ locale, state, dispatch, onClose }: Qu
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
-		// Honeypot check
-		const honeypotEl = document.getElementById('website_url') as HTMLInputElement | null;
+		// Honeypot check — DOM field is "company_url_confirm" to confuse bots.
+		// Phase 5: when wiring to POST /api/services/quote-request, send the value
+		// as JSON property "honeypot" (matches Zod schema), not the DOM field name.
+		const honeypotEl = document.getElementById('company_url_confirm') as HTMLInputElement | null;
 		if (honeypotEl?.value) return;
 
 		const errors: string[] = [];

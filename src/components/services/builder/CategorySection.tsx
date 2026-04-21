@@ -102,7 +102,8 @@ export default function CategorySection({
 					>
 						<div className="px-5 pb-4 space-y-3 border-t border-neutral-100 pt-3">
 							{services.map((service) => {
-								// Compute conflicts for this service
+								// Conflicts are symmetric per catalog validator — checking one direction suffices.
+								// If this assumption breaks, fix the validator rather than adding defensive checks here.
 								const conflictingNames: string[] = [];
 								if (service.conflictsWith) {
 									for (const conflictId of service.conflictsWith) {

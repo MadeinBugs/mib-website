@@ -1,6 +1,8 @@
-// In-memory rate limiter for serverless environments.
-// NOTE: This does NOT persist across serverless invocations on Vercel.
-// Replace with Upstash Redis (@upstash/ratelimit) before public launch.
+/**
+ * @deprecated Use `rate-limit-redis.ts` (Upstash-based) for new features.
+ * This in-memory limiter is kept for backward compatibility with newsletter endpoints.
+ * It does NOT persist across Vercel cold starts.
+ */
 
 interface RateLimitEntry {
 	count: number;

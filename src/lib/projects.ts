@@ -186,10 +186,6 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 			discord: {
 				url: 'https://go.madeinbugs.com.br/asumipage-discord',
 				label: { en: 'Discord', 'pt-BR': 'Discord' }
-			},
-			build: {
-				url: 'https://go.madeinbugs.com.br/asumipage-build',
-				label: { en: 'Build', 'pt-BR': 'Build' }
 			}
 		},
 		videos: ['https://youtu.be/6QbVCweByhw'],

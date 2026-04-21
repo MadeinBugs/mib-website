@@ -1,7 +1,8 @@
 import { normalizeLocale } from '@/lib/i18n';
 import { cookies } from 'next/headers';
-import { verifyQuoteSignature } from '@/lib/services/quote-url';
+import { verifyQuoteSignature, buildQuoteUrl } from '@/lib/services/quote-url';
 import Link from 'next/link';
+import type { Locale } from '@/lib/services/types';
 
 interface Props {
 	params: Promise<{ locale: string }>;
@@ -10,11 +11,12 @@ interface Props {
 
 export default async function QuoteSentPage({ params, searchParams }: Props) {
 	const { locale: rawLocale } = await params;
-	const locale = normalizeLocale(rawLocale);
+	const locale = normalizeLocale(rawLocale) as Locale;
 	const { id } = await searchParams;
 
 	let isValid = false;
 	let quoteId = id || '';
+	let shareableUrl = '';
 
 	// Validate via mib_quote_session cookie
 	if (id) {
@@ -25,6 +27,7 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 			const [cookieUuid, cookieSig] = sessionCookie.value.split(':');
 			if (cookieUuid === id && cookieSig && verifyQuoteSignature(cookieUuid, cookieSig)) {
 				isValid = true;
+				shareableUrl = buildQuoteUrl(locale, id);
 			}
 
 			// Clear the cookie after reading
@@ -54,12 +57,24 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 				</p>
 
 				{isValid && quoteId && (
-					<div className="bg-[#f0fdf4] border border-[#86efac] rounded-lg p-4 mb-6 text-left">
-						<p className="text-sm text-neutral-500 mb-1">
-							{locale === 'pt-BR' ? 'ID do orçamento:' : 'Quote ID:'}
+					<>
+						<div className="bg-[#f0fdf4] border border-[#86efac] rounded-lg p-4 mb-4 text-left">
+							<p className="text-sm font-semibold text-neutral-700 mb-2">
+								{locale === 'pt-BR' ? 'Link do seu orçamento:' : 'Your quote link:'}
+							</p>
+							<a
+								href={shareableUrl}
+								className="text-sm text-[#04c597] hover:underline break-all"
+							>
+								{shareableUrl}
+							</a>
+						</div>
+						<p className="text-xs text-neutral-400 mb-6">
+							{locale === 'pt-BR'
+								? 'Salve este link — você pode usá-lo para ver seu orçamento a qualquer momento.'
+								: 'Save this link — you can use it to view your quote at any time.'}
 						</p>
-						<code className="text-sm font-mono text-neutral-800 break-all">{quoteId}</code>
-					</div>
+					</>
 				)}
 
 				<p className="text-sm text-neutral-500 mb-6">

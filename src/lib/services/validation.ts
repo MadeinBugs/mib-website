@@ -44,7 +44,7 @@ export const QuoteSubmissionSchema = z.object({
 	consentAccepted: z.literal(true),
 	termsVersion: z.string().min(1).max(50),
 	catalogVersion: z.string().min(1).max(50),
-	honeypot: z.literal(''),
+	honeypot: z.string().max(500),
 	refParam: z.string().max(100).optional(),
 	clientComputedTotal: z.number().nonnegative(),
 });
@@ -62,11 +62,6 @@ export function validateSubmissionAgainstCatalog(
 	catalog: ServiceItem[]
 ): ValidationResult {
 	const { selectedItems, currency, maintenanceMonths } = submission;
-
-	// Rule 12: Terms version
-	if (submission.termsVersion !== TERMS_VERSION) {
-		return makeError('Terms version mismatch. Please review the updated terms.', 'TERMS_VERSION_MISMATCH');
-	}
 
 	const selectedServiceIds = new Set(selectedItems.map((si) => si.serviceId));
 
@@ -191,18 +186,25 @@ export function validateSubmissionAgainstCatalog(
 
 	// Rule 13: Catalog version check
 	const catalogVersionMatches = submission.catalogVersion === CATALOG_VERSION;
+	const termsVersionMatches = submission.termsVersion === TERMS_VERSION;
+
+	// Rule 12+13: If either version is stale and drift is large, tell client to refresh
+	if (!catalogVersionMatches || !termsVersionMatches) {
+		if (diff > 0.01) {
+			const driftPercent = serverTotal > 0 ? diff / serverTotal : diff;
+			if (driftPercent > 0.10) {
+				return makeError(
+					'Our catalog or terms have been updated since you started. Please refresh and review your package.',
+					!catalogVersionMatches ? 'CATALOG_VERSION_MISMATCH' : 'TERMS_VERSION_MISMATCH'
+				);
+			}
+		}
+	}
 
 	if (diff > 0.01) {
 		const driftPercent = serverTotal > 0 ? diff / serverTotal : diff;
 
 		if (driftPercent > 0.10) {
-			// Rule 11: Beyond 10%
-			if (!catalogVersionMatches) {
-				return makeError(
-					'Our catalog has been updated since you started. Please refresh and review your package.',
-					'CATALOG_VERSION_MISMATCH'
-				);
-			}
 			return makeError(
 				'Our pricing has been updated since you started. Please review your package and try again.',
 				'PRICE_DRIFT_TOO_LARGE'

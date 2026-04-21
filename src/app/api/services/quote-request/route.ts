@@ -6,26 +6,14 @@ import { createServiceClient } from '@/lib/supabase/service';
 import { QuoteSubmissionSchema, validateSubmissionAgainstCatalog } from '@/lib/services/validation';
 import { SERVICE_CATALOG, getServiceById } from '@/lib/services/catalog';
 import { CATALOG_VERSION } from '@/lib/services/catalog-version.generated';
-import { computeGrandTotal, countPendingItems, collectDeliverables, collectThirdPartyCosts, computeMaintenanceForService } from '@/lib/services/pricing';
+import { computeGrandTotal, countPendingItems, computeMaintenanceForService } from '@/lib/services/pricing';
 import { signQuoteId, buildQuoteUrl } from '@/lib/services/quote-url';
 import { renderEmail } from '@/emails/render';
+import { formatPrice, formatDate } from '@/lib/services/format';
 import type { SelectedItemSnapshot, Currency, Locale, QuoteSubmission } from '@/lib/services/types';
 
 function hashIp(ip: string): string {
 	return crypto.createHash('sha256').update(ip).digest('hex');
-}
-
-function formatPrice(amount: number, currency: Currency): string {
-	if (currency === 'BRL') return `R$ ${amount.toLocaleString('pt-BR')}`;
-	return `USD ${amount.toLocaleString('en-US')}`;
-}
-
-function formatDate(date: Date, locale: Locale): string {
-	return date.toLocaleDateString(locale === 'pt-BR' ? 'pt-BR' : 'en-US', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-	});
 }
 
 async function sendDiscordWebhook(payload: object): Promise<void> {
@@ -78,7 +66,10 @@ async function sendConfirmationEmail(
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				sender: { name: 'Made in Bugs', email: 'hello@madeinbugs.com.br' },
+				sender: {
+					name: process.env.BREVO_SENDER_NAME || 'Made in Bugs',
+					email: process.env.BREVO_SENDER_EMAIL || 'hello@madeinbugs.com.br',
+				},
 				to: [{ email: submission.clientInfo.email, name: submission.clientInfo.name }],
 				subject,
 				htmlContent,
@@ -123,7 +114,12 @@ function buildSelectedItemSnapshots(
 			};
 		});
 
-		const maintenanceInfo = computeMaintenanceForService(service, item, currency);
+		// Compute maintenance in both currencies for snapshot accuracy
+		const maintenanceBRL = computeMaintenanceForService(service, item, 'BRL');
+		const maintenanceUSD = computeMaintenanceForService(service, item, 'USD');
+		const maintenancePrice = maintenanceBRL && maintenanceUSD
+			? { BRL: maintenanceBRL.total, USD: maintenanceUSD.total }
+			: null;
 
 		// Collect deliverables for this service (including config options)
 		const deliverables = [...service.clientDeliverables];
@@ -158,10 +154,10 @@ function buildSelectedItemSnapshots(
 			basePrice: service.basePrice,
 			configurations,
 			customFields,
-			maintenancePrice: maintenanceInfo ? { BRL: maintenanceInfo.total, USD: maintenanceInfo.total } : null,
-			maintenanceBreakdown: maintenanceInfo ? {
-				base: maintenanceInfo.base,
-				modifiers: maintenanceInfo.modifiers,
+			maintenancePrice,
+			maintenanceBreakdown: maintenanceBRL ? {
+				base: maintenanceBRL.base,
+				modifiers: maintenanceBRL.modifiers,
 			} : undefined,
 			deliverables,
 			thirdPartyCosts,
@@ -170,15 +166,7 @@ function buildSelectedItemSnapshots(
 }
 
 export async function POST(request: NextRequest) {
-	// Feature flag check
-	if (process.env.SERVICES_FEATURE_LIVE !== 'true') {
-		return NextResponse.json(
-			{ error: 'Services are currently in preview mode. Please check back soon.' },
-			{ status: 503 }
-		);
-	}
-
-	// Rate limit
+	// Rate limit first — protects even when feature is off
 	const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
 		request.headers.get('x-real-ip') ||
 		'unknown';
@@ -188,6 +176,14 @@ export async function POST(request: NextRequest) {
 		return NextResponse.json(
 			{ error: 'Too many requests. Please try again in a minute.' },
 			{ status: 429 }
+		);
+	}
+
+	// Feature flag check
+	if (process.env.SERVICES_FEATURE_LIVE !== 'true') {
+		return NextResponse.json(
+			{ error: 'Services are currently in preview mode. Please check back soon.' },
+			{ status: 503 }
 		);
 	}
 
@@ -207,9 +203,12 @@ export async function POST(request: NextRequest) {
 
 	const submission = parseResult.data as QuoteSubmission;
 
-	// Honeypot double-check (Zod already enforces z.literal(''))
+	// Honeypot check — run before business validation, return silent success to hide detection
 	if (submission.honeypot !== '') {
-		// Silent success — don't reveal bot detection
+		sendDiscordWebhook({
+			username: 'Infra Builder',
+			content: `🍯 Honeypot triggered from IP hash ${hashIp(ip)}`,
+		}).catch((err) => console.error('[quote-request] Discord failed:', err));
 		return NextResponse.json({ id: crypto.randomUUID(), shareableUrl: '' });
 	}
 
@@ -297,6 +296,14 @@ export async function POST(request: NextRequest) {
 		}
 	}
 
+	// Catalog version stale warning (independent of price drift)
+	if (submission.catalogVersion !== CATALOG_VERSION) {
+		sendDiscordWebhook({
+			username: 'Infra Builder',
+			content: `⚠️ Stale catalog on quote ${uuid}: client=${submission.catalogVersion}, server=${CATALOG_VERSION}`,
+		}).catch((err) => console.error('[quote-request] Discord failed:', err));
+	}
+
 	// Fire Discord webhook (non-blocking)
 	const serviceList = submission.selectedItems
 		.map((item) => {
@@ -304,6 +311,9 @@ export async function POST(request: NextRequest) {
 			return `• ${service?.name[submission.locale] || item.serviceId}`;
 		})
 		.join('\n');
+	const truncatedServiceList = serviceList.length > 1000
+		? serviceList.slice(0, 1000) + '\n… and more'
+		: serviceList;
 
 	sendDiscordWebhook({
 		username: 'Infra Builder',
@@ -324,7 +334,7 @@ export async function POST(request: NextRequest) {
 				},
 				{ name: 'Grand total', value: formatPrice(computedTotals.grandTotal, currency), inline: false },
 				{ name: 'Pending items', value: hasPending ? `⏱ ${pendingCount} items need review` : 'None', inline: false },
-				{ name: 'Services', value: serviceList, inline: false },
+				{ name: 'Services', value: truncatedServiceList, inline: false },
 				{ name: 'Message', value: submission.clientInfo.message ? submission.clientInfo.message.slice(0, 500) : '—', inline: false },
 				{ name: 'Source', value: submission.refParam || 'direct', inline: true },
 				{ name: 'Locale', value: submission.locale, inline: true },
@@ -332,7 +342,7 @@ export async function POST(request: NextRequest) {
 			footer: { text: `Quote ID: ${uuid}` },
 			timestamp: new Date().toISOString(),
 		}],
-	}).catch(() => { }); // Non-blocking
+	}).catch((err) => console.error('[quote-request] Discord failed:', err));
 
 	// Send confirmation email (non-blocking)
 	sendConfirmationEmail(
@@ -341,7 +351,7 @@ export async function POST(request: NextRequest) {
 		expiresAt,
 		hasPending,
 		pendingCount
-	).catch(() => { }); // Non-blocking
+	).catch((err) => console.error('[quote-request] Brevo email failed:', err));
 
 	// Set HTTP-only cookie for the quote-sent page
 	const cookieStore = await cookies();

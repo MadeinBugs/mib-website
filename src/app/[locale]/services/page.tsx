@@ -1,5 +1,7 @@
 import { getTranslations, normalizeLocale } from '@/lib/i18n';
 import Link from 'next/link';
+import { FaServer, FaRocket, FaBolt, FaClipboardList, FaEnvelope, FaChartBar, FaWrench, FaMobileAlt, FaGamepad } from 'react-icons/fa';
+import type { IconType } from 'react-icons';
 
 interface Props {
 	params: Promise<{ locale: string }>;
@@ -103,23 +105,23 @@ export default async function ServicesPage({ params }: Props) {
 						{locale === 'pt-BR' ? 'O que oferecemos' : 'What we offer'}
 					</h2>
 					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
-						{[
-							{ key: 'infrastructure', en: 'Infrastructure', pt: 'Infraestrutura', icon: '🏗️' },
-							{ key: 'cicd', en: 'Code & Delivery', pt: 'Código & Entrega', icon: '🚀' },
-							{ key: 'automation', en: 'Automation', pt: 'Automação', icon: '⚡' },
-							{ key: 'crm', en: 'CRM & Scheduling', pt: 'CRM & Agendamento', icon: '📋' },
-							{ key: 'marketing', en: 'Marketing & Email', pt: 'Marketing & Email', icon: '📧' },
-							{ key: 'analytics', en: 'Analytics & Insights', pt: 'Analytics & Insights', icon: '📊' },
-							{ key: 'internal-tools', en: 'Internal Tools', pt: 'Ferramentas Internas', icon: '🔧' },
-							{ key: 'social-media', en: 'Social Media', pt: 'Redes Sociais', icon: '📱' },
-							{ key: 'web-gamedev', en: 'Web & Gamedev', pt: 'Web & Gamedev', icon: '🎮' },
-						].map((cat) => (
+						{([
+							{ key: 'infrastructure', en: 'Infrastructure', pt: 'Infraestrutura', Icon: FaServer },
+							{ key: 'cicd', en: 'Code & Delivery', pt: 'Código & Entrega', Icon: FaRocket },
+							{ key: 'automation', en: 'Automation', pt: 'Automação', Icon: FaBolt },
+							{ key: 'crm', en: 'CRM & Scheduling', pt: 'CRM & Agendamento', Icon: FaClipboardList },
+							{ key: 'marketing', en: 'Marketing & Email', pt: 'Marketing & Email', Icon: FaEnvelope },
+							{ key: 'analytics', en: 'Analytics & Insights', pt: 'Analytics & Insights', Icon: FaChartBar },
+							{ key: 'internal-tools', en: 'Internal Tools', pt: 'Ferramentas Internas', Icon: FaWrench },
+							{ key: 'social-media', en: 'Social Media', pt: 'Redes Sociais', Icon: FaMobileAlt },
+							{ key: 'web-gamedev', en: 'Web & Gamedev', pt: 'Web & Gamedev', Icon: FaGamepad },
+						] as Array<{ key: string; en: string; pt: string; Icon: IconType }>).map((cat) => (
 							<Link
 								key={cat.key}
 								href={`/${locale}/services/infra-builder?category=${cat.key}`}
 								className="p-4 bg-white rounded-xl border-2 border-neutral-200 hover:border-[#04c597] transition-colors text-center"
 							>
-								<span className="text-3xl block mb-2">{cat.icon}</span>
+								<cat.Icon className="text-3xl mx-auto mb-2 text-[#04c597]" />
 								<span className="font-semibold text-neutral-800 text-sm">
 									{locale === 'pt-BR' ? cat.pt : cat.en}
 								</span>

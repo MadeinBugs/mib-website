@@ -2,17 +2,16 @@ import { notFound } from 'next/navigation';
 import { normalizeLocale } from '@/lib/i18n';
 import { createServiceClient } from '@/lib/supabase/service';
 import { verifyQuoteSignature } from '@/lib/services/quote-url';
+import { autoExpireQuote } from '@/lib/services/quote-expiration';
+import { formatPrice, formatDate } from '@/lib/services/format';
 import Link from 'next/link';
-import type { SelectedItemSnapshot } from '@/lib/services/types';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import type { SelectedItemSnapshot, Locale, Currency } from '@/lib/services/types';
 
 interface Props {
 	params: Promise<{ locale: string; uuid: string }>;
 	searchParams: Promise<{ sig?: string }>;
-}
-
-function formatPrice(amount: number, currency: string): string {
-	if (currency === 'BRL') return `R$ ${amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-	return `USD ${amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
 }
 
 function StatusBadge({ status }: { status: string }) {
@@ -33,13 +32,11 @@ function StatusBadge({ status }: { status: string }) {
 
 export default async function QuoteViewPage({ params, searchParams }: Props) {
 	const { locale: rawLocale, uuid } = await params;
-	const locale = normalizeLocale(rawLocale);
+	const locale = normalizeLocale(rawLocale) as Locale;
 	const { sig } = await searchParams;
 
-	if (!sig) notFound();
-
-	// Validate signature
-	if (!verifyQuoteSignature(uuid, sig)) notFound();
+	// Verify signature before DB fetch to avoid timing side-channel
+	if (!sig || !verifyQuoteSignature(uuid, sig)) notFound();
 
 	// Fetch quote
 	const supabase = createServiceClient();
@@ -55,17 +52,10 @@ export default async function QuoteViewPage({ params, searchParams }: Props) {
 	if (quote.url_signature !== sig) notFound();
 
 	// Auto-expire
-	let status = quote.status;
-	if (status === 'new' && new Date(quote.expires_at) < new Date()) {
-		await supabase
-			.from('quote_requests')
-			.update({ status: 'expired' })
-			.eq('id', uuid);
-		status = 'expired';
-	}
+	const status = await autoExpireQuote(uuid, quote.status, quote.expires_at);
 
 	const items = quote.selected_items as SelectedItemSnapshot[];
-	const currency = quote.currency;
+	const currency = quote.currency as Currency;
 	const isExpired = status === 'expired';
 
 	return (
@@ -99,17 +89,15 @@ export default async function QuoteViewPage({ params, searchParams }: Props) {
 						<div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
 							<p className="text-blue-800 text-sm">
 								{locale === 'pt-BR'
-									? `Válido até ${new Date(quote.expires_at).toLocaleDateString('pt-BR', { year: 'numeric', month: 'long', day: 'numeric' })}`
-									: `Valid until ${new Date(quote.expires_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`}
+									? `Válido até ${formatDate(new Date(quote.expires_at), locale)}`
+									: `Valid until ${formatDate(new Date(quote.expires_at), locale)}`}
 							</p>
 						</div>
 					)}
 
 					<p className="text-sm text-neutral-500">
 						{locale === 'pt-BR' ? 'Enviado em' : 'Submitted on'}{' '}
-						{new Date(quote.created_at).toLocaleDateString(locale === 'pt-BR' ? 'pt-BR' : 'en-US', {
-							year: 'numeric', month: 'long', day: 'numeric',
-						})}
+						{formatDate(new Date(quote.created_at), locale)}
 					</p>
 				</div>
 
@@ -129,7 +117,7 @@ export default async function QuoteViewPage({ params, searchParams }: Props) {
 										<p className="text-xs text-neutral-400 uppercase">{item.serviceCategory}</p>
 									</div>
 									<span className="text-neutral-800 font-semibold">
-										{formatPrice(item.basePrice[currency as 'BRL' | 'USD'], currency)}
+										{formatPrice(item.basePrice[currency], currency)}
 									</span>
 								</div>
 
@@ -141,9 +129,9 @@ export default async function QuoteViewPage({ params, searchParams }: Props) {
 												{config.selectedOptions.map((opt) => (
 													<span key={opt.optionId}>
 														{opt.optionLabel[locale]}
-														{opt.priceModifier[currency as 'BRL' | 'USD'] > 0 && (
+														{opt.priceModifier[currency] > 0 && (
 															<span className="text-neutral-400 ml-1">
-																(+{formatPrice(opt.priceModifier[currency as 'BRL' | 'USD'], currency)})
+																(+{formatPrice(opt.priceModifier[currency], currency)})
 															</span>
 														)}
 													</span>
@@ -221,14 +209,14 @@ export default async function QuoteViewPage({ params, searchParams }: Props) {
 						<h2 className="text-lg font-bold text-neutral-800 mb-4">
 							{locale === 'pt-BR' ? 'Nossa resposta' : 'Our response'}
 						</h2>
-						<div className="prose prose-neutral max-w-none text-neutral-600 text-sm whitespace-pre-wrap">
-							{quote.response_notes}
+						<div className="prose prose-neutral max-w-none text-neutral-600 text-sm">
+							<ReactMarkdown remarkPlugins={[remarkGfm]}>
+								{quote.response_notes}
+							</ReactMarkdown>
 						</div>
 						<p className="text-xs text-neutral-400 mt-4">
 							{locale === 'pt-BR' ? 'Respondido em' : 'Responded on'}{' '}
-							{new Date(quote.response_sent_at).toLocaleDateString(locale === 'pt-BR' ? 'pt-BR' : 'en-US', {
-								year: 'numeric', month: 'long', day: 'numeric',
-							})}
+							{formatDate(new Date(quote.response_sent_at), locale)}
 						</p>
 					</div>
 				)}

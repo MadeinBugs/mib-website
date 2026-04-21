@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/service';
 import { verifyQuoteSignature } from '@/lib/services/quote-url';
+import { autoExpireQuote } from '@/lib/services/quote-expiration';
 
 export async function GET(
 	request: NextRequest,
@@ -9,7 +10,8 @@ export async function GET(
 	const { uuid } = await params;
 	const sig = request.nextUrl.searchParams.get('sig');
 
-	if (!sig) {
+	// Verify signature before DB fetch to avoid timing side-channel
+	if (!sig || !verifyQuoteSignature(uuid, sig)) {
 		return NextResponse.json({ error: 'Not found' }, { status: 404 });
 	}
 
@@ -24,26 +26,15 @@ export async function GET(
 		return NextResponse.json({ error: 'Not found' }, { status: 404 });
 	}
 
-	// Verify signature with timing-safe comparison
-	if (!verifyQuoteSignature(uuid, sig)) {
-		return NextResponse.json({ error: 'Not found' }, { status: 404 });
-	}
-
 	// Auto-expire if status is 'new' and past expiration
-	if (quote.status === 'new' && new Date(quote.expires_at) < new Date()) {
-		await supabase
-			.from('quote_requests')
-			.update({ status: 'expired' })
-			.eq('id', uuid);
-		quote.status = 'expired';
-	}
+	const status = await autoExpireQuote(uuid, quote.status, quote.expires_at);
 
 	// Return public-safe subset
 	return NextResponse.json({
 		id: quote.id,
 		created_at: quote.created_at,
 		expires_at: quote.expires_at,
-		status: quote.status,
+		status: status,
 		locale: quote.locale,
 		currency: quote.currency,
 		client_name: quote.client_name,
@@ -58,7 +49,7 @@ export async function GET(
 		maintenance_monthly_price: quote.maintenance_monthly_price,
 		maintenance_total: quote.maintenance_total,
 		catalog_version: quote.catalog_version,
-		response_notes: quote.status !== 'new' ? quote.response_notes : null,
-		response_sent_at: quote.status !== 'new' ? quote.response_sent_at : null,
+		response_notes: status !== 'new' ? quote.response_notes : null,
+		response_sent_at: status !== 'new' ? quote.response_sent_at : null,
 	});
 }

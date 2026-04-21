@@ -12,6 +12,11 @@ export async function middleware(request: NextRequest) {
 		return NextResponse.redirect(url, 308);
 	}
 
+	// Legal pages don't need auth — only locale normalization (handled above)
+	if (/^\/(en|pt-BR)\/(terms|privacy)/.test(pathname)) {
+		return supabaseResponse;
+	}
+
 	const isPictureContestRoute = /^\/(en|pt-BR)\/picture-contest/.test(pathname);
 	const isPictureContestAdmin = /^\/(en|pt-BR)\/picture-contest\/(gallery|login|logout)/.test(pathname);
 	const isMascotRoute = pathname.startsWith('/mascot');
@@ -137,5 +142,7 @@ export const config = {
 		'/pt-BR/picture-contest/:path*',
 		'/pt-br/picture-contest',
 		'/pt-br/picture-contest/:path*',
+		'/pt-br/terms/:path*',
+		'/pt-br/privacy/:path*',
 	],
 };

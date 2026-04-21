@@ -3,6 +3,8 @@ import ContentLayout from '../../../../components/ContentLayout';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { TERMS_VERSION } from '../../../../lib/services/defaults';
+import { formatVersionDate } from '../../../../lib/services/format';
+import type { Locale } from '../../../../lib/services/types';
 
 interface Props {
 	params: Promise<{ locale: string }>;
@@ -21,6 +23,7 @@ export default async function ServicesTermsPage({ params }: Props) {
 	const { locale: rawLocale } = await params;
 	const locale = normalizeLocale(rawLocale);
 	const t = await getTranslations(locale);
+	const versionDate = formatVersionDate(TERMS_VERSION, locale as Locale);
 
 	if (locale === 'en') {
 		return (
@@ -31,7 +34,7 @@ export default async function ServicesTermsPage({ params }: Props) {
 							B2B Infrastructure Services — Terms of Service
 						</h1>
 						<p className="text-sm text-neutral-500 mb-10">
-							Version: {TERMS_VERSION} · Last updated: April 1st 2026
+							Version: {TERMS_VERSION} · Last updated: {versionDate}
 						</p>
 
 						<div className="space-y-8 text-neutral-700 leading-relaxed">
@@ -127,7 +130,7 @@ export default async function ServicesTermsPage({ params }: Props) {
 
 						<div className="mt-12 pt-6 border-t border-neutral-200">
 							<Link href={`/${locale}/terms`} className="text-sm text-neutral-500 hover:text-amber-700 transition-colors">
-								← Back to Terms index
+								{t.legal.backToTerms}
 							</Link>
 						</div>
 					</div>
@@ -145,7 +148,7 @@ export default async function ServicesTermsPage({ params }: Props) {
 						Serviços de Infraestrutura B2B — Termos de Serviço
 					</h1>
 					<p className="text-sm text-neutral-500 mb-10">
-						Versão: {TERMS_VERSION} · Última atualização: 1 de abril de 2026
+						Versão: {TERMS_VERSION} · Última atualização: {versionDate}
 					</p>
 
 					<div className="space-y-8 text-neutral-700 leading-relaxed">
@@ -241,7 +244,7 @@ export default async function ServicesTermsPage({ params }: Props) {
 
 					<div className="mt-12 pt-6 border-t border-neutral-200">
 						<Link href={`/${locale}/terms`} className="text-sm text-neutral-500 hover:text-amber-700 transition-colors">
-							← Voltar ao índice de Termos
+							{t.legal.backToTerms}
 						</Link>
 					</div>
 				</div>

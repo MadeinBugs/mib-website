@@ -45,6 +45,10 @@
 		"rateLimit": "Muitas tentativas. Tente novamente em alguns minutos.",
 		"success": "Deu certo! Verifique sua caixa de entrada 📬"
 	},
+	"legal": {
+		"backToTerms": "← Voltar ao índice de Termos",
+		"backToPrivacy": "← Voltar ao índice de Privacidade"
+	},
 	"bugsletter": {
 		"title": "Asumi Bugsletter",
 		"description": "Oiê! Você está convidado para a nossa mailing list ✨\n\nSão emails mensais com atualizações do Asumi: Steam, demo, beta testing e eventos!\n\nSe achar interessante, inscreva-se abaixo 🦉 você pode cancelar a qualquer momento.",

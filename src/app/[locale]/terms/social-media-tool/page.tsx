@@ -52,7 +52,7 @@ export default async function SocialMediaToolTermsPage({ params }: Props) {
 
 						<div className="mt-12 pt-6 border-t border-neutral-200">
 							<Link href={`/${locale}/terms`} className="text-sm text-neutral-500 hover:text-amber-700 transition-colors">
-								← Back to Terms index
+								{t.legal.backToTerms}
 							</Link>
 						</div>
 					</div>
@@ -92,7 +92,7 @@ export default async function SocialMediaToolTermsPage({ params }: Props) {
 
 					<div className="mt-12 pt-6 border-t border-neutral-200">
 						<Link href={`/${locale}/terms`} className="text-sm text-neutral-500 hover:text-amber-700 transition-colors">
-							← Voltar ao índice de Termos
+							{t.legal.backToTerms}
 						</Link>
 					</div>
 				</div>

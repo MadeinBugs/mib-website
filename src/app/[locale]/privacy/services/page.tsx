@@ -126,7 +126,7 @@ export default async function ServicesPrivacyPage({ params }: Props) {
 
 						<div className="mt-12 pt-6 border-t border-neutral-200">
 							<Link href={`/${locale}/privacy`} className="text-sm text-neutral-500 hover:text-amber-700 transition-colors">
-								← Back to Privacy index
+								{t.legal.backToPrivacy}
 							</Link>
 						</div>
 					</div>
@@ -240,7 +240,7 @@ export default async function ServicesPrivacyPage({ params }: Props) {
 
 					<div className="mt-12 pt-6 border-t border-neutral-200">
 						<Link href={`/${locale}/privacy`} className="text-sm text-neutral-500 hover:text-amber-700 transition-colors">
-							← Voltar ao índice de Privacidade
+							{t.legal.backToPrivacy}
 						</Link>
 					</div>
 				</div>

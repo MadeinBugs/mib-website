@@ -38,6 +38,10 @@ export interface Translations {
 			english: string;
 		};
 	};
+	legal: {
+		backToTerms: string;
+		backToPrivacy: string;
+	};
 }
 
 // Cache for translations to avoid repeated file reads

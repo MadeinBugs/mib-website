@@ -1,5 +1,8 @@
 import { normalizeLocale } from '@/lib/i18n';
+import { getActiveServices } from '@/lib/services/catalog';
+import type { Locale } from '@/lib/services/types';
 import Link from 'next/link';
+import InfraBuilderClient from './InfraBuilderClient';
 
 interface Props {
 	params: Promise<{ locale: string }>;
@@ -33,25 +36,7 @@ export default async function InfraBuilderPage({ params }: Props) {
 		);
 	}
 
-	// Placeholder for Phase 4 builder UI
-	return (
-		<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-6">
-			<div className="max-w-7xl mx-auto">
-				<h1 className="text-3xl font-bold text-neutral-800 mb-4">
-					{locale === 'pt-BR' ? 'Infra Builder' : 'Infra Builder'}
-				</h1>
-				<p className="text-neutral-600">
-					{locale === 'pt-BR'
-						? 'A interface do builder será implementada na Fase 4.'
-						: 'The builder interface will be implemented in Phase 4.'}
-				</p>
-				<Link
-					href={`/${locale}/services`}
-					className="inline-block mt-4 text-[#04c597] hover:underline"
-				>
-					{locale === 'pt-BR' ? '← Voltar aos serviços' : '← Back to services'}
-				</Link>
-			</div>
-		</div>
-	);
+	const catalog = getActiveServices();
+
+	return <InfraBuilderClient locale={locale as Locale} catalog={catalog} />;
 }

@@ -188,23 +188,22 @@ export function validateSubmissionAgainstCatalog(
 	const catalogVersionMatches = submission.catalogVersion === CATALOG_VERSION;
 	const termsVersionMatches = submission.termsVersion === TERMS_VERSION;
 
-	// Rule 12+13: If either version is stale and drift is large, tell client to refresh
-	if (!catalogVersionMatches || !termsVersionMatches) {
-		if (diff > 0.01) {
-			const driftPercent = serverTotal > 0 ? diff / serverTotal : diff;
-			if (driftPercent > 0.10) {
-				return makeError(
-					'Our catalog or terms have been updated since you started. Please refresh and review your package.',
-					!catalogVersionMatches ? 'CATALOG_VERSION_MISMATCH' : 'TERMS_VERSION_MISMATCH'
-				);
-			}
-		}
-	}
-
 	if (diff > 0.01) {
 		const driftPercent = serverTotal > 0 ? diff / serverTotal : diff;
 
 		if (driftPercent > 0.10) {
+			if (!catalogVersionMatches) {
+				return makeError(
+					'Our catalog has been updated since you started. Please refresh and review your package.',
+					'CATALOG_VERSION_MISMATCH'
+				);
+			}
+			if (!termsVersionMatches) {
+				return makeError(
+					'Our terms have been updated since you started. Please refresh and review your package.',
+					'TERMS_VERSION_MISMATCH'
+				);
+			}
 			return makeError(
 				'Our pricing has been updated since you started. Please review your package and try again.',
 				'PRICE_DRIFT_TOO_LARGE'

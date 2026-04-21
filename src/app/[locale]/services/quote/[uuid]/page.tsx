@@ -7,6 +7,7 @@ import { formatPrice, formatDate } from '@/lib/services/format';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeSanitize from 'rehype-sanitize';
 import type { SelectedItemSnapshot, Locale, Currency } from '@/lib/services/types';
 
 interface Props {
@@ -210,7 +211,7 @@ export default async function QuoteViewPage({ params, searchParams }: Props) {
 							{locale === 'pt-BR' ? 'Nossa resposta' : 'Our response'}
 						</h2>
 						<div className="prose prose-neutral max-w-none text-neutral-600 text-sm">
-							<ReactMarkdown remarkPlugins={[remarkGfm]}>
+							<ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
 								{quote.response_notes}
 							</ReactMarkdown>
 						</div>

@@ -263,10 +263,11 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 				<div className="lg:flex lg:gap-6 lg:items-start">
 					{/* Left: categories */}
 					<div className="flex-1 space-y-4 min-w-0">
-						{groups.map(({ category, services }) => (
+						{groups.map(({ category, services }, index) => (
 							<CategorySection
 								key={category}
 								category={category}
+								categoryIndex={index}
 								services={services}
 								locale={locale}
 								currency={state.currency}

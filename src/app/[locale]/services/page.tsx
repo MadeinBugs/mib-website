@@ -115,18 +115,21 @@ export default async function ServicesPage({ params }: Props) {
 							{ key: 'team-management', en: 'Team Management', pt: 'Gestão de Equipe', Icon: FaWrench },
 							{ key: 'social-media', en: 'Social Media', pt: 'Redes Sociais', Icon: FaMobileAlt },
 							{ key: 'web-gamedev', en: 'Web & Gamedev', pt: 'Web & Gamedev', Icon: FaGamepad },
-						] as Array<{ key: string; en: string; pt: string; Icon: IconType }>).map((cat) => (
-							<Link
-								key={cat.key}
-								href={`/${locale}/services/infra-builder?category=${cat.key}`}
-								className="p-4 bg-service-bg-elevated rounded-xl border-2 border-service-border hover:border-service-accent transition-colors text-center"
-							>
-								<cat.Icon className="text-3xl mx-auto mb-2 text-service-accent" />
-								<span className="font-semibold text-service-text-primary text-sm">
-									{locale === 'pt-BR' ? cat.pt : cat.en}
-								</span>
-							</Link>
-						))}
+						] as Array<{ key: string; en: string; pt: string; Icon: IconType }>).map((cat, index) => {
+							const iconColors = ['#3dd68c', '#1ed8a4', '#58d5ba', '#0ad8b6', '#49c3db', '#75c7f0', '#9db1ff', '#b0a9ff', '#bba5ff', '#d59cff', '#dc8fe8', '#ff80ca'];
+							return (
+								<Link
+									key={cat.key}
+									href={`/${locale}/services/infra-builder?category=${cat.key}`}
+									className="p-4 bg-service-bg-elevated rounded-xl border-2 border-service-border hover:border-service-accent transition-colors text-center"
+								>
+									<cat.Icon className="text-3xl mx-auto mb-2" style={{ color: iconColors[index % iconColors.length] }} />
+									<span className="font-semibold text-service-text-primary text-sm">
+										{locale === 'pt-BR' ? cat.pt : cat.en}
+									</span>
+								</Link>
+							);
+						})}
 					</div>
 				</div>
 			</section>

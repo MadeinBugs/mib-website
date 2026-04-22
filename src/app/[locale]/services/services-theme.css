@@ -1,15 +1,15 @@
 .services-theme {
 	/* Palette */
-	--service-bg: #0a0a0a;
-	--service-bg-elevated: #141414;
+	--service-bg: #060a10;
+	--service-bg-elevated: #030508;
 	--service-bg-strong: #1a1a1a;
 	--service-border: #262626;
 	--service-border-strong: #404040;
 	--service-text-primary: #fafafa;
 	--service-text-secondary: #a3a3a3;
 	--service-text-tertiary: #525252;
-	--service-accent: #04c597;
-	--service-accent-hover: #06b08a;
+	--service-accent: #2B9CA5;
+	--service-accent-hover: #24858d;
 	--service-success: #10b981;
 	--service-warning: #f59e0b;
 	--service-error: #ef4444;

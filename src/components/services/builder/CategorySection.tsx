@@ -7,6 +7,11 @@ import { FaServer, FaRocket, FaBolt, FaClipboardList, FaEnvelope, FaChartBar, Fa
 import type { IconType } from 'react-icons';
 import ServiceCard from './ServiceCard';
 
+const CATEGORY_ICON_COLORS = [
+	'#3dd68c', '#58d5ba', '#0ad8b6', '#49c3db', '#75c7f0',
+	'#9db1ff', '#b0a9ff', '#d59cff', '#dc8fe8', '#ff80ca',
+];
+
 const CATEGORY_LABELS: Record<ServiceCategory, { en: string; 'pt-BR': string }> = {
 	infrastructure: { en: 'Infrastructure', 'pt-BR': 'Infraestrutura' },
 	cicd: { en: 'CI/CD & DevOps', 'pt-BR': 'CI/CD & DevOps' },
@@ -33,6 +38,7 @@ const CATEGORY_ICONS: Record<ServiceCategory, IconType> = {
 
 interface CategorySectionProps {
 	category: ServiceCategory;
+	categoryIndex: number;
 	services: ServiceItem[];
 	locale: Locale;
 	currency: Currency;
@@ -48,6 +54,7 @@ interface CategorySectionProps {
 
 export default function CategorySection({
 	category,
+	categoryIndex,
 	services,
 	locale,
 	currency,
@@ -70,7 +77,7 @@ export default function CategorySection({
 				className="w-full flex items-center justify-between px-5 py-4 hover:bg-service-bg-strong transition-colors"
 			>
 				<div className="flex items-center gap-3">
-					{(() => { const Icon = CATEGORY_ICONS[category]; return <Icon className="text-xl text-service-accent" />; })()}
+					{(() => { const Icon = CATEGORY_ICONS[category]; return <Icon className="text-xl" style={{ color: CATEGORY_ICON_COLORS[categoryIndex % CATEGORY_ICON_COLORS.length] }} />; })()}
 					<h2 className="font-bold text-service-text-primary">
 						{CATEGORY_LABELS[category][locale]}
 					</h2>

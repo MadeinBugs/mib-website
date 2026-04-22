@@ -138,13 +138,22 @@ export default function QuoteSubmitForm({ locale, state, dispatch, onClose }: Qu
 					<label className="block text-sm font-medium text-neutral-700 mb-1">
 						{locale === 'en' ? 'Website (optional)' : 'Website (opcional)'}
 					</label>
-					<input
-						type="url"
-						value={state.clientInfo.studioWebsite}
-						onChange={(e) => dispatch({ type: 'UPDATE_CLIENT_INFO', field: 'studioWebsite', value: e.target.value })}
-						className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none"
-						maxLength={300}
-					/>
+					<div className="flex">
+						<span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-neutral-200 bg-neutral-50 text-neutral-500 text-sm select-none">
+							https://
+						</span>
+						<input
+							type="text"
+							value={state.clientInfo.studioWebsite.replace(/^https?:\/\//, '')}
+							onChange={(e) => {
+								const raw = e.target.value.replace(/^https?:\/\//, '');
+								dispatch({ type: 'UPDATE_CLIENT_INFO', field: 'studioWebsite', value: raw ? `https://${raw}` : '' });
+							}}
+							placeholder={locale === 'en' ? 'yoursite.com' : 'seusite.com.br'}
+							className="flex-1 min-w-0 rounded-r-lg border border-neutral-200 bg-white px-3 py-2 text-sm focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none"
+							maxLength={300}
+						/>
+					</div>
 				</div>
 
 				<div>
@@ -191,7 +200,7 @@ export default function QuoteSubmitForm({ locale, state, dispatch, onClose }: Qu
 				</button>
 				<button
 					type="submit"
-					disabled={state.submissionState === 'submitting'}
+					disabled={state.submissionState === 'submitting' || !state.consentAccepted}
 					className="flex-1 py-2.5 rounded-lg bg-[#04c597] text-white font-semibold hover:bg-[#036b54] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
 				>
 					{state.submissionState === 'submitting'

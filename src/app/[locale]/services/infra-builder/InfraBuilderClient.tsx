@@ -11,7 +11,7 @@ import SummaryPanel from '@/components/services/summary/SummaryPanel';
 import ClientDeliverablesPanel from '@/components/services/deliverables/ClientDeliverablesPanel';
 import QuoteSubmitForm from '@/components/services/form/QuoteSubmitForm';
 import Modal from '@/components/shared/Modal';
-import { FaTimes } from 'react-icons/fa';
+import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import Link from 'next/link';
 
@@ -227,8 +227,8 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 
 				{/* Banner */}
 				{!state.bannerDismissed && selectedCount === 0 && (
-					<div className="mb-6 rounded-xl bg-blue-50 border border-blue-200 px-5 py-4 flex items-start justify-between gap-4">
-						<div>
+					<div className="mb-6 rounded-xl bg-blue-50 border border-blue-200 px-5 py-4 flex items-start gap-4">
+						<div className="flex-1">
 							<p className="text-sm font-medium text-blue-800">
 								{locale === 'en'
 									? 'Not sure what you need? Talk to us first!'
@@ -240,14 +240,25 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 									: 'Agende uma consulta gratuita para discutir seu projeto.'}
 							</p>
 						</div>
-						<button
-							type="button"
-							onClick={() => dispatch({ type: 'DISMISS_BANNER' })}
-							className="shrink-0 text-blue-400 hover:text-blue-600 text-lg leading-none"
-							aria-label="Dismiss"
-						>
-							<FaTimes />
-						</button>
+						<div className="shrink-0 flex items-center gap-2">
+							<a
+								href="https://agenda.madeinbugs.com.br"
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+							>
+								{locale === 'en' ? 'Book a call' : 'Agendar conversa'}
+								<FaExternalLinkAlt className="w-3 h-3" />
+							</a>
+							<button
+								type="button"
+								onClick={() => dispatch({ type: 'DISMISS_BANNER' })}
+								className="text-blue-400 hover:text-blue-600 p-1"
+								aria-label={locale === 'en' ? 'Dismiss banner' : 'Dispensar aviso'}
+							>
+								<FaTimes />
+							</button>
+						</div>
 					</div>
 				)}
 

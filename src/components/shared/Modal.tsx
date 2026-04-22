@@ -70,11 +70,17 @@ export default function Modal({
 		[onClose]
 	);
 
+	// Keep handler in a ref so the effect only re-runs when isOpen changes,
+	// not on every parent re-render (which would steal focus from inputs).
+	const handleKeyDownRef = useRef(handleKeyDown);
+	handleKeyDownRef.current = handleKeyDown;
+
 	// Add/remove keydown listener and body scroll lock
 	useEffect(() => {
 		if (!isOpen) return;
 
-		document.addEventListener('keydown', handleKeyDown);
+		const listener = (e: KeyboardEvent) => handleKeyDownRef.current(e);
+		document.addEventListener('keydown', listener);
 		const originalOverflow = document.body.style.overflow;
 		document.body.style.overflow = 'hidden';
 
@@ -82,12 +88,12 @@ export default function Modal({
 		modalRef.current?.focus();
 
 		return () => {
-			document.removeEventListener('keydown', handleKeyDown);
+			document.removeEventListener('keydown', listener);
 			document.body.style.overflow = originalOverflow;
 			// Restore focus to trigger element
 			triggerRef.current?.focus();
 		};
-	}, [isOpen, handleKeyDown]);
+	}, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const isFull = size === 'full';
 

@@ -98,7 +98,7 @@ export default function SummaryPanel({
 					<button
 						type="button"
 						onClick={onSubmitClick}
-						className="w-full btn-crayon bg-[#04c597] hover:bg-[#036b54] text-white font-semibold py-3 rounded-lg transition-colors"
+						className="w-full bg-[#04c597] hover:bg-[#036b54] text-white font-semibold py-3 rounded-lg transition-colors"
 					>
 						{locale === 'en' ? 'Request Quote' : 'Solicitar Orçamento'}
 					</button>

@@ -9,13 +9,13 @@ interface CurrencyToggleProps {
 
 export default function CurrencyToggle({ currency, onChange }: CurrencyToggleProps) {
 	return (
-		<div className="inline-flex rounded-lg border border-neutral-200 overflow-hidden text-sm">
+		<div className="inline-flex rounded-lg border border-service-border overflow-hidden text-sm">
 			<button
 				type="button"
 				onClick={() => onChange('BRL')}
 				className={`px-3 py-1.5 font-medium transition-colors ${currency === 'BRL'
-						? 'bg-[#04c597] text-white'
-						: 'bg-white text-neutral-600 hover:bg-neutral-50'
+					? 'bg-service-accent text-white'
+					: 'bg-service-bg-strong text-service-text-secondary hover:bg-service-bg-strong/80'
 					}`}
 			>
 				R$ BRL
@@ -24,8 +24,8 @@ export default function CurrencyToggle({ currency, onChange }: CurrencyTogglePro
 				type="button"
 				onClick={() => onChange('USD')}
 				className={`px-3 py-1.5 font-medium transition-colors ${currency === 'USD'
-						? 'bg-[#04c597] text-white'
-						: 'bg-white text-neutral-600 hover:bg-neutral-50'
+					? 'bg-service-accent text-white'
+					: 'bg-service-bg-strong text-service-text-secondary hover:bg-service-bg-strong/80'
 					}`}
 			>
 				$ USD

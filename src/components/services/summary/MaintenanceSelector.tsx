@@ -18,13 +18,13 @@ const OPTIONS: Array<{ value: 0 | 3 | 6 | 12; labelEn: string; labelPt: string }
 export default function MaintenanceSelector({ locale, months, onChange }: MaintenanceSelectorProps) {
 	return (
 		<div className="space-y-1.5">
-			<label className="text-sm font-semibold text-neutral-700">
+			<label className="text-sm font-semibold text-service-text-secondary">
 				{locale === 'en' ? 'Maintenance Period' : 'Período de Manutenção'}
 			</label>
 			<select
 				value={months}
 				onChange={(e) => onChange(Number(e.target.value) as 0 | 3 | 6 | 12)}
-				className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none"
+				className="w-full rounded-lg border border-service-border bg-service-bg-strong px-3 py-2 text-sm text-service-text-primary focus:border-service-accent focus:ring-1 focus:ring-service-accent outline-none"
 			>
 				{OPTIONS.map((opt) => (
 					<option key={opt.value} value={opt.value}>

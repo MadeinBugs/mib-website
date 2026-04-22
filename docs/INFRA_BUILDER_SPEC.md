@@ -722,7 +722,7 @@ Flow:
 14. **Send Discord webhook** to `DISCORD_QUOTE_WEBHOOK_URL` with rich embed (see 10.3).
 15. **Send confirmation email** via Brevo using `quote-received.{locale}.md` template. Include shareable URL.
 16. **Fire Umami event** on response headers (client fires the main `quote_submitted` event; server does not duplicate).
-17. **Set HTTP-only cookie** `mib_quote_session=<uuid>:<sig>` with 10 minute TTL, `SameSite=Lax`, `Secure`, `Path=/`. (`Lax` instead of `Strict` to avoid cookie loss from in-app browsers like Instagram/LinkedIn that treat top-level navigation differently.)
+17. **Set HTTP-only cookie** `mib_quote_session=<uuid>:<sig>` with 10 minute TTL, `SameSite=Lax`, `Secure`, `Path=/`. (Setting allowed in API routes per Next.js 15 rules; server components are read-only.) The cookie has a 10-minute TTL and is not manually cleared after the quote-sent page renders. It is overwritten on the next successful submission from the same browser, and expires naturally otherwise. Explicit clearing was evaluated and rejected: it requires either a Server Action (causes page re-render flicker in Next.js 15) or a dedicated API route (adds infrastructure for no meaningful benefit given the cookie's short TTL and limited scope).
 18. **Return 200** with `{ id: uuid, shareableUrl: string }`. The `sig` is NOT included in the response body — the submitter accesses the quote-sent page via the cookie set in step 17. The shareable URL in the confirmation email includes `?sig=<sig>` for external sharing.
 
 On any step 14–16 error (Discord, Brevo, Umami) after successful Supabase insert (step 13): log error, still return success to the client. The Supabase row exists and n8n will pick it up; recoverable partial failure.

@@ -34,14 +34,14 @@ export default function PendingItemsList({ catalog, selectedItems, locale }: Pen
 	return (
 		<div className="space-y-2">
 			<div className="flex items-center gap-2">
-				<h3 className="text-sm font-semibold text-neutral-700">
+				<h3 className="text-sm font-semibold text-service-text-secondary">
 					{locale === 'en' ? 'Pending Pricing' : 'Preço sob Consulta'}
 				</h3>
 				<PendingPricingBadge locale={locale} />
 			</div>
 			<ul className="space-y-1">
 				{pending.map((p, i) => (
-					<li key={i} className="text-xs text-neutral-500">
+					<li key={i} className="text-xs text-service-text-secondary">
 						{p.serviceName} — {p.fieldLabel}
 						{p.count > 1 && ` (×${p.count})`}
 					</li>

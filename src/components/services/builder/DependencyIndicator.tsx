@@ -11,7 +11,7 @@ interface DependencyIndicatorProps {
 
 export default function DependencyIndicator({ locale, requiredByName }: DependencyIndicatorProps) {
 	return (
-		<div className="flex items-center gap-1.5 text-xs text-amber-700 bg-amber-50 rounded-md px-2 py-1">
+		<div className="flex items-center gap-1.5 text-xs text-amber-400 bg-amber-900/20 rounded-md px-2 py-1">
 			<FaLink className="shrink-0" />
 			<span>
 				{locale === 'en'

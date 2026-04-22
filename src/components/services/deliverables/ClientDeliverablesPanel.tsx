@@ -78,12 +78,12 @@ export default function ClientDeliverablesPanel({
 	};
 
 	return (
-		<div className="rounded-xl border border-neutral-200 bg-white p-5 space-y-4">
+		<div className="rounded-xl border border-service-border bg-service-bg-elevated p-5 space-y-4">
 			<div className="space-y-1">
-				<h2 className="font-bold text-neutral-800">
+				<h2 className="font-bold text-service-text-primary">
 					{locale === 'en' ? 'Client Deliverables' : 'Entregáveis do Cliente'}
 				</h2>
-				<p className="text-xs text-neutral-500">
+				<p className="text-xs text-service-text-secondary">
 					{locale === 'en'
 						? "Things you'll need to provide us to complete these services."
 						: 'Coisas que você precisará nos fornecer para completar estes serviços.'}
@@ -97,29 +97,29 @@ export default function ClientDeliverablesPanel({
 					const optionalCount = deliverables.length - requiredCount;
 
 					return (
-						<div key={service.id} className="border border-neutral-200 rounded-lg overflow-hidden">
+						<div key={service.id} className="border border-service-border rounded-lg overflow-hidden">
 							<button
 								type="button"
 								onClick={() => toggle(service.id)}
-								className="w-full flex items-center justify-between px-4 py-3 bg-neutral-50 hover:bg-neutral-100 transition-colors text-left"
+								className="w-full flex items-center justify-between px-4 py-3 bg-service-bg-strong hover:bg-service-bg-strong/80 transition-colors text-left"
 							>
 								<div className="flex items-center gap-2 min-w-0">
 									<FaChevronDown
-										className={`shrink-0 text-xs text-neutral-400 transition-transform ${isCollapsed ? '-rotate-90' : 'rotate-0'
+										className={`shrink-0 text-xs text-service-text-tertiary transition-transform ${isCollapsed ? '-rotate-90' : 'rotate-0'
 											}`}
 									/>
-									<span className="font-medium text-sm text-neutral-800 truncate">
+									<span className="font-medium text-sm text-service-text-primary truncate">
 										{service.name[locale]}
 									</span>
 								</div>
 								<div className="shrink-0 flex items-center gap-1.5 text-xs">
 									{requiredCount > 0 && (
-										<span className="px-2 py-0.5 rounded-full bg-orange-100 text-orange-700 font-medium">
+										<span className="px-2 py-0.5 rounded-full bg-orange-900/30 text-orange-400 font-medium">
 											{requiredCount} {locale === 'en' ? 'required' : 'obrigatório'}
 										</span>
 									)}
 									{optionalCount > 0 && (
-										<span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 font-medium">
+										<span className="px-2 py-0.5 rounded-full bg-green-900/30 text-green-400 font-medium">
 											{optionalCount} {locale === 'en' ? 'optional' : 'opcional'}
 										</span>
 									)}
@@ -127,7 +127,7 @@ export default function ClientDeliverablesPanel({
 							</button>
 
 							{!isCollapsed && (
-								<ul className="px-4 py-3 space-y-2 bg-white">
+								<ul className="px-4 py-3 space-y-2 bg-service-bg-elevated">
 									{deliverables.map((d) => (
 										<DeliverableItem key={d.id} deliverable={d} locale={locale} />
 									))}

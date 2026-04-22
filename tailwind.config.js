@@ -20,6 +20,21 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        service: {
+          bg: 'var(--service-bg)',
+          'bg-elevated': 'var(--service-bg-elevated)',
+          'bg-strong': 'var(--service-bg-strong)',
+          border: 'var(--service-border)',
+          'border-strong': 'var(--service-border-strong)',
+          'text-primary': 'var(--service-text-primary)',
+          'text-secondary': 'var(--service-text-secondary)',
+          'text-tertiary': 'var(--service-text-tertiary)',
+          accent: 'var(--service-accent)',
+          'accent-hover': 'var(--service-accent-hover)',
+          success: 'var(--service-success)',
+          warning: 'var(--service-warning)',
+          error: 'var(--service-error)',
+        },
         // Hand-drawn, playful color palette inspired by "Baba Is You"
         primary: {
           50: '#f0f9ff',

@@ -147,7 +147,7 @@ export default function QuoteSubmitForm({ locale, catalog, state, dispatch, onCl
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
-			<h3 className="text-lg font-bold text-neutral-800">
+			<h3 className="text-lg font-bold text-service-text-primary">
 				{locale === 'en' ? 'Contact Information' : 'Informações de Contato'}
 			</h3>
 
@@ -155,50 +155,50 @@ export default function QuoteSubmitForm({ locale, catalog, state, dispatch, onCl
 
 			<div className="space-y-3">
 				<div>
-					<label className="block text-sm font-medium text-neutral-700 mb-1">
+					<label className="block text-sm font-medium text-service-text-secondary mb-1">
 						{locale === 'en' ? 'Name' : 'Nome'} <span className="text-red-500">*</span>
 					</label>
 					<input
 						type="text"
 						value={state.clientInfo.name}
 						onChange={(e) => dispatch({ type: 'UPDATE_CLIENT_INFO', field: 'name', value: e.target.value })}
-						className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none"
+						className="w-full rounded-lg border border-service-border bg-service-bg-strong px-3 py-2 text-sm text-service-text-primary focus:border-service-accent focus:ring-1 focus:ring-service-accent outline-none"
 						maxLength={200}
 					/>
 				</div>
 
 				<div>
-					<label className="block text-sm font-medium text-neutral-700 mb-1">
+					<label className="block text-sm font-medium text-service-text-secondary mb-1">
 						{locale === 'en' ? 'Email' : 'Email'} <span className="text-red-500">*</span>
 					</label>
 					<input
 						type="email"
 						value={state.clientInfo.email}
 						onChange={(e) => dispatch({ type: 'UPDATE_CLIENT_INFO', field: 'email', value: e.target.value })}
-						className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none"
+						className="w-full rounded-lg border border-service-border bg-service-bg-strong px-3 py-2 text-sm text-service-text-primary focus:border-service-accent focus:ring-1 focus:ring-service-accent outline-none"
 						maxLength={254}
 					/>
 				</div>
 
 				<div>
-					<label className="block text-sm font-medium text-neutral-700 mb-1">
+					<label className="block text-sm font-medium text-service-text-secondary mb-1">
 						{locale === 'en' ? 'Studio/Company (optional)' : 'Estúdio/Empresa (opcional)'}
 					</label>
 					<input
 						type="text"
 						value={state.clientInfo.studioName}
 						onChange={(e) => dispatch({ type: 'UPDATE_CLIENT_INFO', field: 'studioName', value: e.target.value })}
-						className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none"
+						className="w-full rounded-lg border border-service-border bg-service-bg-strong px-3 py-2 text-sm text-service-text-primary focus:border-service-accent focus:ring-1 focus:ring-service-accent outline-none"
 						maxLength={200}
 					/>
 				</div>
 
 				<div>
-					<label className="block text-sm font-medium text-neutral-700 mb-1">
+					<label className="block text-sm font-medium text-service-text-secondary mb-1">
 						{locale === 'en' ? 'Website (optional)' : 'Website (opcional)'}
 					</label>
 					<div className="flex">
-						<span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-neutral-200 bg-neutral-50 text-neutral-500 text-sm select-none">
+						<span className="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-service-border bg-service-bg-strong text-service-text-tertiary text-sm select-none">
 							https://
 						</span>
 						<input
@@ -209,21 +209,21 @@ export default function QuoteSubmitForm({ locale, catalog, state, dispatch, onCl
 								dispatch({ type: 'UPDATE_CLIENT_INFO', field: 'studioWebsite', value: raw ? `https://${raw}` : '' });
 							}}
 							placeholder={locale === 'en' ? 'yoursite.com' : 'seusite.com.br'}
-							className="flex-1 min-w-0 rounded-r-lg border border-neutral-200 bg-white px-3 py-2 text-sm focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none"
+							className="flex-1 min-w-0 rounded-r-lg border border-service-border bg-service-bg-strong px-3 py-2 text-sm text-service-text-primary focus:border-service-accent focus:ring-1 focus:ring-service-accent outline-none"
 							maxLength={300}
 						/>
 					</div>
 				</div>
 
 				<div>
-					<label className="block text-sm font-medium text-neutral-700 mb-1">
+					<label className="block text-sm font-medium text-service-text-secondary mb-1">
 						{locale === 'en' ? 'Message (optional)' : 'Mensagem (opcional)'}
 					</label>
 					<textarea
 						value={state.clientInfo.message}
 						onChange={(e) => dispatch({ type: 'UPDATE_CLIENT_INFO', field: 'message', value: e.target.value })}
 						rows={3}
-						className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none resize-y"
+						className="w-full rounded-lg border border-service-border bg-service-bg-strong px-3 py-2 text-sm text-service-text-primary focus:border-service-accent focus:ring-1 focus:ring-service-accent outline-none resize-y"
 						maxLength={2000}
 					/>
 				</div>
@@ -236,16 +236,16 @@ export default function QuoteSubmitForm({ locale, catalog, state, dispatch, onCl
 			/>
 
 			{validationErrors.length > 0 && (
-				<div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 space-y-1">
+				<div className="rounded-lg bg-red-900/20 border border-red-800/30 px-3 py-2 space-y-1">
 					{validationErrors.map((err, i) => (
-						<p key={i} className="text-xs text-red-700">{err}</p>
+						<p key={i} className="text-xs text-red-400">{err}</p>
 					))}
 				</div>
 			)}
 
 			{state.submissionError && (
-				<div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2">
-					<p className="text-xs text-red-700">{state.submissionError}</p>
+				<div className="rounded-lg bg-red-900/20 border border-red-800/30 px-3 py-2">
+					<p className="text-xs text-red-400">{state.submissionError}</p>
 				</div>
 			)}
 
@@ -253,14 +253,14 @@ export default function QuoteSubmitForm({ locale, catalog, state, dispatch, onCl
 				<button
 					type="button"
 					onClick={onClose}
-					className="flex-1 py-2.5 rounded-lg border border-neutral-200 text-neutral-600 font-medium hover:bg-neutral-50 transition-colors text-sm"
+					className="flex-1 py-2.5 rounded-lg border border-service-border text-service-text-secondary font-medium hover:bg-service-bg-strong transition-colors text-sm"
 				>
 					{locale === 'en' ? 'Cancel' : 'Cancelar'}
 				</button>
 				<button
 					type="submit"
 					disabled={state.submissionState === 'submitting' || !state.consentAccepted}
-					className="flex-1 py-2.5 rounded-lg bg-[#04c597] text-white font-semibold hover:bg-[#036b54] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+					className="flex-1 py-2.5 rounded-lg bg-service-accent text-white font-semibold hover:bg-service-accent-hover transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
 				>
 					{state.submissionState === 'submitting'
 						? (locale === 'en' ? 'Sending…' : 'Enviando…')

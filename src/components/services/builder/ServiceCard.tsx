@@ -52,12 +52,12 @@ export default function ServiceCard({
 	return (
 		<div
 			className={`rounded-lg border-2 transition-all duration-200 ${isBundleLocked
-				? 'border-[#04c597] bg-gradient-to-r from-[#f0fdf8] to-[#e6faf2] shadow-sm'
+				? 'border-service-accent bg-service-accent/10 shadow-sm'
 				: isSelected
-					? 'border-[#04c597] bg-[#f0fdf8] shadow-sm'
+					? 'border-service-accent bg-service-accent/5 shadow-sm'
 					: hasConflict
-						? 'border-red-200 bg-red-50/30 opacity-75'
-						: 'border-neutral-200 bg-white hover:border-neutral-300'
+						? 'border-red-800 bg-red-950/30 opacity-75'
+						: 'border-service-border bg-service-bg-elevated hover:border-service-border-strong'
 				}`}
 		>
 			{/* Header row */}
@@ -67,9 +67,9 @@ export default function ServiceCard({
 					checked={isSelected}
 					onChange={handleToggle}
 					disabled={(hasConflict && !isSelected) || isBundleLocked}
-					className={`mt-1 shrink-0 h-4 w-4 rounded border-neutral-300 focus:ring-[#04c597] ${isBundleLocked
-						? 'text-[#04c597] cursor-not-allowed opacity-60'
-						: 'text-[#04c597] disabled:opacity-50'
+					className={`mt-1 shrink-0 h-4 w-4 rounded border-service-border-strong focus:ring-service-accent ${isBundleLocked
+						? 'text-service-accent cursor-not-allowed opacity-60'
+						: 'text-service-accent disabled:opacity-50'
 						}`}
 					aria-label={service.name[locale]}
 				/>
@@ -80,10 +80,10 @@ export default function ServiceCard({
 							onClick={handleExpand}
 							className="text-left"
 						>
-							<h3 className="font-semibold text-neutral-800 text-sm leading-tight">
+							<h3 className="font-semibold text-service-text-primary text-sm leading-tight">
 								{service.name[locale]}
 							</h3>
-							<p className="text-xs text-neutral-500 mt-0.5 line-clamp-2">
+							<p className="text-xs text-service-text-secondary mt-0.5 line-clamp-2">
 								{service.shortDescription[locale]}
 							</p>
 						</button>
@@ -91,11 +91,11 @@ export default function ServiceCard({
 							<PriceDisplay
 								amount={service.basePrice[currency]}
 								currency={currency}
-								className="text-neutral-800 font-semibold"
+								className="text-service-text-primary font-semibold"
 								size="sm"
 							/>
 							{service.estimatedSetupDays && (
-								<p className="text-[10px] text-neutral-400 mt-0.5">
+								<p className="text-[10px] text-service-text-tertiary mt-0.5">
 									~{service.estimatedSetupDays}d setup
 								</p>
 							)}
@@ -104,7 +104,7 @@ export default function ServiceCard({
 
 					{/* Bundle-locked indicator */}
 					{isBundleLocked && (
-						<div className="mt-2 flex items-center gap-1.5 text-xs text-[#04c597] font-medium">
+						<div className="mt-2 flex items-center gap-1.5 text-xs text-service-accent font-medium">
 							<FaGift className="shrink-0" />
 							{locale === 'en' ? 'Included free with your selection' : 'Incluso grátis com sua seleção'}
 						</div>
@@ -128,7 +128,7 @@ export default function ServiceCard({
 				<button
 					type="button"
 					onClick={handleExpand}
-					className="shrink-0 p-1 text-neutral-400 hover:text-neutral-600 transition-colors"
+					className="shrink-0 p-1 text-service-text-tertiary hover:text-service-text-secondary transition-colors"
 					aria-label={isExpanded ? 'Collapse' : 'Expand'}
 				>
 					<svg
@@ -160,9 +160,9 @@ export default function ServiceCard({
 
 							{/* Maintenance info */}
 							{service.maintenance && (
-								<div className="text-xs text-neutral-500 bg-neutral-50 rounded-md px-3 py-2">
+								<div className="text-xs text-service-text-secondary bg-service-bg-strong rounded-md px-3 py-2">
 									{locale === 'en' ? 'Maintenance: ' : 'Manutenção: '}
-									<span className="font-medium text-neutral-700">
+									<span className="font-medium text-service-text-primary">
 										{formatPrice(service.maintenance.price[currency], currency)}/
 										{locale === 'en' ? 'mo' : 'mês'}
 									</span>
@@ -248,13 +248,13 @@ export default function ServiceCard({
 
 							{/* Requires / Recommends */}
 							{service.requires && service.requires.length > 0 && (
-								<p className="text-xs text-neutral-500">
+								<p className="text-xs text-service-text-secondary">
 									{locale === 'en' ? 'Requires: ' : 'Requer: '}
 									{service.requires.map((id) => catalog.find((s) => s.id === id)?.name[locale] ?? id).join(', ')}
 								</p>
 							)}
 							{service.recommends && service.recommends.length > 0 && (
-								<p className="text-xs text-blue-600 flex items-center gap-1">
+								<p className="text-xs text-blue-400 flex items-center gap-1">
 									<FaLightbulb className="shrink-0" />
 									{locale === 'en' ? 'You may also want: ' : 'Você também pode querer: '}
 									{service.recommends.map((id) => catalog.find((s) => s.id === id)?.name[locale] ?? id).join(', ')}

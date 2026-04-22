@@ -23,38 +23,38 @@ export default function PriceTotals({
 	maintenanceMonths,
 }: PriceTotalsProps) {
 	return (
-		<div className="space-y-2 pt-2 border-t border-neutral-200">
+		<div className="space-y-2 pt-2 border-t border-service-border">
 			<div className="flex justify-between text-sm">
-				<span className="text-neutral-600">
+				<span className="text-service-text-secondary">
 					{locale === 'en' ? 'Setup' : 'Implementação'}
 				</span>
-				<PriceDisplay amount={setup} currency={currency} size="sm" className="font-medium text-neutral-800" />
+				<PriceDisplay amount={setup} currency={currency} size="sm" className="font-medium text-service-text-primary" />
 			</div>
 
 			{maintenanceMonths > 0 && (
 				<>
 					<div className="flex justify-between text-sm">
-						<span className="text-neutral-600">
+						<span className="text-service-text-secondary">
 							{locale === 'en' ? 'Maintenance/mo' : 'Manutenção/mês'}
 						</span>
-						<PriceDisplay amount={maintenanceMonthly} currency={currency} size="sm" className="text-neutral-600" />
+						<PriceDisplay amount={maintenanceMonthly} currency={currency} size="sm" className="text-service-text-secondary" />
 					</div>
 					<div className="flex justify-between text-sm">
-						<span className="text-neutral-600">
+						<span className="text-service-text-secondary">
 							{locale === 'en'
 								? `Maintenance (${maintenanceMonths} mo)`
 								: `Manutenção (${maintenanceMonths} meses)`}
 						</span>
-						<PriceDisplay amount={maintenanceTotal} currency={currency} size="sm" className="font-medium text-neutral-800" />
+						<PriceDisplay amount={maintenanceTotal} currency={currency} size="sm" className="font-medium text-service-text-primary" />
 					</div>
 				</>
 			)}
 
-			<div className="flex justify-between pt-2 border-t border-neutral-300">
-				<span className="font-bold text-neutral-800">
+			<div className="flex justify-between pt-2 border-t border-service-border-strong">
+				<span className="font-bold text-service-text-primary">
 					{locale === 'en' ? 'Total' : 'Total'}
 				</span>
-				<PriceDisplay amount={grandTotal} currency={currency} size="lg" className="text-[#036b54]" />
+				<PriceDisplay amount={grandTotal} currency={currency} size="lg" className="text-service-accent" />
 			</div>
 		</div>
 	);

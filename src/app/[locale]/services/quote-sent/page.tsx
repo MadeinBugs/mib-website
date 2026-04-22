@@ -35,19 +35,19 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center p-6">
-			<div className="max-w-lg w-full bg-white rounded-2xl shadow-lg overflow-hidden text-center">
+		<div className="flex items-center justify-center p-6 min-h-[60vh]">
+			<div className="max-w-lg w-full bg-service-bg-elevated rounded-2xl border border-service-border overflow-hidden text-center">
 				<img
 					src="/assets/mail/MiB-Mail-Banner1.png"
 					alt="Made in Bugs"
 					className="w-full block"
 				/>
 				<div className="p-8">
-					<h1 className="text-2xl font-bold text-neutral-800 mb-2">
+					<h1 className="text-2xl font-bold text-service-text-primary mb-2">
 						{locale === 'pt-BR' ? 'Orçamento enviado!' : 'Quote submitted!'}
 					</h1>
 
-					<p className="text-neutral-600 mb-6 mt-4">
+					<p className="text-service-text-secondary mb-6 mt-4">
 						{locale === 'pt-BR'
 							? 'Recebemos seu pedido de orçamento. Nossa equipe vai analisar e responder em 2-3 dias úteis.'
 							: "We've received your quote request. Our team will review and respond within 2-3 business days."}
@@ -55,18 +55,18 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 
 					{isValid && quoteId && (
 						<>
-							<div className="bg-[#f0fdf4] border border-[#86efac] rounded-lg p-4 mb-4 text-left">
-								<p className="text-sm font-semibold text-neutral-700 mb-2">
+							<div className="bg-service-accent/10 border border-service-accent/30 rounded-lg p-4 mb-4 text-left">
+								<p className="text-sm font-semibold text-service-text-secondary mb-2">
 									{locale === 'pt-BR' ? 'Link do seu orçamento:' : 'Your quote link:'}
 								</p>
 								<a
 									href={shareableUrl}
-									className="text-sm text-[#04c597] hover:underline break-all"
+									className="text-sm text-service-accent hover:underline break-all"
 								>
 									{shareableUrl}
 								</a>
 							</div>
-							<p className="text-xs text-neutral-400 mb-6">
+							<p className="text-xs text-service-text-tertiary mb-6">
 								{locale === 'pt-BR'
 									? 'Salve este link — você pode usá-lo para ver seu orçamento a qualquer momento.'
 									: 'Save this link — you can use it to view your quote at any time.'}
@@ -74,7 +74,7 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 						</>
 					)}
 
-					<p className="text-sm text-neutral-500 mb-6">
+					<p className="text-sm text-service-text-secondary mb-6">
 						{locale === 'pt-BR'
 							? 'Também enviamos um email com o link do seu orçamento. Se não receber em 5 minutos, verifique sua pasta de spam.'
 							: "We've also emailed you a link to your quote. If you don't see it within 5 minutes, check your spam folder."}
@@ -83,13 +83,13 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 					<div className="flex flex-col gap-3">
 						<Link
 							href={`/${locale}/services`}
-							className="inline-block px-6 py-3 bg-[#04c597] text-white font-semibold rounded-lg hover:bg-[#036b54] transition-colors"
+							className="inline-block px-6 py-3 bg-service-accent text-white font-semibold rounded-lg hover:bg-service-accent-hover transition-colors"
 						>
 							{locale === 'pt-BR' ? '← Voltar aos serviços' : '← Back to services'}
 						</Link>
 						<Link
 							href={`/${locale}`}
-							className="text-[#04c597] hover:underline text-sm"
+							className="text-service-accent hover:underline text-sm"
 						>
 							{locale === 'pt-BR' ? 'Ir para a página inicial' : 'Go to homepage'}
 						</Link>

@@ -63,29 +63,29 @@ export default function CategorySection({
 	const selectedCount = services.filter((s) => s.id in selectedItems).length;
 
 	return (
-		<div className="rounded-xl border border-neutral-200 overflow-hidden bg-white">
+		<div className="rounded-xl border border-service-border overflow-hidden bg-service-bg-elevated">
 			<button
 				type="button"
 				onClick={() => dispatch({ type: 'TOGGLE_CATEGORY', category })}
-				className="w-full flex items-center justify-between px-5 py-4 hover:bg-neutral-50 transition-colors"
+				className="w-full flex items-center justify-between px-5 py-4 hover:bg-service-bg-strong transition-colors"
 			>
 				<div className="flex items-center gap-3">
-					{(() => { const Icon = CATEGORY_ICONS[category]; return <Icon className="text-xl text-[#04c597]" />; })()}
-					<h2 className="font-bold text-neutral-800">
+					{(() => { const Icon = CATEGORY_ICONS[category]; return <Icon className="text-xl text-service-accent" />; })()}
+					<h2 className="font-bold text-service-text-primary">
 						{CATEGORY_LABELS[category][locale]}
 					</h2>
 					{selectedCount > 0 && (
-						<span className="px-2 py-0.5 rounded-full bg-[#04c597] text-white text-xs font-medium">
+						<span className="px-2 py-0.5 rounded-full bg-service-accent text-white text-xs font-medium">
 							{selectedCount}
 						</span>
 					)}
 				</div>
 				<div className="flex items-center gap-2">
-					<span className="text-xs text-neutral-400">
+					<span className="text-xs text-service-text-tertiary">
 						{services.length} {locale === 'en' ? 'services' : 'serviços'}
 					</span>
 					<svg
-						className={`w-5 h-5 text-neutral-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+						className={`w-5 h-5 text-service-text-tertiary transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
 						fill="none"
 						stroke="currentColor"
 						viewBox="0 0 24 24"
@@ -104,7 +104,7 @@ export default function CategorySection({
 						transition={{ duration: 0.25 }}
 						className="overflow-hidden"
 					>
-						<div className="px-5 pb-4 space-y-3 border-t border-neutral-100 pt-3">
+						<div className="px-5 pb-4 space-y-3 border-t border-service-border pt-3">
 							{services.map((service) => {
 								// Conflicts are symmetric per catalog validator — checking one direction suffices.
 								// If this assumption breaks, fix the validator rather than adding defensive checks here.

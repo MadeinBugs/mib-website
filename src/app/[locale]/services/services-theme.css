@@ -1,0 +1,64 @@
+.services-theme {
+	/* Palette */
+	--service-bg: #0a0a0a;
+	--service-bg-elevated: #141414;
+	--service-bg-strong: #1a1a1a;
+	--service-border: #262626;
+	--service-border-strong: #404040;
+	--service-text-primary: #fafafa;
+	--service-text-secondary: #a3a3a3;
+	--service-text-tertiary: #525252;
+	--service-accent: #04c597;
+	--service-accent-hover: #06b08a;
+	--service-success: #10b981;
+	--service-warning: #f59e0b;
+	--service-error: #ef4444;
+
+	min-height: 100dvh;
+	background-color: var(--service-bg);
+	color: var(--service-text-primary);
+}
+
+/* Override body background to prevent orange edges on overscroll */
+body:has(.services-theme) {
+	background: var(--service-bg) !important;
+}
+
+/* Scrollbar */
+.services-theme ::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+.services-theme ::-webkit-scrollbar-track {
+	background: var(--service-bg);
+}
+.services-theme ::-webkit-scrollbar-thumb {
+	background: var(--service-border);
+	border-radius: 5px;
+	border: 2px solid var(--service-bg);
+}
+.services-theme ::-webkit-scrollbar-thumb:hover {
+	background: var(--service-border-strong);
+}
+.services-theme * {
+	scrollbar-color: var(--service-border) var(--service-bg);
+	scrollbar-width: thin;
+}
+
+/* Selection */
+.services-theme ::selection {
+	background: var(--service-accent);
+	color: var(--service-bg);
+}
+
+/* Focus */
+.services-theme *:focus-visible {
+	outline: 2px solid var(--service-accent);
+	outline-offset: 2px;
+}
+
+/* Monospace for technical labels */
+.services-theme code,
+.services-theme .font-mono {
+	font-family: var(--font-services-mono, ui-monospace), SFMono-Regular, Menlo, monospace;
+}

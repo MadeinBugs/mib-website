@@ -116,21 +116,21 @@ export default function Modal({
 						animate={{ opacity: 1, scale: 1, y: 0 }}
 						exit={{ opacity: 0, scale: isFull ? 1 : 0.9, y: isFull ? 0 : 20 }}
 						transition={{ duration: 0.3 }}
-						className={`relative bg-[#f7fff0] ${isFull ? '' : 'rounded-crayon border-2 border-[#1e6259]'} shadow-2xl flex flex-col outline-none ${sizeClasses[size]}`}
+						className={`relative bg-service-bg-elevated ${isFull ? '' : 'rounded-xl border border-service-border'} shadow-2xl flex flex-col outline-none ${sizeClasses[size]}`}
 						style={isFull ? { height: '100dvh' } : { maxHeight: '90dvh' }}
 						onClick={(e) => e.stopPropagation()}
 					>
 						{/* Header */}
 						{(title || true) && (
-							<div className="flex items-center justify-between px-6 py-4 border-b border-[#d4e8c8] shrink-0">
+							<div className="flex items-center justify-between px-6 py-4 border-b border-service-border shrink-0">
 								{title && (
-									<h2 className="font-bold text-lg text-neutral-800">
+									<h2 className="font-bold text-lg text-service-text-primary">
 										{title}
 									</h2>
 								)}
 								<button
 									onClick={onClose}
-									className="ml-auto p-1 text-neutral-500 hover:text-neutral-800 transition-colors rounded-lg hover:bg-neutral-100"
+									className="ml-auto p-1 text-service-text-tertiary hover:text-service-text-primary transition-colors rounded-lg hover:bg-service-bg-strong"
 									aria-label="Close"
 								>
 									<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,7 +147,7 @@ export default function Modal({
 
 						{/* Footer */}
 						{footer && (
-							<div className="px-6 py-4 border-t border-[#d4e8c8] shrink-0">
+							<div className="px-6 py-4 border-t border-service-border shrink-0">
 								{footer}
 							</div>
 						)}

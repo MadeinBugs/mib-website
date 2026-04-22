@@ -35,13 +35,13 @@ export default function CustomFieldInput({
 					rows={field.type === 'textarea' ? 3 : undefined}
 					minLength={field.minLength}
 					maxLength={field.maxLength}
-					className="flex-1 rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none transition-colors resize-y"
+					className="flex-1 rounded-lg border border-service-border bg-service-bg-strong px-3 py-2 text-sm text-service-text-primary focus:border-service-accent focus:ring-1 focus:ring-service-accent outline-none transition-colors resize-y"
 				/>
 				{field.repeatable && values.length > (field.minItems ?? 0) && (
 					<button
 						type="button"
 						onClick={() => onRemove(index)}
-						className="shrink-0 p-2 text-neutral-400 hover:text-red-500 transition-colors"
+						className="shrink-0 p-2 text-service-text-tertiary hover:text-red-400 transition-colors"
 						aria-label={locale === 'en' ? 'Remove' : 'Remover'}
 					>
 						✕
@@ -54,13 +54,13 @@ export default function CustomFieldInput({
 	return (
 		<div className="space-y-2">
 			<div className="flex items-center gap-2">
-				<label className="text-sm font-medium text-neutral-700">
+				<label className="text-sm font-medium text-service-text-secondary">
 					{field.label[locale]}
 				</label>
 				{field.pendingPricing && <PendingPricingBadge locale={locale} />}
 			</div>
 			{field.helpText && (
-				<p className="text-xs text-neutral-500">{field.helpText[locale]}</p>
+				<p className="text-xs text-service-text-tertiary">{field.helpText[locale]}</p>
 			)}
 
 			{values.length === 0 && !field.repeatable ? (
@@ -75,7 +75,7 @@ export default function CustomFieldInput({
 				<button
 					type="button"
 					onClick={() => onAdd('')}
-					className="text-sm text-[#04c597] hover:text-[#036b54] font-medium transition-colors"
+					className="text-sm text-service-accent hover:text-service-accent-hover font-medium transition-colors"
 				>
 					+ {locale === 'en' ? 'Add another' : 'Adicionar outro'}
 				</button>

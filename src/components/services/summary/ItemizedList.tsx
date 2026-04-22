@@ -18,7 +18,7 @@ export default function ItemizedList({ catalog, selectedItems, locale, currency,
 
 	return (
 		<div className="space-y-2">
-			<h3 className="text-sm font-semibold text-neutral-700">
+			<h3 className="text-sm font-semibold text-service-text-secondary">
 				{locale === 'en' ? 'Selected Services' : 'Serviços Selecionados'}
 			</h3>
 			<ul className="space-y-1.5">
@@ -31,20 +31,20 @@ export default function ItemizedList({ catalog, selectedItems, locale, currency,
 
 					return (
 						<li key={item.serviceId} className="flex items-center justify-between text-sm">
-							<span className="text-neutral-600 truncate mr-2">
+							<span className="text-service-text-secondary truncate mr-2">
 								{service.name[locale]}
 								{isBundled && (
-									<span className="ml-2 text-xs text-[#04c597] font-medium">
+									<span className="ml-2 text-xs text-service-accent font-medium">
 										{locale === 'en' ? '(bundled free)' : '(incluso grátis)'}
 									</span>
 								)}
 							</span>
 							{isBundled ? (
-								<span className="text-neutral-400 shrink-0 line-through text-xs">
+								<span className="text-service-text-tertiary shrink-0 line-through text-xs">
 									{formatPrice(itemPrice, currency)}
 								</span>
 							) : (
-								<PriceDisplay amount={itemPrice} currency={currency} size="sm" className="text-neutral-800 font-medium shrink-0" />
+								<PriceDisplay amount={itemPrice} currency={currency} size="sm" className="text-service-text-primary font-medium shrink-0" />
 							)}
 						</li>
 					);

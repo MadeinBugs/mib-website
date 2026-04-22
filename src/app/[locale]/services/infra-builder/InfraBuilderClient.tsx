@@ -13,8 +13,6 @@ import ClientDeliverablesPanel from '@/components/services/deliverables/ClientDe
 import QuoteSubmitForm from '@/components/services/form/QuoteSubmitForm';
 import Modal from '@/components/shared/Modal';
 import { FaTimes, FaExternalLinkAlt } from 'react-icons/fa';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
-import Link from 'next/link';
 
 const STORAGE_KEY = 'mib-infra-builder-state';
 
@@ -189,7 +187,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 	}, [catalog, state.selectedItems, state.currency, state.maintenanceMonths, state.bundleAdded]);
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
+		<div>
 			<AbandonmentTracker
 				itemCount={selectedCount}
 				estimatedTotal={grandTotal}
@@ -199,19 +197,10 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 lg:py-8">
 				{/* Header */}
 				<div className="mb-6">
-					<div className="flex items-center justify-between mb-2">
-						<Link
-							href={`/${locale}/services`}
-							className="text-sm text-[#04c597] hover:underline inline-block"
-						>
-							{locale === 'en' ? '← Back to services' : '← Voltar aos serviços'}
-						</Link>
-						<LanguageSwitcher />
-					</div>
-					<h1 className="text-2xl sm:text-3xl font-bold text-neutral-800">
+					<h1 className="text-2xl sm:text-3xl font-bold text-service-text-primary">
 						{locale === 'en' ? 'Infrastructure Builder' : 'Builder de Infraestrutura'}
 					</h1>
-					<p className="text-neutral-600 mt-1 text-sm sm:text-base">
+					<p className="text-service-text-secondary mt-1 text-sm sm:text-base">
 						{locale === 'en'
 							? 'Select the services you need and get an instant quote.'
 							: 'Selecione os serviços que precisa e obtenha um orçamento instantâneo.'}
@@ -220,12 +209,12 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 
 				{/* Toast notification */}
 				{toastMessage && (
-					<div className="mb-4 rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 flex items-center justify-between gap-3 text-sm text-amber-800">
+					<div className="mb-4 rounded-lg bg-amber-900/30 border border-amber-700/50 px-4 py-3 flex items-center justify-between gap-3 text-sm text-amber-300">
 						<span>{toastMessage}</span>
 						<button
 							type="button"
 							onClick={() => setToastMessage(null)}
-							className="shrink-0 text-amber-400 hover:text-amber-600"
+							className="shrink-0 text-amber-500 hover:text-amber-300"
 							aria-label="Dismiss"
 						>
 							<FaTimes />
@@ -235,14 +224,14 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 
 				{/* Banner */}
 				{!state.bannerDismissed && selectedCount === 0 && (
-					<div className="mb-6 rounded-xl bg-blue-50 border border-blue-200 px-5 py-4 flex items-start gap-4">
+					<div className="mb-6 rounded-xl bg-service-bg-elevated border border-service-border px-5 py-4 flex items-start gap-4">
 						<div className="flex-1">
-							<p className="text-sm font-medium text-blue-800">
+							<p className="text-sm font-medium text-service-text-primary">
 								{locale === 'en'
 									? 'Not sure what you need? Talk to us first!'
 									: 'Não sabe o que precisa? Fale conosco primeiro!'}
 							</p>
-							<p className="text-xs text-blue-600 mt-0.5">
+							<p className="text-xs text-service-text-secondary mt-0.5">
 								{locale === 'en'
 									? 'Schedule a free consultation to discuss your project.'
 									: 'Agende uma consulta gratuita para discutir seu projeto.'}
@@ -253,7 +242,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 								href="https://agenda.madeinbugs.com.br/andressmartin/consultoria-infraestrutura"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+								className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-service-accent text-white text-sm font-medium hover:bg-service-accent-hover transition-colors"
 							>
 								{locale === 'en' ? 'Book a call' : 'Agendar conversa'}
 								<FaExternalLinkAlt className="w-3 h-3" />
@@ -261,7 +250,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 							<button
 								type="button"
 								onClick={() => dispatch({ type: 'DISMISS_BANNER' })}
-								className="text-blue-400 hover:text-blue-600 p-1"
+								className="text-service-text-tertiary hover:text-service-text-secondary p-1"
 								aria-label={locale === 'en' ? 'Dismiss banner' : 'Dispensar aviso'}
 							>
 								<FaTimes />
@@ -292,7 +281,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 					</div>
 
 					{/* Right: sticky summary (desktop only) */}
-					<div className="hidden lg:block lg:w-96 lg:shrink-0 lg:sticky lg:top-6">
+					<div className="hidden lg:block lg:w-96 lg:shrink-0 lg:sticky lg:top-20">
 						<SummaryPanel
 							catalog={catalog}
 							selectedItems={state.selectedItems}
@@ -316,7 +305,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 					<button
 						type="button"
 						onClick={() => setShowMobileSummary(true)}
-						className="w-full flex items-center justify-between px-5 py-3.5 rounded-full bg-[#04c597] text-white font-semibold shadow-lg hover:bg-[#036b54] transition-colors"
+						className="w-full flex items-center justify-between px-5 py-3.5 rounded-full bg-service-accent text-white font-semibold shadow-lg hover:bg-service-accent-hover transition-colors"
 					>
 						<span>
 							{locale === 'en' ? 'View Summary' : 'Ver Resumo'}

@@ -21,17 +21,17 @@ export default function ServiceConfigurator({
 	if (configuration.type === 'single-select') {
 		return (
 			<div className="space-y-1">
-				<label className="block text-sm font-medium text-neutral-700">
+				<label className="block text-sm font-medium text-service-text-secondary">
 					{configuration.label[locale]}
 					{configuration.required && <span className="text-red-500 ml-0.5">*</span>}
 				</label>
 				{configuration.description && (
-					<p className="text-xs text-neutral-500">{configuration.description[locale]}</p>
+					<p className="text-xs text-service-text-tertiary">{configuration.description[locale]}</p>
 				)}
 				<select
 					value={selectedOptionIds[0] ?? ''}
 					onChange={(e) => onChange(e.target.value ? [e.target.value] : [])}
-					className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-800 focus:border-[#04c597] focus:ring-1 focus:ring-[#04c597] outline-none transition-colors"
+					className="w-full rounded-lg border border-service-border bg-service-bg-strong px-3 py-2 text-sm text-service-text-primary focus:border-service-accent focus:ring-1 focus:ring-service-accent outline-none transition-colors"
 				>
 					{!configuration.required && (
 						<option value="">
@@ -52,7 +52,7 @@ export default function ServiceConfigurator({
 				{selectedOptionIds[0] && (() => {
 					const opt = configuration.options.find((o) => o.id === selectedOptionIds[0]);
 					return opt?.description ? (
-						<p className="text-xs text-neutral-500 mt-1 pl-1">{opt.description[locale]}</p>
+						<p className="text-xs text-service-text-tertiary mt-1 pl-1">{opt.description[locale]}</p>
 					) : null;
 				})()}
 			</div>
@@ -62,12 +62,12 @@ export default function ServiceConfigurator({
 	// Multi-select
 	return (
 		<div className="space-y-1">
-			<label className="block text-sm font-medium text-neutral-700">
+			<label className="block text-sm font-medium text-service-text-secondary">
 				{configuration.label[locale]}
 				{configuration.required && <span className="text-red-500 ml-0.5">*</span>}
 			</label>
 			{configuration.description && (
-				<p className="text-xs text-neutral-500">{configuration.description[locale]}</p>
+				<p className="text-xs text-service-text-tertiary">{configuration.description[locale]}</p>
 			)}
 			<div className="space-y-1.5 mt-1">
 				{configuration.options.map((opt) => {
@@ -86,11 +86,11 @@ export default function ServiceConfigurator({
 										: [...selectedOptionIds, opt.id];
 									onChange(newIds);
 								}}
-								className="mt-0.5 rounded border-neutral-300 text-[#04c597] focus:ring-[#04c597]"
+								className="mt-0.5 rounded border-service-border-strong text-service-accent focus:ring-service-accent"
 							/>
-							<span className="text-sm text-neutral-700 group-hover:text-neutral-900">
+							<span className="text-sm text-service-text-primary group-hover:text-service-text-primary">
 								{opt.label[locale]}
-								{modLabel && <span className="text-neutral-500">{modLabel}</span>}
+								{modLabel && <span className="text-service-text-secondary">{modLabel}</span>}
 							</span>
 						</label>
 					);

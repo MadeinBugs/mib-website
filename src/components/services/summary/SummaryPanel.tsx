@@ -40,9 +40,9 @@ export default function SummaryPanel({
 	const thirdPartyCosts: ThirdPartyCost[] = collectThirdPartyCosts(catalog, selectedArray, currency);
 
 	return (
-		<div className="rounded-xl border border-neutral-200 bg-white p-5 space-y-4">
+		<div className="rounded-xl border border-service-border bg-service-bg-elevated p-5 space-y-4">
 			<div className="flex items-center justify-between">
-				<h2 className="font-bold text-neutral-800">
+				<h2 className="font-bold text-service-text-primary">
 					{locale === 'en' ? 'Summary' : 'Resumo'}
 				</h2>
 				<CurrencyToggle
@@ -52,7 +52,7 @@ export default function SummaryPanel({
 			</div>
 
 			{!hasItems && (
-				<p className="text-sm text-neutral-400 py-4 text-center">
+				<p className="text-sm text-service-text-tertiary py-4 text-center">
 					{locale === 'en'
 						? 'Select services to build your quote'
 						: 'Selecione serviços para montar seu orçamento'}
@@ -98,7 +98,7 @@ export default function SummaryPanel({
 					<button
 						type="button"
 						onClick={onSubmitClick}
-						className="w-full bg-[#04c597] hover:bg-[#036b54] text-white font-semibold py-3 rounded-lg transition-colors"
+						className="w-full bg-service-accent hover:bg-service-accent-hover text-white font-semibold py-3 rounded-lg transition-colors"
 					>
 						{locale === 'en' ? 'Request Quote' : 'Solicitar Orçamento'}
 					</button>

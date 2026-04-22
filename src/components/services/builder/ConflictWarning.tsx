@@ -14,7 +14,7 @@ export default function ConflictWarning({ locale, conflictingServiceNames }: Con
 	const names = conflictingServiceNames.join(', ');
 
 	return (
-		<div className="flex items-start gap-2 text-xs text-red-700 bg-red-50 rounded-md px-3 py-2 border border-red-200">
+		<div className="flex items-start gap-2 text-xs text-red-400 bg-red-900/20 rounded-md px-3 py-2 border border-red-800/30">
 			<FaExclamationTriangle className="shrink-0 mt-0.5" />
 			<span>
 				{locale === 'en'

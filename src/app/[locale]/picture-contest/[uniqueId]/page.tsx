@@ -26,7 +26,7 @@ export default async function PlayerPage({
 	// Fetch all pictures in this session
 	const { data: pictures } = await supabase
 		.from('contest_pictures')
-		.select('id, unique_id, filename, storage_path, picture_index, taken_at, metadata, is_favorite_1, is_favorite_2')
+		.select('id, unique_id, filename, storage_path, picture_index, taken_at, metadata, is_favorite_1')
 		.eq('unique_id', code)
 		.order('picture_index', { ascending: true });
 
@@ -58,7 +58,6 @@ export default async function PlayerPage({
 		taken_at: picture.taken_at,
 		metadata: picture.metadata as Record<string, unknown> | null,
 		is_favorite_1: picture.is_favorite_1 ?? false,
-		is_favorite_2: picture.is_favorite_2 ?? false,
 	}));
 
 	const favoriteCount = favorites?.length ?? 0;

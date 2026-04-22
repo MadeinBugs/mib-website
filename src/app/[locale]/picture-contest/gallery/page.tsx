@@ -27,7 +27,6 @@ export default async function AdminGalleryPage({
 				storage_path,
 				taken_at,
 				is_favorite_1,
-				is_favorite_2,
 				discord_posted_at
 			)
 		`)
@@ -75,12 +74,11 @@ export default async function AdminGalleryPage({
 		id: number;
 		storage_path: string;
 		is_favorite_1: boolean;
-		is_favorite_2: boolean;
 	};
 
 	const sessionData = sessions.map((session, index) => {
 		const pics = session.contest_pictures as PictureRow[];
-		const favCount = pics.filter((p) => p.is_favorite_1 || p.is_favorite_2).length;
+		const favCount = pics.filter((p) => p.is_favorite_1).length;
 
 		return {
 			unique_id: session.unique_id,

@@ -11,6 +11,8 @@ import rehypeSanitize from 'rehype-sanitize';
 import { FaGift } from 'react-icons/fa';
 import type { SelectedItemSnapshot, Locale, Currency } from '@/lib/services/types';
 
+export const dynamic = 'force-dynamic';
+
 interface Props {
 	params: Promise<{ locale: string; uuid: string }>;
 	searchParams: Promise<{ sig?: string }>;

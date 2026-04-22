@@ -3,6 +3,9 @@ import { cookies } from 'next/headers';
 import { verifyQuoteSignature, buildQuoteUrl } from '@/lib/services/quote-url';
 import Link from 'next/link';
 import type { Locale } from '@/lib/services/types';
+import QuoteSentClearCookie from './QuoteSentClearCookie';
+
+export const dynamic = 'force-dynamic';
 
 interface Props {
 	params: Promise<{ locale: string }>;
@@ -15,6 +18,7 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 	const { id } = await searchParams;
 
 	let isValid = false;
+	let hasSessionCookie = false;
 	let quoteId = id || '';
 	let shareableUrl = '';
 
@@ -24,25 +28,18 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 		const sessionCookie = cookieStore.get('mib_quote_session');
 
 		if (sessionCookie?.value) {
+			hasSessionCookie = true;
 			const [cookieUuid, cookieSig] = sessionCookie.value.split(':');
 			if (cookieUuid === id && cookieSig && verifyQuoteSignature(cookieUuid, cookieSig)) {
 				isValid = true;
 				shareableUrl = buildQuoteUrl(locale, id);
 			}
-
-			// Clear the cookie after reading
-			cookieStore.set('mib_quote_session', '', {
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
-				sameSite: 'lax',
-				path: '/',
-				maxAge: 0,
-			});
 		}
 	}
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center p-6">
+			{hasSessionCookie && <QuoteSentClearCookie />}
 			<div className="max-w-lg w-full bg-white rounded-2xl shadow-lg p-8 text-center">
 				<div className="text-5xl mb-4">✅</div>
 

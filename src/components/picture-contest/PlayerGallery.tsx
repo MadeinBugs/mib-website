@@ -13,7 +13,6 @@ interface PictureData {
 	taken_at: string | null;
 	metadata: Record<string, unknown> | null;
 	is_favorite_1: boolean;
-	is_favorite_2: boolean;
 }
 
 export default function PlayerGallery({
@@ -34,7 +33,6 @@ export default function PlayerGallery({
 
 	function getFavoriteSlot(pic: PictureData): number | null {
 		if (pic.is_favorite_1) return 1;
-		if (pic.is_favorite_2) return 2;
 		return null;
 	}
 
@@ -67,7 +65,6 @@ export default function PlayerGallery({
 						? {
 							...p,
 							is_favorite_1: slot === 1 ? true : p.is_favorite_1,
-							is_favorite_2: slot === 2 ? true : p.is_favorite_2,
 						}
 						: p
 				)

@@ -3,6 +3,8 @@ import { createServiceClient } from '@/lib/supabase/service';
 import { verifyQuoteSignature } from '@/lib/services/quote-url';
 import { autoExpireQuote } from '@/lib/services/quote-expiration';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
 	request: NextRequest,
 	{ params }: { params: Promise<{ uuid: string }> }

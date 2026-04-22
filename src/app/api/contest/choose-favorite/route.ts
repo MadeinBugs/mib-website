@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 	// 2. Validate picture belongs to this session
 	const { data: picture } = await supabase
 		.from('contest_pictures')
-		.select('id, unique_id, filename, storage_path, is_favorite_1, is_favorite_2')
+		.select('id, unique_id, filename, storage_path, is_favorite_1')
 		.eq('id', picture_id)
 		.eq('unique_id', unique_id)
 		.single();
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	// 3. Check if this picture is already a favorite
-	if (picture.is_favorite_1 || picture.is_favorite_2) {
+	if (picture.is_favorite_1) {
 		return NextResponse.json({ error: 'already_favorite' }, { status: 409 });
 	}
 
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
 	}
 
 	// 7. Update contest_pictures flag
-	const updateField = favorite_slot === 1 ? 'is_favorite_1' : 'is_favorite_2';
+	const updateField = 'is_favorite_1';
 	await supabase
 		.from('contest_pictures')
 		.update({ [updateField]: true })

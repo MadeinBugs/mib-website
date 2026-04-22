@@ -26,6 +26,7 @@ export async function middleware(request: NextRequest) {
 		return supabaseResponse;
 	}
 
+	const isAdminRoute = pathname.startsWith('/admin');
 	const isPictureContestRoute = /^\/(en|pt-BR)\/picture-contest/.test(pathname);
 	const isPictureContestAdmin = /^\/(en|pt-BR)\/picture-contest\/(gallery|login|logout)/.test(pathname);
 	const isMascotRoute = pathname.startsWith('/mascot');
@@ -63,6 +64,18 @@ export async function middleware(request: NextRequest) {
 	const {
 		data: { user },
 	} = await supabase.auth.getUser();
+
+	// --- Admin route protection ---
+	if (isAdminRoute) {
+		if (!user) {
+			const url = request.nextUrl.clone();
+			url.pathname = '/mascot/login';
+			url.searchParams.set('next', pathname);
+			return NextResponse.redirect(url);
+		}
+		// Role check (admin) happens in the layout server component
+		return supabaseResponse;
+	}
 
 	// --- PICTURE_CONTEST_LIVE gate ---
 	// Public picture-contest routes (not admin) are blocked when not live,
@@ -144,6 +157,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
 	matcher: [
+		'/admin',
+		'/admin/:path*',
 		'/mascot/:path*',
 		'/en/picture-contest',
 		'/en/picture-contest/:path*',

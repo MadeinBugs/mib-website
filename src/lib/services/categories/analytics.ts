@@ -153,50 +153,6 @@ export const analyticsServices: ServiceItem[] = [
 					},
 				],
 			},
-			{
-				id: 'shortlink-subdomain-preference',
-				label: {
-					en: 'Subdomain Preference',
-					'pt-BR': 'Preferência de Subdomínio',
-				},
-				type: 'single-select',
-				required: true,
-				defaultOptionId: 'go',
-				options: [
-					{
-						id: 'go',
-						label: {
-							en: 'go.yourdomain.com (recommended)',
-							'pt-BR': 'go.seudominio.com (recomendado)',
-						},
-						description: {
-							en: 'Most common choice.',
-							'pt-BR': 'Escolha mais comum.',
-						},
-						priceModifier: { BRL: 0, USD: 0 },
-					},
-					{
-						id: 'links',
-						label: {
-							en: 'links.yourdomain.com',
-							'pt-BR': 'links.seudominio.com',
-						},
-						priceModifier: { BRL: 0, USD: 0 },
-					},
-					{
-						id: 'custom',
-						label: {
-							en: 'Custom (tell us in the message field)',
-							'pt-BR': 'Customizado (nos diga no campo de mensagem)',
-						},
-						description: {
-							en: 'Anything like s.yourdomain.com, l.yourdomain.com, etc.',
-							'pt-BR': 'Qualquer coisa como s.seudominio.com, l.seudominio.com, etc.',
-						},
-						priceModifier: { BRL: 0, USD: 0 },
-					},
-				],
-			},
 		],
 		clientDeliverables: [],
 		active: true,

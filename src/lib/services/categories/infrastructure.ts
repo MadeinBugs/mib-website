@@ -1,7 +1,6 @@
 import type { ServiceItem } from '../types';
 import {
 	DELIVERABLE_CLOUD_PAYMENT,
-	DELIVERABLE_CONFIRMED_DOMAIN,
 	DELIVERABLE_DOMAIN,
 	DELIVERABLE_DOMAIN_REGISTRAR_ACCESS,
 	DELIVERABLE_LOGO_BRANDING,
@@ -115,7 +114,7 @@ export const infrastructureServices: ServiceItem[] = [
 		basePrice: { BRL: 300, USD: 70 },
 		maintenance: null,
 		estimatedSetupDays: 0.5,
-		clientDeliverables: [DELIVERABLE_DOMAIN, DELIVERABLE_DOMAIN_REGISTRAR_ACCESS, DELIVERABLE_CONFIRMED_DOMAIN],
+		clientDeliverables: [DELIVERABLE_DOMAIN, DELIVERABLE_DOMAIN_REGISTRAR_ACCESS],
 		thirdPartyCosts: [COST_DOMAIN_REGISTRATION],
 		active: true,
 	},

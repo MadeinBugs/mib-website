@@ -6,6 +6,7 @@ import type {
 	ThirdPartyCost,
 	Price,
 } from './types';
+import { isStudioControlPanelBundled } from './bundling';
 
 function findService(catalog: ServiceItem[], serviceId: string): ServiceItem | null {
 	const service = catalog.find((s) => s.id === serviceId);
@@ -64,6 +65,15 @@ export function computeSetupPrice(
 		total += service.basePrice[currency];
 		total += getOptionModifiers(service, selected, currency);
 	}
+
+	// Bundle discount: Studio Control Panel is free when bundled
+	if (isStudioControlPanelBundled(catalog, selectedItems)) {
+		const panel = catalog.find((s) => s.id === 'studio-control-panel');
+		if (panel) {
+			total -= panel.basePrice[currency];
+		}
+	}
+
 	return total;
 }
 
@@ -79,6 +89,15 @@ export function computeMaintenanceMonthly(
 		total += service.maintenance.price[currency];
 		total += getMaintenanceModifiers(service, selected, currency);
 	}
+
+	// Bundle discount: Studio Control Panel maintenance is also free when bundled
+	if (isStudioControlPanelBundled(catalog, selectedItems)) {
+		const panel = catalog.find((s) => s.id === 'studio-control-panel');
+		if (panel?.maintenance) {
+			total -= panel.maintenance.price[currency];
+		}
+	}
+
 	return total;
 }
 

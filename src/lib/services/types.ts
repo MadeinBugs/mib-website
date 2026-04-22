@@ -160,6 +160,8 @@ export interface SelectedItemSnapshot {
 	};
 	deliverables: ClientDeliverable[];
 	thirdPartyCosts: ThirdPartyCost[];
+	/** Business-rule discount applied (e.g. studio-control-panel bundled free) */
+	bundledFree?: boolean;
 }
 
 export interface QuoteSubmission {

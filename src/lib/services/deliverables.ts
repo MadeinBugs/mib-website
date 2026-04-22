@@ -38,15 +38,6 @@ export const DELIVERABLE_CLOUD_PAYMENT: ClientDeliverable = {
 	},
 };
 
-export const DELIVERABLE_CONFIRMED_DOMAIN: ClientDeliverable = {
-	id: 'confirmed-domain-name',
-	type: 'decision',
-	label: {
-		en: 'Confirmed domain name',
-		'pt-BR': 'Nome de domínio confirmado',
-	},
-};
-
 export const DELIVERABLE_TEAM_MEMBERS: ClientDeliverable = {
 	id: 'team-member-list',
 	type: 'other',

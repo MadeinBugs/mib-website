@@ -254,6 +254,16 @@ function checkCustomFieldSanity() {
 	}
 }
 
+// --- Check 9: Studio Control Panel bundling guard ---
+function checkStudioControlPanelExists() {
+	const panel = SERVICE_CATALOG.find((s) => s.id === 'studio-control-panel');
+	if (!panel) {
+		error('studio-control-panel service not found — bundling logic relies on this ID');
+	} else if (panel.basePrice.BRL === 0 && panel.basePrice.USD === 0) {
+		error('studio-control-panel has zero base price; bundle discount would be a no-op');
+	}
+}
+
 // --- Generate catalog version hash ---
 function generateCatalogVersion(): string {
 	const serialized = JSON.stringify(SERVICE_CATALOG);
@@ -278,6 +288,7 @@ checkPrices();
 checkBilingualStrings();
 checkActiveConfigValidity();
 checkCustomFieldSanity();
+checkStudioControlPanelExists();
 
 if (errors.length > 0) {
 	console.error(`\n💀 Catalog validation failed with ${errors.length} error(s).`);

@@ -2,7 +2,9 @@
 
 import type { ServiceItem, SelectedServiceItem, Locale, Currency } from '../../../lib/services/types';
 import { computeSetupPrice } from '../../../lib/services/pricing';
+import { isStudioControlPanelBundled } from '../../../lib/services/bundling';
 import PriceDisplay from '../shared/PriceDisplay';
+import { formatPrice } from '../../../lib/services/format';
 
 interface ItemizedListProps {
 	catalog: ServiceItem[];
@@ -14,6 +16,8 @@ interface ItemizedListProps {
 export default function ItemizedList({ catalog, selectedItems, locale, currency }: ItemizedListProps) {
 	if (selectedItems.length === 0) return null;
 
+	const bundled = isStudioControlPanelBundled(catalog, selectedItems);
+
 	return (
 		<div className="space-y-2">
 			<h3 className="text-sm font-semibold text-neutral-700">
@@ -24,14 +28,26 @@ export default function ItemizedList({ catalog, selectedItems, locale, currency 
 					const service = catalog.find((s) => s.id === item.serviceId);
 					if (!service) return null;
 
+					const isBundledPanel = bundled && item.serviceId === 'studio-control-panel';
 					const itemPrice = computeSetupPrice(catalog, [item], currency);
 
 					return (
 						<li key={item.serviceId} className="flex items-center justify-between text-sm">
 							<span className="text-neutral-600 truncate mr-2">
 								{service.name[locale]}
+								{isBundledPanel && (
+									<span className="ml-2 text-xs text-[#04c597] font-medium">
+										{locale === 'en' ? '(bundled free)' : '(incluso grátis)'}
+									</span>
+								)}
 							</span>
-							<PriceDisplay amount={itemPrice} currency={currency} size="sm" className="text-neutral-800 font-medium shrink-0" />
+							{isBundledPanel ? (
+								<span className="text-neutral-400 shrink-0 line-through text-xs">
+									{formatPrice(itemPrice, currency)}
+								</span>
+							) : (
+								<PriceDisplay amount={itemPrice} currency={currency} size="sm" className="text-neutral-800 font-medium shrink-0" />
+							)}
 						</li>
 					);
 				})}

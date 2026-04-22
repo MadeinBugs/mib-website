@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaServer, FaMobileAlt, FaEnvelopeOpenText } from 'react-icons/fa';
+import { FaServer, FaMobileAlt, FaEnvelopeOpenText, FaCamera } from 'react-icons/fa';
 import type { LegalIndexContent, LegalPageContent } from './types';
 
 // ---------------------------------------------------------------------------
@@ -50,6 +50,18 @@ export const privacyIndex: LegalIndexContent = {
 			'pt-BR': {
 				title: 'Newsletter',
 				description: 'Como tratamos dados de assinantes da nossa Bugsletter.',
+			},
+		},
+		{
+			slug: 'picture-contest',
+			icon: React.createElement(FaCamera, { className: 'text-2xl' }),
+			en: {
+				title: 'Picture Contest',
+				description: 'Privacy policy for the in-event photo contest and game playtest sessions.',
+			},
+			'pt-BR': {
+				title: 'Concurso de Fotos',
+				description: 'Política de privacidade para o concurso de fotos e sessões de playtest no evento.',
 			},
 		},
 	],
@@ -367,6 +379,111 @@ export const newsletterPrivacy: LegalPageContent = {
 			{
 				title: '6. Contato',
 				content: React.createElement('p', null, 'Controlador de dados: Made in Bugs', React.createElement('br'), 'Contato: ', contactLink),
+			},
+		],
+	},
+};
+
+// ---------------------------------------------------------------------------
+// /privacy/picture-contest
+// ---------------------------------------------------------------------------
+
+const pictureContactLink = React.createElement('a', { href: 'mailto:contato@madeinbugs.com.br', className: 'text-blue-600 hover:underline' }, 'contato@madeinbugs.com.br');
+
+export const pictureContestPrivacy: LegalPageContent = {
+	en: {
+		title: 'Picture Contest — Privacy Policy',
+		lastUpdated: 'Last updated: April 22, 2026',
+		sections: [
+			{
+				title: '1. What We Collect',
+				content: React.createElement(React.Fragment, null,
+					React.createElement('p', null, 'When you play our game at this event, we automatically capture screenshots you choose to keep, along with gameplay metadata (such as animals photographed and time of day in the game). Each play session is identified by an anonymous 5-letter code.'),
+					React.createElement('p', { className: 'mt-2' }, 'If you choose to enter the photo contest, you may voluntarily provide your name, email address, and phone number through our feedback form. By providing this information, you link your contact details to your session code and the screenshots associated with it.'),
+				),
+			},
+			{
+				title: '2. Why We Collect It',
+				content: React.createElement(React.Fragment, null,
+					React.createElement('p', null, 'We use this information solely to:'),
+					React.createElement('ul', { className: 'list-disc list-inside space-y-2 mt-2' },
+						React.createElement('li', null, 'Contact you if your photo wins the contest.'),
+						React.createElement('li', null, 'Potentially feature winning photos in promotional materials, with your explicit consent.'),
+						React.createElement('li', null, 'Improve our game through playtest feedback.'),
+					),
+				),
+			},
+			{
+				title: '3. Who Can See It',
+				content: React.createElement(React.Fragment, null,
+					React.createElement('p', null, 'Your screenshots are visible to the Made in Bugs development team for judging purposes.'),
+					React.createElement('p', { className: 'mt-2' }, 'If you choose a photo as your favorite, it will be posted publicly in our community Discord server for community voting.'),
+				),
+			},
+			{
+				title: '4. How Long We Keep It',
+				content: React.createElement('p', null,
+					'Your data will be deleted within 30 days after the event ends, unless your photo wins the contest. If you win, we may retain your contact information until prize delivery is complete. You may request deletion at any time by emailing ', pictureContactLink, '.',
+				),
+			},
+			{
+				title: '5. Your Rights',
+				content: React.createElement(React.Fragment, null,
+					React.createElement('p', null, 'You can request access to, correction of, or deletion of your personal data at any time by contacting us at ', pictureContactLink, '.'),
+					React.createElement('p', { className: 'mt-2' }, 'If you are located in the EU or Brazil, you have additional rights under GDPR and LGPD respectively.'),
+				),
+			},
+			{
+				title: '6. Contact',
+				content: React.createElement('p', null, 'Data controller: Made in Bugs', React.createElement('br'), 'Contact: ', pictureContactLink),
+			},
+		],
+	},
+	'pt-BR': {
+		title: 'Concurso de Fotos — Política de Privacidade',
+		lastUpdated: 'Última atualização: 22 de abril de 2026',
+		sections: [
+			{
+				title: '1. O que Coletamos',
+				content: React.createElement(React.Fragment, null,
+					React.createElement('p', null, 'Quando você joga nosso jogo no evento, capturamos automaticamente as capturas de tela que você escolhe guardar, juntamente com metadados de gameplay (como animais fotografados e horário do dia no jogo). Cada sessão de jogo é identificada por um código anônimo de 5 letras.'),
+					React.createElement('p', { className: 'mt-2' }, 'Caso você opte por participar do concurso de fotos, poderá fornecer voluntariamente seu nome, endereço de e-mail e número de telefone por meio do nosso formulário de feedback. Ao fornecer essas informações, você vincula seus dados de contato ao seu código de sessão e às capturas de tela associadas.'),
+				),
+			},
+			{
+				title: '2. Por que Coletamos',
+				content: React.createElement(React.Fragment, null,
+					React.createElement('p', null, 'Utilizamos essas informações exclusivamente para:'),
+					React.createElement('ul', { className: 'list-disc list-inside space-y-2 mt-2' },
+						React.createElement('li', null, 'Entrar em contato com você caso sua foto vença o concurso.'),
+						React.createElement('li', null, 'Potencialmente exibir fotos vencedoras em materiais promocionais, com seu consentimento explícito.'),
+						React.createElement('li', null, 'Aprimorar nosso jogo com base no feedback dos playtests.'),
+					),
+				),
+			},
+			{
+				title: '3. Quem Pode Ver',
+				content: React.createElement(React.Fragment, null,
+					React.createElement('p', null, 'Suas capturas de tela são visíveis para a equipe de desenvolvimento da Made in Bugs para fins de julgamento.'),
+					React.createElement('p', { className: 'mt-2' }, 'Se você escolher uma foto como favorita, ela será publicada publicamente no nosso servidor do Discord da comunidade para votação.'),
+				),
+			},
+			{
+				title: '4. Por Quanto Tempo Mantemos',
+				content: React.createElement('p', null,
+					'Seus dados serão excluídos dentro de 30 dias após o término do evento, a menos que sua foto vença o concurso. Em caso de vitória, poderemos manter suas informações de contato até que a entrega do prêmio seja concluída. Você pode solicitar a exclusão a qualquer momento pelo e-mail ', pictureContactLink, '.',
+				),
+			},
+			{
+				title: '5. Seus Direitos',
+				content: React.createElement(React.Fragment, null,
+					React.createElement('p', null, 'Você pode solicitar acesso, correção ou exclusão dos seus dados pessoais a qualquer momento entrando em contato pelo ', pictureContactLink, '.'),
+					React.createElement('p', { className: 'mt-2' }, 'Se você estiver localizado na UE ou no Brasil, possui direitos adicionais sob o GDPR e a LGPD, respectivamente.'),
+				),
+			},
+			{
+				title: '6. Contato',
+				content: React.createElement('p', null, 'Controlador de dados: Made in Bugs', React.createElement('br'), 'Contato: ', pictureContactLink),
 			},
 		],
 	},

@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import { verifyQuoteSignature, buildQuoteUrl } from '@/lib/services/quote-url';
 import Link from 'next/link';
 import type { Locale } from '@/lib/services/types';
-import QuoteSentClearCookie from './QuoteSentClearCookie';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +17,6 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 	const { id } = await searchParams;
 
 	let isValid = false;
-	let hasSessionCookie = false;
 	let quoteId = id || '';
 	let shareableUrl = '';
 
@@ -28,7 +26,6 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 		const sessionCookie = cookieStore.get('mib_quote_session');
 
 		if (sessionCookie?.value) {
-			hasSessionCookie = true;
 			const [cookieUuid, cookieSig] = sessionCookie.value.split(':');
 			if (cookieUuid === id && cookieSig && verifyQuoteSignature(cookieUuid, cookieSig)) {
 				isValid = true;
@@ -39,60 +36,64 @@ export default async function QuoteSentPage({ params, searchParams }: Props) {
 
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center p-6">
-			{hasSessionCookie && <QuoteSentClearCookie />}
-			<div className="max-w-lg w-full bg-white rounded-2xl shadow-lg p-8 text-center">
-				<div className="text-5xl mb-4">✅</div>
+			<div className="max-w-lg w-full bg-white rounded-2xl shadow-lg overflow-hidden text-center">
+				<img
+					src="/assets/mail/MiB-Mail-Banner1.png"
+					alt="Made in Bugs"
+					className="w-full block"
+				/>
+				<div className="p-8">
+					<h1 className="text-2xl font-bold text-neutral-800 mb-2">
+						{locale === 'pt-BR' ? 'Orçamento enviado!' : 'Quote submitted!'}
+					</h1>
 
-				<h1 className="text-2xl font-bold text-neutral-800 mb-4">
-					{locale === 'pt-BR' ? 'Orçamento enviado!' : 'Quote submitted!'}
-				</h1>
+					<p className="text-neutral-600 mb-6 mt-4">
+						{locale === 'pt-BR'
+							? 'Recebemos seu pedido de orçamento. Nossa equipe vai analisar e responder em 2-3 dias úteis.'
+							: "We've received your quote request. Our team will review and respond within 2-3 business days."}
+					</p>
 
-				<p className="text-neutral-600 mb-6">
-					{locale === 'pt-BR'
-						? 'Recebemos seu pedido de orçamento. Nossa equipe vai analisar e responder em 2-3 dias úteis.'
-						: "We've received your quote request. Our team will review and respond within 2-3 business days."}
-				</p>
-
-				{isValid && quoteId && (
-					<>
-						<div className="bg-[#f0fdf4] border border-[#86efac] rounded-lg p-4 mb-4 text-left">
-							<p className="text-sm font-semibold text-neutral-700 mb-2">
-								{locale === 'pt-BR' ? 'Link do seu orçamento:' : 'Your quote link:'}
+					{isValid && quoteId && (
+						<>
+							<div className="bg-[#f0fdf4] border border-[#86efac] rounded-lg p-4 mb-4 text-left">
+								<p className="text-sm font-semibold text-neutral-700 mb-2">
+									{locale === 'pt-BR' ? 'Link do seu orçamento:' : 'Your quote link:'}
+								</p>
+								<a
+									href={shareableUrl}
+									className="text-sm text-[#04c597] hover:underline break-all"
+								>
+									{shareableUrl}
+								</a>
+							</div>
+							<p className="text-xs text-neutral-400 mb-6">
+								{locale === 'pt-BR'
+									? 'Salve este link — você pode usá-lo para ver seu orçamento a qualquer momento.'
+									: 'Save this link — you can use it to view your quote at any time.'}
 							</p>
-							<a
-								href={shareableUrl}
-								className="text-sm text-[#04c597] hover:underline break-all"
-							>
-								{shareableUrl}
-							</a>
-						</div>
-						<p className="text-xs text-neutral-400 mb-6">
-							{locale === 'pt-BR'
-								? 'Salve este link — você pode usá-lo para ver seu orçamento a qualquer momento.'
-								: 'Save this link — you can use it to view your quote at any time.'}
-						</p>
-					</>
-				)}
+						</>
+					)}
 
-				<p className="text-sm text-neutral-500 mb-6">
-					{locale === 'pt-BR'
-						? `Também enviamos um email com o link do seu orçamento. Se não receber em 5 minutos, verifique sua pasta de spam.`
-						: `We've also emailed you a link to your quote. If you don't see it within 5 minutes, check your spam folder.`}
-				</p>
+					<p className="text-sm text-neutral-500 mb-6">
+						{locale === 'pt-BR'
+							? 'Também enviamos um email com o link do seu orçamento. Se não receber em 5 minutos, verifique sua pasta de spam.'
+							: "We've also emailed you a link to your quote. If you don't see it within 5 minutes, check your spam folder."}
+					</p>
 
-				<div className="flex flex-col gap-3">
-					<Link
-						href={`/${locale}/services`}
-						className="inline-block px-6 py-3 bg-[#04c597] text-white font-semibold rounded-lg hover:bg-[#036b54] transition-colors"
-					>
-						{locale === 'pt-BR' ? '← Voltar aos serviços' : '← Back to services'}
-					</Link>
-					<Link
-						href={`/${locale}`}
-						className="text-[#04c597] hover:underline text-sm"
-					>
-						{locale === 'pt-BR' ? 'Ir para a página inicial' : 'Go to homepage'}
-					</Link>
+					<div className="flex flex-col gap-3">
+						<Link
+							href={`/${locale}/services`}
+							className="inline-block px-6 py-3 bg-[#04c597] text-white font-semibold rounded-lg hover:bg-[#036b54] transition-colors"
+						>
+							{locale === 'pt-BR' ? '← Voltar aos serviços' : '← Back to services'}
+						</Link>
+						<Link
+							href={`/${locale}`}
+							className="text-[#04c597] hover:underline text-sm"
+						>
+							{locale === 'pt-BR' ? 'Ir para a página inicial' : 'Go to homepage'}
+						</Link>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -40,6 +40,7 @@ interface CategorySectionProps {
 	expandedServices: string[];
 	isExpanded: boolean;
 	autoAdded: Record<string, string>;
+	bundleAdded: string[];
 	allSelectedIds: Set<string>;
 	catalog: ServiceItem[];
 	dispatch: React.Dispatch<BuilderAction>;
@@ -54,6 +55,7 @@ export default function CategorySection({
 	expandedServices,
 	isExpanded,
 	autoAdded,
+	bundleAdded,
 	allSelectedIds,
 	catalog,
 	dispatch,
@@ -133,6 +135,7 @@ export default function CategorySection({
 										isExpanded={expandedServices.includes(service.id)}
 										autoAddedBy={autoAddedByName}
 										conflictingNames={conflictingNames}
+										isBundleLocked={bundleAdded.includes(service.id)}
 										catalog={catalog}
 										dispatch={dispatch}
 									/>

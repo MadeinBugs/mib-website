@@ -2,6 +2,7 @@ import type { ServiceItem, SelectedServiceItem } from './types';
 import type { BuilderState, BuilderAction } from './builder-types';
 import { buildDefaultSelection } from './builder-types';
 import { resolveDependencies } from './dependencies';
+import { isBundleEligible } from './bundling';
 
 /**
  * Collect the selectedOptionIds map for a service from the builder state.
@@ -111,6 +112,10 @@ export function builderReducer(catalog: ServiceItem[]) {
 		switch (action.type) {
 			case 'TOGGLE_SERVICE': {
 				const { serviceId } = action;
+
+				// Block toggling a bundle-locked service
+				if (state.bundleAdded.includes(serviceId)) return state;
+
 				const isSelected = serviceId in state.selectedItems;
 
 				if (isSelected) {
@@ -355,6 +360,7 @@ export function builderReducer(catalog: ServiceItem[]) {
 					submittedQuoteId: action.quoteId,
 					selectedItems: {},
 					autoAdded: {},
+					bundleAdded: [],
 				};
 
 			case 'SUBMIT_ERROR':
@@ -372,5 +378,93 @@ export function builderReducer(catalog: ServiceItem[]) {
 			default:
 				return state;
 		}
+	};
+}
+
+// ---------------------------------------------------------------------------
+// Bundle reconciliation
+// ---------------------------------------------------------------------------
+
+const PANEL_ID = 'studio-control-panel';
+
+/**
+ * Actions that can affect bundle eligibility. If you add a new action that
+ * modifies selectedItems, add its type here.
+ */
+const BUNDLE_AFFECTING_ACTIONS = new Set<BuilderAction['type']>([
+	'TOGGLE_SERVICE',
+	'SET_CONFIGURATION',
+	'RESTORE_STATE',
+]);
+
+/**
+ * Post-reducer pass that reconciles the studio-control-panel bundle:
+ *
+ * 1. Eligible + panel not selected → auto-add panel, record in bundleAdded
+ * 2. Eligible + panel already selected manually → move to bundleAdded (lock it)
+ * 3. Not eligible + panel in bundleAdded → remove panel, clear bundleAdded
+ * 4. Not eligible + panel selected manually → leave it alone
+ * 5. Panel removed by cascade → clean bundleAdded
+ */
+function reconcileBundling(catalog: ServiceItem[], state: BuilderState): BuilderState {
+	const selectedArray = Object.values(state.selectedItems);
+	const eligible = isBundleEligible(catalog, selectedArray);
+	const panelSelected = PANEL_ID in state.selectedItems;
+	const panelBundled = state.bundleAdded.includes(PANEL_ID);
+
+	if (eligible) {
+		if (!panelSelected) {
+			// Case 1: auto-add panel
+			const panelService = catalog.find((s) => s.id === PANEL_ID);
+			if (!panelService || !panelService.active) return state;
+			const panelItem = buildDefaultSelection(PANEL_ID, panelService.configurations);
+			return {
+				...state,
+				selectedItems: { ...state.selectedItems, [PANEL_ID]: panelItem },
+				bundleAdded: [...state.bundleAdded, PANEL_ID],
+			};
+		}
+		if (panelSelected && !panelBundled) {
+			// Case 2: was manually selected, now eligible → lock it
+			return { ...state, bundleAdded: [...state.bundleAdded, PANEL_ID] };
+		}
+		// Already bundled → no change
+		return state;
+	}
+
+	// Not eligible
+	if (panelBundled) {
+		if (panelSelected) {
+			// Case 3: remove the auto-added panel
+			const { [PANEL_ID]: _, ...rest } = state.selectedItems;
+			const newAutoAdded = { ...state.autoAdded };
+			delete newAutoAdded[PANEL_ID];
+			return {
+				...state,
+				selectedItems: rest,
+				autoAdded: newAutoAdded,
+				bundleAdded: state.bundleAdded.filter((id) => id !== PANEL_ID),
+			};
+		}
+		// Case 5: panel already removed by cascade, just clean bundleAdded
+		return { ...state, bundleAdded: state.bundleAdded.filter((id) => id !== PANEL_ID) };
+	}
+
+	// Case 4: not eligible, panel not bundled → leave alone
+	return state;
+}
+
+/**
+ * Factory that creates the full reducer with bundle reconciliation.
+ * Wraps the base reducer and runs reconcileBundling after bundle-affecting actions.
+ */
+export function createBuilderReducer(catalog: ServiceItem[]) {
+	const baseReducer = builderReducer(catalog);
+	return function wrappedReducer(state: BuilderState, action: BuilderAction): BuilderState {
+		const next = baseReducer(state, action);
+		if (BUNDLE_AFFECTING_ACTIONS.has(action.type)) {
+			return reconcileBundling(catalog, next);
+		}
+		return next;
 	};
 }

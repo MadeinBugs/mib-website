@@ -6,7 +6,6 @@ import type {
 	ThirdPartyCost,
 	Price,
 } from './types';
-import { isStudioControlPanelBundled } from './bundling';
 
 function findService(catalog: ServiceItem[], serviceId: string): ServiceItem | null {
 	const service = catalog.find((s) => s.id === serviceId);
@@ -56,7 +55,8 @@ function getMaintenanceModifiers(
 export function computeSetupPrice(
 	catalog: ServiceItem[],
 	selectedItems: SelectedServiceItem[],
-	currency: Currency
+	currency: Currency,
+	bundleAdded: string[] = []
 ): number {
 	let total = 0;
 	for (const selected of selectedItems) {
@@ -66,11 +66,11 @@ export function computeSetupPrice(
 		total += getOptionModifiers(service, selected, currency);
 	}
 
-	// Bundle discount: Studio Control Panel is free when bundled
-	if (isStudioControlPanelBundled(catalog, selectedItems)) {
-		const panel = catalog.find((s) => s.id === 'studio-control-panel');
-		if (panel) {
-			total -= panel.basePrice[currency];
+	// Bundle discount: zero out bundled services
+	for (const bundledId of bundleAdded) {
+		const service = catalog.find((s) => s.id === bundledId);
+		if (service && selectedItems.some((i) => i.serviceId === bundledId)) {
+			total -= service.basePrice[currency];
 		}
 	}
 
@@ -80,7 +80,8 @@ export function computeSetupPrice(
 export function computeMaintenanceMonthly(
 	catalog: ServiceItem[],
 	selectedItems: SelectedServiceItem[],
-	currency: Currency
+	currency: Currency,
+	bundleAdded: string[] = []
 ): number {
 	let total = 0;
 	for (const selected of selectedItems) {
@@ -90,11 +91,11 @@ export function computeMaintenanceMonthly(
 		total += getMaintenanceModifiers(service, selected, currency);
 	}
 
-	// Bundle discount: Studio Control Panel maintenance is also free when bundled
-	if (isStudioControlPanelBundled(catalog, selectedItems)) {
-		const panel = catalog.find((s) => s.id === 'studio-control-panel');
-		if (panel?.maintenance) {
-			total -= panel.maintenance.price[currency];
+	// Bundle discount: zero out bundled service maintenance
+	for (const bundledId of bundleAdded) {
+		const service = catalog.find((s) => s.id === bundledId);
+		if (service?.maintenance && selectedItems.some((i) => i.serviceId === bundledId)) {
+			total -= service.maintenance.price[currency];
 		}
 	}
 
@@ -105,11 +106,12 @@ export function computeGrandTotal(
 	catalog: ServiceItem[],
 	selectedItems: SelectedServiceItem[],
 	currency: Currency,
-	maintenanceMonths: 0 | 3 | 6 | 12
+	maintenanceMonths: 0 | 3 | 6 | 12,
+	bundleAdded: string[] = []
 ): { setup: number; maintenanceMonthly: number; maintenanceTotal: number; grandTotal: number } {
-	const setup = computeSetupPrice(catalog, selectedItems, currency);
+	const setup = computeSetupPrice(catalog, selectedItems, currency, bundleAdded);
 	const maintenanceMonthly = maintenanceMonths > 0
-		? computeMaintenanceMonthly(catalog, selectedItems, currency)
+		? computeMaintenanceMonthly(catalog, selectedItems, currency, bundleAdded)
 		: 0;
 	const maintenanceTotal = maintenanceMonthly * maintenanceMonths;
 	return {

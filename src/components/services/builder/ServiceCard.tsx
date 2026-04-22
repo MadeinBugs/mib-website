@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { ServiceItem, Locale, Currency, SelectedServiceItem } from '../../../lib/services/types';
 import type { BuilderAction } from '../../../lib/services/builder-types';
 import { formatPrice } from '../../../lib/services/format';
-import { FaLightbulb } from 'react-icons/fa';
+import { FaLightbulb, FaGift } from 'react-icons/fa';
 import ServiceConfigurator from './ServiceConfigurator';
 import CustomFieldInput from './CustomFieldInput';
 import DependencyIndicator from './DependencyIndicator';
@@ -20,6 +20,8 @@ interface ServiceCardProps {
 	autoAddedBy: string | null;
 	/** Names of conflicting services that are currently selected */
 	conflictingNames: string[];
+	/** True when this service is auto-added by bundle logic and cannot be toggled */
+	isBundleLocked: boolean;
 	catalog: ServiceItem[];
 	dispatch: React.Dispatch<BuilderAction>;
 }
@@ -32,6 +34,7 @@ export default function ServiceCard({
 	isExpanded,
 	autoAddedBy,
 	conflictingNames,
+	isBundleLocked,
 	catalog,
 	dispatch,
 }: ServiceCardProps) {
@@ -48,11 +51,13 @@ export default function ServiceCard({
 
 	return (
 		<div
-			className={`rounded-lg border-2 transition-all duration-200 ${isSelected
-				? 'border-[#04c597] bg-[#f0fdf8] shadow-sm'
-				: hasConflict
-					? 'border-red-200 bg-red-50/30 opacity-75'
-					: 'border-neutral-200 bg-white hover:border-neutral-300'
+			className={`rounded-lg border-2 transition-all duration-200 ${isBundleLocked
+				? 'border-[#04c597] bg-gradient-to-r from-[#f0fdf8] to-[#e6faf2] shadow-sm'
+				: isSelected
+					? 'border-[#04c597] bg-[#f0fdf8] shadow-sm'
+					: hasConflict
+						? 'border-red-200 bg-red-50/30 opacity-75'
+						: 'border-neutral-200 bg-white hover:border-neutral-300'
 				}`}
 		>
 			{/* Header row */}
@@ -61,8 +66,11 @@ export default function ServiceCard({
 					type="checkbox"
 					checked={isSelected}
 					onChange={handleToggle}
-					disabled={hasConflict && !isSelected}
-					className="mt-1 shrink-0 h-4 w-4 rounded border-neutral-300 text-[#04c597] focus:ring-[#04c597] disabled:opacity-50"
+					disabled={(hasConflict && !isSelected) || isBundleLocked}
+					className={`mt-1 shrink-0 h-4 w-4 rounded border-neutral-300 focus:ring-[#04c597] ${isBundleLocked
+						? 'text-[#04c597] cursor-not-allowed opacity-60'
+						: 'text-[#04c597] disabled:opacity-50'
+						}`}
 					aria-label={service.name[locale]}
 				/>
 				<div className="flex-1 min-w-0">
@@ -94,8 +102,16 @@ export default function ServiceCard({
 						</div>
 					</div>
 
+					{/* Bundle-locked indicator */}
+					{isBundleLocked && (
+						<div className="mt-2 flex items-center gap-1.5 text-xs text-[#04c597] font-medium">
+							<FaGift className="shrink-0" />
+							{locale === 'en' ? 'Included free with your selection' : 'Incluso grátis com sua seleção'}
+						</div>
+					)}
+
 					{/* Auto-added indicator */}
-					{autoAddedBy && (
+					{autoAddedBy && !isBundleLocked && (
 						<div className="mt-2">
 							<DependencyIndicator locale={locale} requiredByName={autoAddedBy} />
 						</div>

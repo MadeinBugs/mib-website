@@ -4,7 +4,7 @@ import { useReducer, useMemo, useState, useEffect, useCallback } from 'react';
 import type { ServiceItem, SelectedServiceItem, ServiceCategory, Locale } from '@/lib/services/types';
 import { createInitialState } from '@/lib/services/builder-types';
 import type { BuilderState } from '@/lib/services/builder-types';
-import { builderReducer } from '@/lib/services/builder-reducer';
+import { createBuilderReducer } from '@/lib/services/builder-reducer';
 import { collectDeliverables } from '@/lib/services/pricing';
 import CategorySection from '@/components/services/builder/CategorySection';
 import SummaryPanel from '@/components/services/summary/SummaryPanel';
@@ -91,8 +91,12 @@ function pruneInvalidSelections(
 		}
 	}
 
+	// Filter bundleAdded to only include IDs still in cleaned selectedItems
+	const cleanedIds = new Set(Object.keys(cleaned));
+	const cleanedBundleAdded = (saved.bundleAdded ?? []).filter((id: string) => cleanedIds.has(id));
+
 	return {
-		cleaned: { ...saved, selectedItems: cleaned, autoAdded: cleanedAutoAdded },
+		cleaned: { ...saved, selectedItems: cleaned, autoAdded: cleanedAutoAdded, bundleAdded: cleanedBundleAdded },
 		droppedCount: dropped,
 	};
 }
@@ -107,7 +111,7 @@ function saveState(state: BuilderState) {
 }
 
 export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClientProps) {
-	const reducer = useMemo(() => builderReducer(catalog), [catalog]);
+	const reducer = useMemo(() => createBuilderReducer(catalog), [catalog]);
 	const [state, dispatch] = useReducer(reducer, locale, createInitialState);
 	const [showSubmitForm, setShowSubmitForm] = useState(false);
 	const [showMobileSummary, setShowMobileSummary] = useState(false);
@@ -261,8 +265,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 								selectedItems={state.selectedItems}
 								expandedServices={state.expandedServices}
 								isExpanded={state.expandedCategories.includes(category)}
-								autoAdded={state.autoAdded}
-								allSelectedIds={allSelectedIds}
+								autoAdded={state.autoAdded} bundleAdded={state.bundleAdded} allSelectedIds={allSelectedIds}
 								catalog={catalog}
 								dispatch={dispatch}
 							/>
@@ -277,6 +280,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 							locale={locale}
 							currency={state.currency}
 							maintenanceMonths={state.maintenanceMonths}
+							bundleAdded={state.bundleAdded}
 							dispatch={dispatch}
 							onSubmitClick={handleSubmitClick}
 						/>
@@ -324,6 +328,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 						locale={locale}
 						currency={state.currency}
 						maintenanceMonths={state.maintenanceMonths}
+						bundleAdded={state.bundleAdded}
 						dispatch={dispatch}
 						onSubmitClick={handleSubmitClick}
 					/>

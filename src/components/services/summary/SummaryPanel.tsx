@@ -17,6 +17,7 @@ interface SummaryPanelProps {
 	locale: Locale;
 	currency: Currency;
 	maintenanceMonths: 0 | 3 | 6 | 12;
+	bundleAdded: string[];
 	dispatch: React.Dispatch<BuilderAction>;
 	onSubmitClick: () => void;
 }
@@ -27,13 +28,14 @@ export default function SummaryPanel({
 	locale,
 	currency,
 	maintenanceMonths,
+	bundleAdded,
 	dispatch,
 	onSubmitClick,
 }: SummaryPanelProps) {
 	const selectedArray = Object.values(selectedItems);
 	const hasItems = selectedArray.length > 0;
 
-	const totals = computeGrandTotal(catalog, selectedArray, currency, maintenanceMonths);
+	const totals = computeGrandTotal(catalog, selectedArray, currency, maintenanceMonths, bundleAdded);
 	const { count: pendingCount } = countPendingItems(catalog, selectedArray);
 	const thirdPartyCosts: ThirdPartyCost[] = collectThirdPartyCosts(catalog, selectedArray, currency);
 
@@ -64,6 +66,7 @@ export default function SummaryPanel({
 						selectedItems={selectedArray}
 						locale={locale}
 						currency={currency}
+						bundleAdded={bundleAdded}
 					/>
 
 					<PendingItemsList

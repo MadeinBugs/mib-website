@@ -2,7 +2,6 @@
 
 import type { ServiceItem, SelectedServiceItem, Locale, Currency } from '../../../lib/services/types';
 import { computeSetupPrice } from '../../../lib/services/pricing';
-import { isStudioControlPanelBundled } from '../../../lib/services/bundling';
 import PriceDisplay from '../shared/PriceDisplay';
 import { formatPrice } from '../../../lib/services/format';
 
@@ -11,12 +10,11 @@ interface ItemizedListProps {
 	selectedItems: SelectedServiceItem[];
 	locale: Locale;
 	currency: Currency;
+	bundleAdded: string[];
 }
 
-export default function ItemizedList({ catalog, selectedItems, locale, currency }: ItemizedListProps) {
+export default function ItemizedList({ catalog, selectedItems, locale, currency, bundleAdded }: ItemizedListProps) {
 	if (selectedItems.length === 0) return null;
-
-	const bundled = isStudioControlPanelBundled(catalog, selectedItems);
 
 	return (
 		<div className="space-y-2">
@@ -28,20 +26,20 @@ export default function ItemizedList({ catalog, selectedItems, locale, currency 
 					const service = catalog.find((s) => s.id === item.serviceId);
 					if (!service) return null;
 
-					const isBundledPanel = bundled && item.serviceId === 'studio-control-panel';
+					const isBundled = bundleAdded.includes(item.serviceId);
 					const itemPrice = computeSetupPrice(catalog, [item], currency);
 
 					return (
 						<li key={item.serviceId} className="flex items-center justify-between text-sm">
 							<span className="text-neutral-600 truncate mr-2">
 								{service.name[locale]}
-								{isBundledPanel && (
+								{isBundled && (
 									<span className="ml-2 text-xs text-[#04c597] font-medium">
 										{locale === 'en' ? '(bundled free)' : '(incluso grátis)'}
 									</span>
 								)}
 							</span>
-							{isBundledPanel ? (
+							{isBundled ? (
 								<span className="text-neutral-400 shrink-0 line-through text-xs">
 									{formatPrice(itemPrice, currency)}
 								</span>

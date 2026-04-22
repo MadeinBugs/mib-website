@@ -31,6 +31,8 @@ export interface BuilderState {
 	submittedQuoteId: string | null;
 	/** Services that were auto-added as dependencies, keyed by serviceId → reason serviceId */
 	autoAdded: Record<string, string>;
+	/** Services auto-added by bundle logic (e.g. studio-control-panel when bundled free) */
+	bundleAdded: string[];
 	/** Banner dismissed by user */
 	bannerDismissed: boolean;
 	/** Attribution ref parameter */
@@ -84,6 +86,7 @@ export function createInitialState(locale: Locale): BuilderState {
 		submissionError: null,
 		submittedQuoteId: null,
 		autoAdded: {},
+		bundleAdded: [],
 		bannerDismissed: false,
 		refParam: null,
 	};

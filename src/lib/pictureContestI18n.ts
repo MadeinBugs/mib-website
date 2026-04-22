@@ -46,9 +46,10 @@ export const pictureContestTranslations = {
 		favoriteLabel: 'Favoritar',
 		alreadyFavorited: 'Já favoritada',
 		favorite: (slot: number) => `Favorita ${slot}`,
-		favoriteSlotsFull: 'Você já escolheu suas 2 favoritas',
+		favoriteSlotsFull: 'Você já escolheu sua favorita',
 		favoritedCountText: (favorited: number, remaining: number) =>
-			`${favorited} ${favorited === 1 ? 'foto favoritada' : 'fotos favoritadas'}. ${remaining} ${remaining === 1 ? 'restante' : 'restantes'}`,
+			`${favorited === 1 ? '1 foto favoritada' : 'Nenhuma foto favoritada'}. ${remaining === 1 ? '1 restante' : 'Nenhuma restante'}`,
+
 		confirmTitle: 'Confirmar escolha',
 		confirmMessage: 'Tem certeza? Sua foto será postada no Discord da comunidade para votação. Esta escolha não pode ser desfeita.',
 		confirmYes: 'Sim, escolher!',
@@ -105,9 +106,10 @@ export const pictureContestTranslations = {
 		favoriteLabel: 'Favorite',
 		alreadyFavorited: 'Already favorited',
 		favorite: (slot: number) => `Favorite ${slot}`,
-		favoriteSlotsFull: 'You already chose your 2 favorites',
+		favoriteSlotsFull: 'You already chose your favorite',
 		favoritedCountText: (favorited: number, remaining: number) =>
-			`${favorited} ${favorited === 1 ? 'photo favorited' : 'photos favorited'}. ${remaining} remaining`,
+			`${favorited === 1 ? '1 photo favorited' : 'No photos favorited'}. ${remaining === 1 ? '1 remaining' : 'None remaining'}`,
+
 		confirmTitle: 'Confirm choice',
 		confirmMessage: 'Are you sure? Your photo will be posted on the community Discord for voting. This choice cannot be undone.',
 		confirmYes: 'Yes, choose!',

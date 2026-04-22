@@ -56,13 +56,12 @@ export async function POST(request: NextRequest) {
 		.eq('unique_id', unique_id);
 
 	const existingCount = favorites?.length ?? 0;
-	if (existingCount >= 2) {
-		return NextResponse.json({ error: 'already_two_favorites' }, { status: 409 });
+	if (existingCount >= 1) {
+		return NextResponse.json({ error: 'already_one_favorite' }, { status: 409 });
 	}
 
-	// 5. Determine favorite slot
-	const usedSlots = new Set(favorites?.map((f) => f.favorite_slot) ?? []);
-	const favorite_slot = !usedSlots.has(1) ? 1 : 2;
+	// 5. Favorite slot is always 1
+	const favorite_slot = 1;
 
 	// 6. Insert into contest_favorites
 	const { error: insertError } = await supabase
@@ -77,7 +76,7 @@ export async function POST(request: NextRequest) {
 	if (insertError) {
 		// Handle race condition: PK constraint (unique_id, favorite_slot) catches duplicates
 		if (insertError.code === '23505') {
-			return NextResponse.json({ error: 'already_two_favorites' }, { status: 409 });
+			return NextResponse.json({ error: 'already_one_favorite' }, { status: 409 });
 		}
 		console.error('Failed to insert favorite:', insertError);
 		return NextResponse.json({ error: 'insert_failed' }, { status: 500 });

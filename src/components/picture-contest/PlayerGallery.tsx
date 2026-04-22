@@ -31,11 +31,6 @@ export default function PlayerGallery({
 	const [choosing, setChoosing] = useState(false);
 	const [successPictureId, setSuccessPictureId] = useState<number | null>(null);
 
-	function getFavoriteSlot(pic: PictureData): number | null {
-		if (pic.is_favorite_1) return 1;
-		return null;
-	}
-
 	async function handleChooseFavorite(picture: PictureData) {
 		setChoosing(true);
 		try {
@@ -58,14 +53,10 @@ export default function PlayerGallery({
 			}
 
 			// Update local state
-			const slot = data.favorite_slot as number;
 			setLocalPictures((prev) =>
 				prev.map((p) =>
 					p.id === picture.id
-						? {
-							...p,
-							is_favorite_1: slot === 1 ? true : p.is_favorite_1,
-						}
+						? { ...p, is_favorite_1: true }
 						: p
 				)
 			);
@@ -98,15 +89,14 @@ export default function PlayerGallery({
 					{t.picturesCount(localPictures.length)}
 				</p>
 				<p className="text-sm text-neutral-600 font-body mt-1">
-					{t.favoritedCountText(favCount, 2 - favCount)}
+					{t.favoritedCountText(favCount, 1 - favCount)}
 				</p>
 			</div>
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
 				{localPictures.map((picture) => {
-					const slot = getFavoriteSlot(picture);
-					const isFavorite = slot !== null;
-					const canChoose = !isFavorite && favCount < 2;
+					const isFavorite = picture.is_favorite_1;
+					const canChoose = !isFavorite && favCount < 1;
 
 					return (
 						<div key={picture.id} className="relative">

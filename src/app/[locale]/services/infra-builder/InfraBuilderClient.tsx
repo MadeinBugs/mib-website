@@ -5,7 +5,9 @@ import type { ServiceItem, SelectedServiceItem, ServiceCategory, Locale } from '
 import { createInitialState } from '@/lib/services/builder-types';
 import type { BuilderState } from '@/lib/services/builder-types';
 import { createBuilderReducer } from '@/lib/services/builder-reducer';
+import { computeGrandTotal } from '@/lib/services/pricing';
 import CategorySection from '@/components/services/builder/CategorySection';
+import AbandonmentTracker from '@/components/services/builder/AbandonmentTracker';
 import SummaryPanel from '@/components/services/summary/SummaryPanel';
 import ClientDeliverablesPanel from '@/components/services/deliverables/ClientDeliverablesPanel';
 import QuoteSubmitForm from '@/components/services/form/QuoteSubmitForm';
@@ -180,8 +182,20 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 		setShowMobileSummary(false);
 	}, []);
 
+	const grandTotal = useMemo(() => {
+		const selectedArray = Object.values(state.selectedItems);
+		if (selectedArray.length === 0) return 0;
+		return computeGrandTotal(catalog, selectedArray, state.currency, state.maintenanceMonths, state.bundleAdded).grandTotal;
+	}, [catalog, state.selectedItems, state.currency, state.maintenanceMonths, state.bundleAdded]);
+
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
+			<AbandonmentTracker
+				itemCount={selectedCount}
+				estimatedTotal={grandTotal}
+				currency={state.currency}
+				submitted={state.submissionState === 'success'}
+			/>
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 lg:py-8">
 				{/* Header */}
 				<div className="mb-6">
@@ -349,6 +363,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 				<div className="p-5">
 					<QuoteSubmitForm
 						locale={locale}
+						catalog={catalog}
 						state={state}
 						dispatch={dispatch}
 						onClose={() => setShowSubmitForm(false)}

@@ -184,6 +184,7 @@ export interface QuoteSubmission {
 	honeypot: string;
 	refParam?: string;
 	clientComputedTotal: number;
+	bundleAdded?: string[];
 }
 
 export interface ComputedTotals {
@@ -206,7 +207,8 @@ export type ValidationErrorCode =
 	| 'PRICE_DRIFT_TOO_LARGE'
 	| 'TERMS_VERSION_MISMATCH'
 	| 'CATALOG_VERSION_MISMATCH'
-	| 'HONEYPOT_TRIGGERED';
+	| 'HONEYPOT_TRIGGERED'
+	| 'BUNDLE_INVALID';
 
 export type ValidationResult =
 	| { ok: true; data: QuoteSubmission; computedTotals: ComputedTotals }

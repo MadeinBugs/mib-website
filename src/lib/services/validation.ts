@@ -8,6 +8,7 @@ import type {
 	Currency,
 } from './types';
 import { computeGrandTotal } from './pricing';
+import { isBundleEligible } from './bundling';
 import { TERMS_VERSION } from './defaults';
 import { CATALOG_VERSION } from './catalog-version.generated';
 
@@ -47,6 +48,7 @@ export const QuoteSubmissionSchema = z.object({
 	honeypot: z.string().max(500),
 	refParam: z.string().max(100).optional(),
 	clientComputedTotal: z.number().nonnegative(),
+	bundleAdded: z.array(z.string().min(1).max(100)).max(10).optional(),
 });
 
 export type ValidatedSubmission = z.infer<typeof QuoteSubmissionSchema>;
@@ -172,12 +174,21 @@ export function validateSubmissionAgainstCatalog(
 		}
 	}
 
+	// Bundle validation: if client claims bundle, server re-verifies eligibility
+	const bundleAdded = submission.bundleAdded ?? [];
+	if (bundleAdded.length > 0) {
+		if (!isBundleEligible(catalog, selectedItems)) {
+			return makeError('Bundle conditions are not met.', 'BUNDLE_INVALID');
+		}
+	}
+
 	// Rule 7, 11, 13: Compute server-side total and check drift
 	const computedTotals = computeGrandTotal(
 		catalog,
 		selectedItems,
 		currency as Currency,
-		maintenanceMonths
+		maintenanceMonths,
+		bundleAdded
 	);
 
 	const serverTotal = computedTotals.grandTotal;

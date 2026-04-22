@@ -1,28 +1,64 @@
 'use client';
 
-import { useState, useRef } from 'react';
-import type { Locale } from '../../../lib/services/types';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import type { Locale, ServiceItem } from '../../../lib/services/types';
 import type { BuilderState, BuilderAction } from '../../../lib/services/builder-types';
+import { computeGrandTotal } from '../../../lib/services/pricing';
+import { CATALOG_VERSION } from '../../../lib/services/catalog-version.generated';
+import { TERMS_VERSION } from '../../../lib/services/defaults';
 import ConsentCheckbox from './ConsentCheckbox';
 import HoneypotField from './HoneypotField';
 
 interface QuoteSubmitFormProps {
 	locale: Locale;
+	catalog: ServiceItem[];
 	state: BuilderState;
 	dispatch: React.Dispatch<BuilderAction>;
 	onClose: () => void;
 }
 
-export default function QuoteSubmitForm({ locale, state, dispatch, onClose }: QuoteSubmitFormProps) {
-	const honeypotRef = useRef<HTMLInputElement>(null);
+const ERROR_MESSAGES: Record<string, Record<Locale, string>> = {
+	PRICE_DRIFT_TOO_LARGE: {
+		en: 'Our pricing has been updated since you started. Please refresh and review your package.',
+		'pt-BR': 'Nossos preços foram atualizados desde que você começou. Atualize e revise seu pacote.',
+	},
+	CATALOG_VERSION_MISMATCH: {
+		en: 'Our catalog has been updated. Please refresh the page and review your selections.',
+		'pt-BR': 'Nosso catálogo foi atualizado. Atualize a página e revise suas seleções.',
+	},
+	TERMS_VERSION_MISMATCH: {
+		en: 'Our terms have been updated. Please refresh the page and review your consent.',
+		'pt-BR': 'Nossos termos foram atualizados. Atualize a página e revise seu consentimento.',
+	},
+	BUNDLE_INVALID: {
+		en: 'Bundle conditions are no longer met. Please review your selections.',
+		'pt-BR': 'As condições do bundle não são mais atendidas. Revise suas seleções.',
+	},
+	RATE_LIMITED: {
+		en: 'Too many requests. Please wait a minute and try again.',
+		'pt-BR': 'Muitas tentativas. Aguarde um minuto e tente novamente.',
+	},
+	GENERIC: {
+		en: 'Something went wrong. Please try again.',
+		'pt-BR': 'Algo deu errado. Tente novamente.',
+	},
+};
+
+function getErrorMessage(code: string | undefined, status: number, locale: Locale): string {
+	if (status === 429) return ERROR_MESSAGES.RATE_LIMITED[locale];
+	if (code && ERROR_MESSAGES[code]) return ERROR_MESSAGES[code][locale];
+	return ERROR_MESSAGES.GENERIC[locale];
+}
+
+export default function QuoteSubmitForm({ locale, catalog, state, dispatch, onClose }: QuoteSubmitFormProps) {
+	const router = useRouter();
 	const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 
-		// Honeypot check — DOM field is "company_url_confirm" to confuse bots.
-		// Phase 5: when wiring to POST /api/services/quote-request, send the value
-		// as JSON property "honeypot" (matches Zod schema), not the DOM field name.
+		// Honeypot check — DOM field is "company_url_confirm"
 		const honeypotEl = document.getElementById('company_url_confirm') as HTMLInputElement | null;
 		if (honeypotEl?.value) return;
 
@@ -47,44 +83,67 @@ export default function QuoteSubmitForm({ locale, state, dispatch, onClose }: Qu
 		setValidationErrors([]);
 		dispatch({ type: 'SUBMIT_START' });
 
-		// Phase 4: Mock submission — logs to console
-		console.log('[InfraBuilder] Mock quote submission:', {
-			selectedItems: state.selectedItems,
-			maintenanceMonths: state.maintenanceMonths,
-			currency: state.currency,
-			clientInfo: state.clientInfo,
-			locale: state.locale,
-			refParam: state.refParam,
-		});
-
-		// Simulate success after brief delay
-		setTimeout(() => {
-			dispatch({ type: 'SUBMIT_SUCCESS', quoteId: 'mock-' + Date.now() });
-		}, 800);
-	};
-
-	if (state.submissionState === 'success') {
-		return (
-			<div className="text-center py-8 space-y-4">
-				<div className="text-4xl">✅</div>
-				<h3 className="text-lg font-bold text-neutral-800">
-					{locale === 'en' ? 'Quote Request Sent!' : 'Solicitação Enviada!'}
-				</h3>
-				<p className="text-sm text-neutral-600">
-					{locale === 'en'
-						? "We'll get back to you within 2 business days."
-						: 'Retornaremos em até 2 dias úteis.'}
-				</p>
-				<button
-					type="button"
-					onClick={onClose}
-					className="btn-crayon bg-[#04c597] hover:bg-[#036b54] text-white px-6 py-2 rounded-lg font-medium transition-colors"
-				>
-					{locale === 'en' ? 'Close' : 'Fechar'}
-				</button>
-			</div>
+		// Compute client-side total for drift detection
+		const selectedItems = Object.values(state.selectedItems);
+		const totals = computeGrandTotal(
+			catalog,
+			selectedItems,
+			state.currency,
+			state.maintenanceMonths,
+			state.bundleAdded
 		);
-	}
+
+		const payload = {
+			locale: state.locale,
+			currency: state.currency,
+			selectedItems,
+			maintenanceMonths: state.maintenanceMonths,
+			clientInfo: {
+				name: state.clientInfo.name.trim(),
+				email: state.clientInfo.email.trim(),
+				...(state.clientInfo.studioName.trim() ? { studioName: state.clientInfo.studioName.trim() } : {}),
+				...(state.clientInfo.studioWebsite.trim() ? { studioWebsite: state.clientInfo.studioWebsite.trim() } : {}),
+				...(state.clientInfo.message.trim() ? { message: state.clientInfo.message.trim() } : {}),
+			},
+			consentAccepted: true as const,
+			termsVersion: TERMS_VERSION,
+			catalogVersion: CATALOG_VERSION,
+			honeypot: '',
+			...(state.refParam ? { refParam: state.refParam } : {}),
+			clientComputedTotal: totals.grandTotal,
+			...(state.bundleAdded.length > 0 ? { bundleAdded: state.bundleAdded } : {}),
+		};
+
+		try {
+			window.umami?.track('quote_submission_started', { itemCount: selectedItems.length, currency: state.currency });
+
+			const res = await fetch('/api/services/quote-request', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(payload),
+			});
+
+			if (!res.ok) {
+				const data = await res.json().catch(() => ({}));
+				const errorMsg = getErrorMessage(data.code, res.status, locale);
+				window.umami?.track('quote_submission_error', { code: data.code || 'unknown', status: res.status });
+				dispatch({ type: 'SUBMIT_ERROR', error: errorMsg });
+				return;
+			}
+
+			const data = await res.json();
+			window.umami?.track('quote_submitted', { itemCount: selectedItems.length, total: totals.grandTotal, currency: state.currency });
+			dispatch({ type: 'SUBMIT_SUCCESS', quoteId: data.id });
+
+			// Navigate to the quote-sent page
+			router.push(`/${locale}/services/quote-sent?id=${data.id}`);
+		} catch {
+			dispatch({
+				type: 'SUBMIT_ERROR',
+				error: ERROR_MESSAGES.GENERIC[locale],
+			});
+		}
+	};
 
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">

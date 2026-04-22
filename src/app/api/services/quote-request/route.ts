@@ -82,11 +82,13 @@ async function sendConfirmationEmail(
 }
 
 function buildSelectedItemSnapshots(
-	submission: QuoteSubmission
+	submission: QuoteSubmission,
+	bundleAdded: string[]
 ): SelectedItemSnapshot[] {
+	const bundleSet = new Set(bundleAdded);
 	return submission.selectedItems.map((item) => {
 		const service = getServiceById(item.serviceId)!;
-		const currency = submission.currency;
+		const isBundled = bundleSet.has(item.serviceId);
 
 		const configurations = item.configurations.map((selConfig) => {
 			const config = service.configurations?.find((c) => c.id === selConfig.configurationId);
@@ -151,16 +153,17 @@ function buildSelectedItemSnapshots(
 			serviceId: service.id,
 			serviceName: service.name,
 			serviceCategory: service.category,
-			basePrice: service.basePrice,
+			basePrice: isBundled ? { BRL: 0, USD: 0 } : service.basePrice,
 			configurations,
 			customFields,
-			maintenancePrice,
+			maintenancePrice: isBundled ? { BRL: 0, USD: 0 } : maintenancePrice,
 			maintenanceBreakdown: maintenanceBRL ? {
 				base: maintenanceBRL.base,
 				modifiers: maintenanceBRL.modifiers,
 			} : undefined,
 			deliverables,
 			thirdPartyCosts,
+			...(isBundled ? { bundledFree: true } : {}),
 		};
 	});
 }
@@ -236,7 +239,8 @@ export async function POST(request: NextRequest) {
 	const ipHash = hashIp(ip);
 
 	// Build snapshot
-	const selectedItemSnapshots = buildSelectedItemSnapshots(submission);
+	const bundleAdded = submission.bundleAdded ?? [];
+	const selectedItemSnapshots = buildSelectedItemSnapshots(submission, bundleAdded);
 
 	// Pending items
 	const { hasPending, count: pendingCount } = countPendingItems(SERVICE_CATALOG, submission.selectedItems);

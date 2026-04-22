@@ -8,6 +8,7 @@ import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeSanitize from 'rehype-sanitize';
+import { FaGift } from 'react-icons/fa';
 import type { SelectedItemSnapshot, Locale, Currency } from '@/lib/services/types';
 
 interface Props {
@@ -111,11 +112,16 @@ export default async function QuoteViewPage({ params, searchParams }: Props) {
 						{items.map((item) => (
 							<div key={item.serviceId} className="border border-neutral-200 rounded-lg p-4">
 								<div className="flex justify-between items-start">
-									<div>
+									<div className="flex items-center gap-2">
 										<h3 className="font-semibold text-neutral-800">
 											{item.serviceName[locale]}
 										</h3>
-										<p className="text-xs text-neutral-400 uppercase">{item.serviceCategory}</p>
+										{item.bundledFree && (
+											<span className="inline-flex items-center gap-1 text-xs text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full">
+												<FaGift className="text-[10px]" />
+												{locale === 'pt-BR' ? 'incluído grátis' : 'bundled free'}
+											</span>
+										)}
 									</div>
 									<span className="text-neutral-800 font-semibold">
 										{formatPrice(item.basePrice[currency], currency)}

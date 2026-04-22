@@ -236,7 +236,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 						</div>
 						<div className="shrink-0 flex items-center gap-2">
 							<a
-								href="https://agenda.madeinbugs.com.br"
+								href="https://agenda.madeinbugs.com.br/andressmartin/consultoria-infraestrutura"
 								target="_blank"
 								rel="noopener noreferrer"
 								className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors"

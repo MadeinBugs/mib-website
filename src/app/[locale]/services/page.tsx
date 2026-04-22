@@ -64,7 +64,7 @@ export default async function ServicesPage({ params }: Props) {
 						{locale === 'pt-BR' ? 'Montar meu pacote' : 'Build my package'}
 					</Link>
 					<a
-						href="https://agenda.madeinbugs.com.br"
+						href="https://agenda.madeinbugs.com.br/andressmartin/consultoria-infraestrutura"
 						target="_blank"
 						rel="noopener noreferrer"
 						className="inline-block px-8 py-4 border-2 border-neutral-300 text-neutral-700 font-semibold text-lg rounded-lg hover:bg-neutral-50 transition-colors"
@@ -206,7 +206,7 @@ export default async function ServicesPage({ params }: Props) {
 						{locale === 'pt-BR' ? 'Montar meu pacote' : 'Build my package'}
 					</Link>
 					<a
-						href="https://agenda.madeinbugs.com.br"
+						href="https://agenda.madeinbugs.com.br/andressmartin/consultoria-infraestrutura"
 						target="_blank"
 						rel="noopener noreferrer"
 						className="inline-block px-8 py-4 border-2 border-neutral-300 text-neutral-700 font-semibold text-lg rounded-lg hover:bg-neutral-50 transition-colors"

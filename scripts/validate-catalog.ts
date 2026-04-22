@@ -194,6 +194,14 @@ function checkBilingualStrings() {
 					if (option.description) {
 						validateBilingualString(option.description, `${ctx} > config "${config.id}" > option "${option.id}" description`);
 					}
+					if (option.additionalDeliverables) {
+						for (const d of option.additionalDeliverables) {
+							validateBilingualString(d.label, `${ctx} > config "${config.id}" > option "${option.id}" > deliverable "${d.id}" label`);
+							if (d.description) {
+								validateBilingualString(d.description, `${ctx} > config "${config.id}" > option "${option.id}" > deliverable "${d.id}" description`);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -264,6 +272,44 @@ function checkStudioControlPanelExists() {
 	}
 }
 
+// --- Check 10: Deliverable structure (id, type, required) ---
+function checkDeliverableStructure() {
+	const validTypes = ['domain', 'account-access', 'payment-method', 'credentials', 'decision', 'other'];
+
+	function validateDeliverable(d: { id?: string; type?: string; required?: boolean }, ctx: string) {
+		if (typeof d.id !== 'string' || d.id.length === 0) {
+			error(`${ctx}: deliverable missing or empty id`);
+		}
+		if (!validTypes.includes(d.type as string)) {
+			error(`${ctx}: deliverable "${d.id}" has invalid type "${d.type}"`);
+		}
+		if (typeof d.required !== 'boolean') {
+			error(`${ctx}: deliverable "${d.id}" missing required field (must be boolean)`);
+		}
+	}
+
+	for (const service of SERVICE_CATALOG) {
+		const ctx = `[${service.id}]`;
+		for (const d of service.clientDeliverables) {
+			validateDeliverable(d, `${ctx} clientDeliverables`);
+		}
+		if (service.configurations) {
+			for (const config of service.configurations) {
+				for (const option of config.options) {
+					if (option.additionalDeliverables) {
+						for (const d of option.additionalDeliverables) {
+							validateDeliverable(
+								d,
+								`${ctx} config "${config.id}" > option "${option.id}" additionalDeliverables`
+							);
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 // --- Generate catalog version hash ---
 function generateCatalogVersion(): string {
 	const serialized = JSON.stringify(SERVICE_CATALOG);
@@ -289,6 +335,7 @@ checkBilingualStrings();
 checkActiveConfigValidity();
 checkCustomFieldSanity();
 checkStudioControlPanelExists();
+checkDeliverableStructure();
 
 if (errors.length > 0) {
 	console.error(`\n💀 Catalog validation failed with ${errors.length} error(s).`);

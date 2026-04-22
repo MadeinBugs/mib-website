@@ -5,7 +5,6 @@ import type { ServiceItem, SelectedServiceItem, ServiceCategory, Locale } from '
 import { createInitialState } from '@/lib/services/builder-types';
 import type { BuilderState } from '@/lib/services/builder-types';
 import { createBuilderReducer } from '@/lib/services/builder-reducer';
-import { collectDeliverables } from '@/lib/services/pricing';
 import CategorySection from '@/components/services/builder/CategorySection';
 import SummaryPanel from '@/components/services/summary/SummaryPanel';
 import ClientDeliverablesPanel from '@/components/services/deliverables/ClientDeliverablesPanel';
@@ -176,11 +175,6 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 	const selectedCount = Object.keys(state.selectedItems).length;
 	const allSelectedIds = useMemo(() => new Set(Object.keys(state.selectedItems)), [state.selectedItems]);
 
-	const deliverables = useMemo(
-		() => collectDeliverables(catalog, Object.values(state.selectedItems)),
-		[catalog, state.selectedItems]
-	);
-
 	const handleSubmitClick = useCallback(() => {
 		setShowSubmitForm(true);
 		setShowMobileSummary(false);
@@ -295,11 +289,9 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 							dispatch={dispatch}
 							onSubmitClick={handleSubmitClick}
 						/>
-						{deliverables.length > 0 && (
-							<div className="mt-4">
-								<ClientDeliverablesPanel deliverables={deliverables} locale={locale} />
-							</div>
-						)}
+						<div className="mt-4">
+							<ClientDeliverablesPanel catalog={catalog} selectedItems={Object.values(state.selectedItems)} locale={locale} />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -343,9 +335,7 @@ export default function InfraBuilderClient({ locale, catalog }: InfraBuilderClie
 						dispatch={dispatch}
 						onSubmitClick={handleSubmitClick}
 					/>
-					{deliverables.length > 0 && (
-						<ClientDeliverablesPanel deliverables={deliverables} locale={locale} />
-					)}
+					<ClientDeliverablesPanel catalog={catalog} selectedItems={Object.values(state.selectedItems)} locale={locale} />
 				</div>
 			</Modal>
 

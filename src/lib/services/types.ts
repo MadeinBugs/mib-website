@@ -36,6 +36,8 @@ export interface ClientDeliverable {
 	type: DeliverableType;
 	label: BilingualString;
 	description?: BilingualString;
+	/** Whether the client MUST provide this for the service to be completed */
+	required: boolean;
 }
 
 export interface ThirdPartyCost {

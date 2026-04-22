@@ -72,7 +72,6 @@ body:has(.services-theme) {
 	font-family: var(--font-services-sans, 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif) !important;
 	color: inherit !important;
 	text-shadow: none !important;
-	font-size: inherit !important;
 	letter-spacing: -0.01em;
 }
 

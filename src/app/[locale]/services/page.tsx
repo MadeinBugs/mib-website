@@ -40,15 +40,15 @@ export default async function ServicesPage({ params }: Props) {
 
 			{/* Hero Section */}
 			<section className="px-6 py-20 max-w-5xl mx-auto text-center">
-				<h1 className="text-4xl md:text-5xl font-bold text-service-text-primary mb-6">
+				<h1 className="text-3xl md:text-4xl font-bold text-service-text-primary mb-6">
 					{locale === 'pt-BR'
-						? 'Monte a infraestrutura do seu estúdio, sem a dor de cabeça do setup'
-						: 'Set up your studio\'s infrastructure, without the setup'}
+						? 'Infra sem dor de cabeça'
+						: 'Infra without the headache'}
 				</h1>
 				<p className="text-lg text-service-text-secondary max-w-2xl mx-auto mb-10">
 					{locale === 'pt-BR'
-						? 'Escolha os serviços que você precisa, configure, veja o preço ao vivo e envie um pedido de orçamento — tudo em um só lugar.'
-						: 'Choose the services you need, configure them, see live pricing, and submit a quote request — all in one place.'}
+						? 'Escolha os serviços que você precisa, configure e envie um pedido de orçamento.'
+						: 'Choose the services you need, configure them and submit a quote request.'}
 				</p>
 				<div className="flex flex-col sm:flex-row gap-4 justify-center">
 					<Link
@@ -72,21 +72,21 @@ export default async function ServicesPage({ params }: Props) {
 			<section className="px-6 py-16 bg-service-bg-elevated/50">
 				<div className="max-w-3xl mx-auto">
 					<h2 className="text-2xl font-bold text-service-text-primary mb-6 text-center">
-						{locale === 'pt-BR' ? 'A dor que você já conhece' : 'The pain you already know'}
+						{locale === 'pt-BR' ? 'A gente conhce o sofrimento' : 'We know the struggle'}
 					</h2>
 					<ul className="space-y-4 text-service-text-secondary">
 						{(locale === 'pt-BR'
 							? [
-								'Configurar CI/CD, CRM, lista de emails e analytics individualmente leva semanas',
+								'Configurar CI/CD, CRM, lista de emails e analytics individualmente',
 								'Cada ferramenta tem sua própria conta, fatura e painel de controle',
-								'Sem um DevOps dedicado, a infraestrutura acumula dívida técnica silenciosamente',
-								'Plataformas SaaS cobram por assento — os custos escalam com a equipe',
+								'Sem um DevOps dedicado, a infraestrutura acumula dívida técnica',
+								'Plataformas SaaS cobram por assento, custos escalam com a equipe',
 							]
 							: [
-								'Setting up CI/CD, CRM, mailing list, and analytics individually takes weeks',
+								'Setting up CI/CD, CRM, mailing list, and analytics individually',
 								'Each tool has its own account, billing, and dashboard',
-								'Without dedicated DevOps, infrastructure silently accumulates tech debt',
-								'SaaS platforms charge per seat — costs scale with your team',
+								'Without dedicated DevOps, infrastructure accumulates tech debt',
+								'SaaS platforms charge per seat, costs scale with your team',
 							]
 						).map((item, i) => (
 							<li key={i} className="flex items-start gap-3">
@@ -116,7 +116,7 @@ export default async function ServicesPage({ params }: Props) {
 							{ key: 'social-media', en: 'Social Media', pt: 'Redes Sociais', Icon: FaMobileAlt },
 							{ key: 'web-gamedev', en: 'Web & Gamedev', pt: 'Web & Gamedev', Icon: FaGamepad },
 						] as Array<{ key: string; en: string; pt: string; Icon: IconType }>).map((cat, index) => {
-							const iconColors = ['#3dd68c', '#1ed8a4', '#58d5ba', '#0ad8b6', '#49c3db', '#75c7f0', '#9db1ff', '#b0a9ff', '#bba5ff', '#d59cff', '#dc8fe8', '#ff80ca'];
+							const iconColors = ['#3dd68c', '#1ed8a4', '#58d5ba', '#49c3db', '#75c7f0', '#9db1ff', '#b0a9ff', '#bba5ff', '#d59cff', '#dc8fe8', '#ff80ca'];
 							return (
 								<Link
 									key={cat.key}
@@ -190,7 +190,7 @@ export default async function ServicesPage({ params }: Props) {
 
 			{/* Final CTA */}
 			<section className="px-6 py-20 text-center">
-				<h2 className="text-3xl font-bold text-service-text-primary mb-6">
+				<h2 className="text-2xl font-bold text-service-text-primary mb-6">
 					{locale === 'pt-BR'
 						? 'Pronto para parar de manter infraestrutura?'
 						: 'Ready to stop maintaining infrastructure?'}

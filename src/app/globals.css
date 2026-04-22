@@ -7,8 +7,8 @@
 @tailwind utilities;
 
 /* HIGH PRIORITY: Tarot card H1 styling - Clean and simple */
-h1,
-.heading-crayon {
+body:not(:has(.services-theme)) h1,
+body:not(:has(.services-theme)) .heading-crayon {
   font-family: 'Amatic SC', cursive !important; /* H1 headings - Tarot card style */
   font-weight: 700 !important;
   font-size: 4rem !important; /* 48px - Larger tarot card style */

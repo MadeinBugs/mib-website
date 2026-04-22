@@ -71,7 +71,7 @@ export const privacyIndex: LegalIndexContent = {
 // /privacy/services
 // ---------------------------------------------------------------------------
 
-const contactLink = React.createElement('a', { href: 'mailto:andress@madeinbugs.com.br', className: 'text-blue-600 hover:underline' }, 'andress@madeinbugs.com.br');
+const contactLink = React.createElement('a', { href: 'mailto:hello@madeinbugs.com.br', className: 'text-blue-600 hover:underline' }, 'hello@madeinbugs.com.br');
 
 export const servicesPrivacy: LegalPageContent = {
 	en: {
@@ -388,7 +388,7 @@ export const newsletterPrivacy: LegalPageContent = {
 // /privacy/picture-contest
 // ---------------------------------------------------------------------------
 
-const pictureContactLink = React.createElement('a', { href: 'mailto:contato@madeinbugs.com.br', className: 'text-blue-600 hover:underline' }, 'contato@madeinbugs.com.br');
+const pictureContactLink = React.createElement('a', { href: 'mailto:hello@madeinbugs.com.br', className: 'text-blue-600 hover:underline' }, 'hello@madeinbugs.com.br');
 
 export const pictureContestPrivacy: LegalPageContent = {
 	en: {

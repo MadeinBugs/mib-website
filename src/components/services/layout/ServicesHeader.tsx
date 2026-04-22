@@ -21,13 +21,13 @@ export default function ServicesHeader({ locale }: ServicesHeaderProps) {
 
 	return (
 		<header className="border-b border-service-border bg-service-bg/80 backdrop-blur-sm sticky top-0 z-40">
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
 				<Link
 					href={`/${locale}`}
-					className="flex items-center gap-2 text-service-text-primary hover:text-service-accent transition-colors"
+					className="flex items-center gap-3 hover:opacity-80 transition-opacity"
 				>
-					<span className="font-bold text-lg tracking-tight">Made in Bugs</span>
-					<span className="text-xs text-service-text-tertiary hidden sm:inline">/ Services</span>
+					<img src="/assets/logo_white.png" alt="Made in Bugs" className="h-10 w-auto" />
+					<span className="text-base font-semibold text-white hidden sm:inline">/ business</span>
 				</Link>
 
 				<nav className="flex items-center gap-4 sm:gap-6">
@@ -55,8 +55,8 @@ export default function ServicesHeader({ locale }: ServicesHeaderProps) {
 						<Link
 							href={switchLanguage('pt-BR')}
 							className={`px-2 py-1 rounded text-xs font-medium transition-colors ${currentLocale === 'pt-BR'
-									? 'bg-service-accent text-white'
-									: 'text-service-text-secondary hover:text-service-text-primary'
+								? 'bg-service-accent text-white'
+								: 'text-service-text-secondary hover:text-service-text-primary'
 								}`}
 						>
 							PT
@@ -64,8 +64,8 @@ export default function ServicesHeader({ locale }: ServicesHeaderProps) {
 						<Link
 							href={switchLanguage('en')}
 							className={`px-2 py-1 rounded text-xs font-medium transition-colors ${currentLocale === 'en'
-									? 'bg-service-accent text-white'
-									: 'text-service-text-secondary hover:text-service-text-primary'
+								? 'bg-service-accent text-white'
+								: 'text-service-text-secondary hover:text-service-text-primary'
 								}`}
 						>
 							EN

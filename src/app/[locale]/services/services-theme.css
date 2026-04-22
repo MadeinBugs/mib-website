@@ -1,7 +1,7 @@
 .services-theme {
 	/* Palette */
-	--service-bg: #060a10;
-	--service-bg-elevated: #030508;
+	--service-bg: #070c14;
+	--service-bg-elevated: #070a0d;
 	--service-bg-strong: #1a1a1a;
 	--service-border: #262626;
 	--service-border-strong: #404040;
@@ -9,7 +9,7 @@
 	--service-text-secondary: #a3a3a3;
 	--service-text-tertiary: #525252;
 	--service-accent: #2B9CA5;
-	--service-accent-hover: #24858d;
+	--service-accent-hover: #1b6e76;
 	--service-success: #10b981;
 	--service-warning: #f59e0b;
 	--service-error: #ef4444;
@@ -61,4 +61,26 @@ body:has(.services-theme) {
 .services-theme code,
 .services-theme .font-mono {
 	font-family: var(--font-services-mono, ui-monospace), SFMono-Regular, Menlo, monospace;
+}
+
+/* Override site-wide Amatic SC / goldenrod heading styles */
+.services-theme h1,
+.services-theme h2,
+.services-theme h3,
+.services-theme h4,
+.services-theme .heading-crayon {
+	font-family: var(--font-services-sans, 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif) !important;
+	color: inherit !important;
+	text-shadow: none !important;
+	font-size: inherit !important;
+	letter-spacing: -0.01em;
+}
+
+.services-theme h1 {
+	font-weight: 700 !important;
+	letter-spacing: -0.02em;
+}
+
+.services-theme h2 {
+	font-weight: 600 !important;
 }

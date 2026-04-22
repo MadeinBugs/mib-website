@@ -124,8 +124,8 @@ export const infrastructureServices: ServiceItem[] = [
 		id: 'studio-control-panel',
 		category: 'infrastructure',
 		name: {
-			en: 'Studio Control Panel',
-			'pt-BR': 'Painel de Controle do Estúdio',
+			en: 'Control Panel',
+			'pt-BR': 'Painel de Controle',
 		},
 		shortDescription: {
 			en: 'A single beautiful page that gives you quick access to all your tools — analytics, CRM, scheduling, mailing list, and anything else in your package. One login, one place.',

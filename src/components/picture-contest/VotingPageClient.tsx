@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import PolaroidCard from './PolaroidCard';
+import { useState, useEffect } from 'react';
 import VotingCard from './VotingCard';
 import { PictureContestLocaleProvider } from './PictureContestLocaleContext';
 import { usePictureContestLocale } from './PictureContestLocaleContext';
@@ -18,6 +17,7 @@ interface VotingPageClientProps {
 function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProps, 'locale'>) {
 	const { t, locale } = usePictureContestLocale();
 	const [votedIds, setVotedIds] = useState<Set<number>>(new Set());
+	const [hydrated, setHydrated] = useState(false);
 	const [voteCounts, setVoteCounts] = useState<Map<number, number>>(
 		() => new Map(photos.map((p) => [p.id, p.voteCount]))
 	);
@@ -25,9 +25,15 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 	const [showCaptcha, setShowCaptcha] = useState(false);
 	const [pendingVoteId, setPendingVoteId] = useState<number | null>(null);
 
-	const hasVotedBefore = typeof window !== 'undefined'
-		? sessionStorage.getItem('contest_hasVotedBefore') === 'true'
-		: false;
+	useEffect(() => {
+		try {
+			const stored = localStorage.getItem('contest_voted_ids');
+			if (stored) {
+				setVotedIds(new Set(JSON.parse(stored) as number[]));
+			}
+		} catch { }
+		setHydrated(true);
+	}, []);
 
 	async function submitVote(pictureId: number, captchaToken?: string) {
 		setPendingIds((s) => new Set(s).add(pictureId));
@@ -43,7 +49,11 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 			});
 
 			if (res.ok) {
-				setVotedIds((s) => new Set(s).add(pictureId));
+				setVotedIds((s) => {
+					const next = new Set(s).add(pictureId);
+					localStorage.setItem('contest_voted_ids', JSON.stringify([...next]));
+					return next;
+				});
 				setVoteCounts((m) => {
 					const next = new Map(m);
 					next.set(pictureId, (next.get(pictureId) ?? 0) + 1);
@@ -52,7 +62,11 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 				sessionStorage.setItem('contest_hasVotedBefore', 'true');
 			} else if (res.status === 409) {
 				// Already voted — sync local state
-				setVotedIds((s) => new Set(s).add(pictureId));
+				setVotedIds((s) => {
+					const next = new Set(s).add(pictureId);
+					localStorage.setItem('contest_voted_ids', JSON.stringify([...next]));
+					return next;
+				});
 			} else if (res.status === 400) {
 				const data = await res.json();
 				if (data.error?.includes('Captcha')) {
@@ -84,6 +98,7 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 				setVotedIds((s) => {
 					const next = new Set(s);
 					next.delete(pictureId);
+					localStorage.setItem('contest_voted_ids', JSON.stringify([...next]));
 					return next;
 				});
 				setVoteCounts((m) => {
@@ -107,7 +122,10 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 
 		if (votedIds.has(pictureId)) {
 			submitUnvote(pictureId);
-		} else if (hasVotedBefore || sessionStorage.getItem('contest_hasVotedBefore') === 'true') {
+		} else if (
+			sessionStorage.getItem('contest_hasVotedBefore') === 'true' ||
+			localStorage.getItem('contest_voted_ids') !== null
+		) {
 			submitVote(pictureId);
 		} else {
 			// First vote ever — need captcha
@@ -169,7 +187,7 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 					<VotingCard
 						key={photo.id}
 						photo={photo}
-						isVoted={votedIds.has(photo.id)}
+						isVoted={hydrated ? votedIds.has(photo.id) : false}
 						voteCount={voteCounts.get(photo.id) ?? photo.voteCount}
 						isPending={pendingIds.has(photo.id)}
 						isActive={isActive}
@@ -238,11 +256,13 @@ function HCaptchaWrapper({
 	siteKey: string;
 	onVerify: (token: string) => void;
 }) {
-	// Dynamic import avoids SSR issues with hCaptcha
 	const [HCaptcha, setHCaptcha] = useState<typeof import('@hcaptcha/react-hcaptcha').default | null>(null);
 
-	if (!HCaptcha) {
+	useEffect(() => {
 		import('@hcaptcha/react-hcaptcha').then((mod) => setHCaptcha(() => mod.default));
+	}, []);
+
+	if (!HCaptcha) {
 		return (
 			<div className="w-[303px] h-[78px] bg-neutral-100 rounded animate-pulse flex items-center justify-center">
 				<div className="w-6 h-6 border-2 border-neutral-300 border-t-neutral-600 rounded-full animate-spin" />

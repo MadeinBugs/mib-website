@@ -31,7 +31,7 @@ export default async function JobDetailPage({ params }: Props) {
 	const jobDetails = job.jobDetails?.[locale as 'en' | 'pt-BR'];
 
 	return (
-		<ContentLayout translations={t} locale={locale}>
+		<ContentLayout translations={t} locale={locale} showServicesNav={process.env.SERVICES_FEATURE_LIVE === 'true'}>
 			<div className="max-w-4xl mx-auto">
 				{/* Back Button */}
 				<Link

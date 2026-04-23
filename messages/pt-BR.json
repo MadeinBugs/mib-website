@@ -2,7 +2,8 @@
 	"navigation": {
 		"about": "Sobre Nós",
 		"portfolio": "Portfólio",
-		"contact": "Contato"
+		"contact": "Contato",
+		"services": "Serviços"
 	},
 	"homepage": {
 		"title": "Made in Bugs",
@@ -57,5 +58,71 @@
 		"signature": "— Andress & Bela",
 		"backToSite": "← Voltar ao site",
 		"ogDescription": "Inscreva-se na mailing list do Asumi para receber atualizações e novidades."
+	},
+	"services": {
+		"landing": {
+			"comingSoon": {
+				"title": "Em breve",
+				"description": "Estamos preparando nosso builder de infraestrutura. Fique de olho!",
+				"backHome": "← Voltar ao início"
+			},
+			"hero": {
+				"headline": "Infra sem dor de cabeça",
+				"subheadline": "Escolha os serviços que você precisa, configure e envie um pedido de orçamento.",
+				"ctaPrimary": "Montar meu pacote",
+				"ctaSecondary": "Não sabe o que precisa? Fale com a gente"
+			},
+			"problem": {
+				"title": "A gente conhece o sofrimento",
+				"items": [
+					"Configurar CI/CD, CRM, lista de emails e analytics individualmente",
+					"Cada ferramenta tem sua própria conta, fatura e painel de controle",
+					"Sem um DevOps dedicado, a infraestrutura acumula dívida técnica",
+					"Plataformas SaaS cobram por assento, custos escalam com a equipe"
+				]
+			},
+			"categories": {
+				"title": "O que oferecemos",
+				"infrastructure": "Infraestrutura",
+				"cicd": "Código & Entrega",
+				"automation": "Automação",
+				"crm": "CRM & Agendamento",
+				"marketing": "Marketing & Email",
+				"analytics": "Analytics & Insights",
+				"teamManagement": "Gestão de Equipe",
+				"socialMedia": "Redes Sociais",
+				"webGamedev": "Web & Gamedev"
+			},
+			"process": {
+				"title": "Como funciona",
+				"steps": [
+					{
+						"title": "Monte seu pacote",
+						"description": "Escolha serviços e configure"
+					},
+					{
+						"title": "Envie o orçamento",
+						"description": "Revise e envie"
+					},
+					{
+						"title": "Respondemos em 2-3 dias",
+						"description": "Com preço final"
+					},
+					{
+						"title": "A gente monta tudo",
+						"description": "Setup de ponta a ponta"
+					}
+				]
+			},
+			"stack": {
+				"title": "Veja em ação",
+				"subtitle": "Essa é a nossa própria infraestrutura. A gente usa o que vende."
+			},
+			"cta": {
+				"title": "Pronto para parar de manter infraestrutura?",
+				"ctaPrimary": "Montar meu pacote",
+				"ctaSecondary": "Ou fale com a gente primeiro"
+			}
+		}
 	}
 }

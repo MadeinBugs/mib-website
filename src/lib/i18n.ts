@@ -7,6 +7,7 @@ export interface Translations {
 		about: string;
 		portfolio: string;
 		contact: string;
+		services: string;
 	};
 	homepage: {
 		title: string;
@@ -41,6 +42,28 @@ export interface Translations {
 	legal: {
 		backToTerms: string;
 		backToPrivacy: string;
+	};
+	services: {
+		landing: {
+			comingSoon: { title: string; description: string; backHome: string };
+			hero: { headline: string; subheadline: string; ctaPrimary: string; ctaSecondary: string };
+			problem: { title: string; items: string[] };
+			categories: {
+				title: string;
+				infrastructure: string;
+				cicd: string;
+				automation: string;
+				crm: string;
+				marketing: string;
+				analytics: string;
+				teamManagement: string;
+				socialMedia: string;
+				webGamedev: string;
+			};
+			process: { title: string; steps: Array<{ title: string; description: string }> };
+			stack: { title: string; subtitle: string };
+			cta: { title: string; ctaPrimary: string; ctaSecondary: string };
+		};
 	};
 }
 

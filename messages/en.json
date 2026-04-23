@@ -2,7 +2,8 @@
 	"navigation": {
 		"about": "About Us",
 		"portfolio": "Portfolio",
-		"contact": "Contact"
+		"contact": "Contact",
+		"services": "Services"
 	},
 	"homepage": {
 		"title": "Made in Bugs",
@@ -57,5 +58,71 @@
 		"signature": "— Andress & Bela",
 		"backToSite": "← Back to site",
 		"ogDescription": "Sign up for the Asumi mailing list to receive updates and news."
+	},
+	"services": {
+		"landing": {
+			"comingSoon": {
+				"title": "Coming Soon",
+				"description": "We're preparing our infrastructure builder. Stay tuned!",
+				"backHome": "← Back to home"
+			},
+			"hero": {
+				"headline": "Infra without the headache",
+				"subheadline": "Choose the services you need, configure them and submit a quote request.",
+				"ctaPrimary": "Build my package",
+				"ctaSecondary": "Not sure what you need? Talk to us"
+			},
+			"problem": {
+				"title": "We know the struggle",
+				"items": [
+					"Setting up CI/CD, CRM, mailing list, and analytics individually",
+					"Each tool has its own account, billing, and dashboard",
+					"Without dedicated DevOps, infrastructure accumulates tech debt",
+					"SaaS platforms charge per seat, costs scale with your team"
+				]
+			},
+			"categories": {
+				"title": "What we offer",
+				"infrastructure": "Infrastructure",
+				"cicd": "Code & Delivery",
+				"automation": "Automation",
+				"crm": "CRM & Scheduling",
+				"marketing": "Marketing & Email",
+				"analytics": "Analytics & Insights",
+				"teamManagement": "Team Management",
+				"socialMedia": "Social Media",
+				"webGamedev": "Web & Gamedev"
+			},
+			"process": {
+				"title": "How it works",
+				"steps": [
+					{
+						"title": "Build your package",
+						"description": "Choose services and configure"
+					},
+					{
+						"title": "Submit quote",
+						"description": "Review and submit"
+					},
+					{
+						"title": "We respond in 2-3 days",
+						"description": "With final pricing"
+					},
+					{
+						"title": "We set it up end-to-end",
+						"description": "Full setup handled"
+					}
+				]
+			},
+			"stack": {
+				"title": "See it in action",
+				"subtitle": "This is our own infrastructure. We eat our own cooking."
+			},
+			"cta": {
+				"title": "Ready to stop maintaining infrastructure?",
+				"ctaPrimary": "Build my package",
+				"ctaSecondary": "Or talk to us first"
+			}
+		}
 	}
 }

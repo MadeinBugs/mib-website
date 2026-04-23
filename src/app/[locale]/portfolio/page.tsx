@@ -18,7 +18,7 @@ export default async function PortfolioPage({ params }: Props) {
 	const projects = getAllProjects();
 
 	return (
-		<ContentLayout translations={t} locale={locale}>
+		<ContentLayout translations={t} locale={locale} showServicesNav={process.env.SERVICES_FEATURE_LIVE === 'true'}>
 			<div className="space-y-8">
 				{/* Page Header */}
 				<div className="text-center space-y-6">

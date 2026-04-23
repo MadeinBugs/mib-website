@@ -13,6 +13,7 @@ interface ContentLayoutProps {
 	children: React.ReactNode;
 	translations: Translations;
 	locale: string;
+	showServicesNav?: boolean;
 }
 
 // Header navigation button component
@@ -51,7 +52,7 @@ function NavButtonHeader({ href, imageSrc, hoverImageSrc, label, isActive, isMob
 	);
 }
 
-export default function ContentLayout({ children, translations, locale }: ContentLayoutProps) {
+export default function ContentLayout({ children, translations, locale, showServicesNav = false }: ContentLayoutProps) {
 	const pathname = usePathname();
 
 	// Header navigation items with button images (same as homepage navigation)
@@ -100,7 +101,7 @@ export default function ContentLayout({ children, translations, locale }: Conten
 								/>
 							</div>
 						</Link>
-						<nav className="w-full flex justify-center mt-2">
+						<nav className="w-full flex flex-col items-center mt-2">
 							<div className="flex flex-row justify-center items-center gap-12 w-full custom-gap">
 								{navItems.map((item) => (
 									<NavButtonHeader
@@ -114,6 +115,17 @@ export default function ContentLayout({ children, translations, locale }: Conten
 									/>
 								))}
 							</div>
+							{showServicesNav && (
+								<Link
+									href={`/${locale}/services`}
+									className={`mt-3 text-sm font-semibold px-4 py-2 rounded-lg transition-colors ${pathname.startsWith(`/${locale}/services`)
+											? 'bg-blue-600 text-white'
+											: 'text-white bg-white/10 hover:bg-white/20'
+										}`}
+								>
+									{translations.navigation.services}
+								</Link>
+							)}
 						</nav>
 					</div>
 
@@ -145,6 +157,17 @@ export default function ContentLayout({ children, translations, locale }: Conten
 									isActive={pathname === item.href}
 								/>
 							))}
+							{showServicesNav && (
+								<Link
+									href={`/${locale}/services`}
+									className={`text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 ${pathname.startsWith(`/${locale}/services`)
+											? 'bg-blue-600 text-white'
+											: 'text-white bg-white/10 hover:bg-white/20'
+										}`}
+								>
+									{translations.navigation.services}
+								</Link>
+							)}
 						</nav>
 
 						{/* Language Switcher - right aligned */}

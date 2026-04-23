@@ -27,7 +27,7 @@ export default async function AboutPage({ params }: Props) {
 	const activePets = petsData.pets.filter(pet => pet.active !== false);
 
 	return (
-		<ContentLayout translations={t} locale={locale}>
+		<ContentLayout translations={t} locale={locale} showServicesNav={process.env.SERVICES_FEATURE_LIVE === 'true'}>
 			<div className="space-y-12">
 				{/* Hero Section */}
 				<div className="text-center space-y-8">

@@ -15,7 +15,7 @@ Obrigado por montar seu pacote de infraestrutura. Recebemos seu orçamento e nos
 
 Você pode ver e compartilhar seu orçamento a qualquer momento por este link:
 
-[Ver seu orçamento →]({{shareableUrl}})
+[Orçamento →]({{shareableUrl}})
 
 {{#hasPendingItems}}
 > **Nota:** Alguns itens do seu orçamento ({{pendingItemCount}}) precisam de análise antes de definirmos o preço final. Incluiremos esses valores na nossa resposta.

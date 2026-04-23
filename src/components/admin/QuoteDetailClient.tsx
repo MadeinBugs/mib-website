@@ -110,6 +110,10 @@ export default function QuoteDetailClient({ quote: initialQuote, shareableUrl }:
 	}
 
 	async function handleSendEmail() {
+		if (quote.response_sent_at) {
+			const confirmed = window.confirm('A response email was already sent. Send again?');
+			if (!confirmed) return;
+		}
 		setSendingEmail(true);
 		try {
 			const res = await fetch('/api/services/send-response-email', {
@@ -138,7 +142,7 @@ export default function QuoteDetailClient({ quote: initialQuote, shareableUrl }:
 			});
 			const data = await res.json().catch(() => ({}));
 			if (!res.ok) throw new Error(data.error ?? 'Failed to trigger sync');
-			showAlert('success', 'Sync retry triggered — check Discord for confirmation.');
+			showAlert('success', 'Sync retry triggered. Reload in ~30s to see the Twenty link.');
 		} catch (err) {
 			showAlert('error', err instanceof Error ? err.message : 'Failed to trigger sync');
 		} finally {
@@ -164,8 +168,8 @@ export default function QuoteDetailClient({ quote: initialQuote, shareableUrl }:
 			{/* Alert banner */}
 			{alert && (
 				<div className={`rounded-lg px-4 py-3 text-sm font-medium ${alert.type === 'success'
-						? 'bg-green-900/30 border border-green-800/40 text-green-300'
-						: 'bg-red-900/30 border border-red-800/40 text-red-300'
+					? 'bg-green-900/30 border border-green-800/40 text-green-300'
+					: 'bg-red-900/30 border border-red-800/40 text-red-300'
 					}`}>
 					{alert.type === 'success' ? '✓ ' : '✗ '}{alert.text}
 				</div>

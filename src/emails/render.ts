@@ -5,6 +5,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Marked, Renderer } from 'marked';
+import DOMPurify from 'isomorphic-dompurify';
 import { wrapInBaseTemplate } from './templates/base';
 import { generateUnsubscribeUrl } from '../lib/unsubscribe';
 
@@ -218,9 +219,13 @@ export function renderEmail(
 		throw new Error(`Email template "${templateName}.${locale}.md" is missing a "subject" in frontmatter`);
 	}
 
-	// Convert markdown → HTML with inline CSS
+	// Convert markdown → HTML with inline CSS, then sanitize
 	marked.setOptions({ renderer: createEmailRenderer() });
-	const bodyHtml = marked.parse(body) as string;
+	const rawBodyHtml = marked.parse(body) as string;
+	const bodyHtml = DOMPurify.sanitize(rawBodyHtml, {
+		ADD_ATTR: ['target', 'style'],
+		FORCE_BODY: true,
+	});
 
 	// Wrap in base template
 	const unsubscribeUrl = recipientEmail ? generateUnsubscribeUrl(recipientEmail, locale) : undefined;

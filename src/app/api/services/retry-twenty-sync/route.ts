@@ -65,7 +65,13 @@ export async function POST(request: NextRequest) {
 		const n8nRes = await fetch(webhookUrl, {
 			method: 'POST',
 			headers: webhookHeaders,
-			body: JSON.stringify({ type: 'retry', record: quote }),
+			body: JSON.stringify({
+				type: 'INSERT',
+				table: 'quote_requests',
+				schema: 'public',
+				record: quote,
+				old_record: null,
+			}),
 		});
 
 		if (!n8nRes.ok) {

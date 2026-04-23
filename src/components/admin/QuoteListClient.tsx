@@ -24,7 +24,9 @@ export interface QuoteRow {
 }
 
 type SortColumn = 'created_at' | 'status' | 'total_price';
-type StatusFilter = 'all' | 'new' | 'contacted' | 'quoted' | 'accepted' | 'rejected' | 'expired';
+
+const STATUS_LABELS = ['all', 'new', 'contacted', 'quoted', 'accepted', 'rejected', 'expired'] as const;
+type StatusFilter = typeof STATUS_LABELS[number];
 
 const STATUS_COLORS: Record<string, string> = {
 	new: 'bg-blue-900/30 text-blue-400',
@@ -34,8 +36,6 @@ const STATUS_COLORS: Record<string, string> = {
 	rejected: 'bg-neutral-800 text-neutral-400',
 	expired: 'bg-red-900/30 text-red-400',
 };
-
-const STATUS_LABELS: StatusFilter[] = ['all', 'new', 'contacted', 'quoted', 'accepted', 'rejected', 'expired'];
 
 function isSyncPending(quote: QuoteRow): boolean {
 	if (quote.twenty_opportunity_id) return false;
@@ -162,8 +162,8 @@ export default function QuoteListClient({ quotes }: Props) {
 						key={s}
 						onClick={() => setStatusFilter(s)}
 						className={`px-3 py-1.5 rounded-full text-xs font-semibold capitalize transition-colors ${statusFilter === s
-								? 'bg-service-accent text-white'
-								: 'bg-service-bg-elevated border border-service-border text-service-text-secondary hover:text-white'
+							? 'bg-service-accent text-white'
+							: 'bg-service-bg-elevated border border-service-border text-service-text-secondary hover:text-white'
 							}`}
 					>
 						{s} {counts[s] !== undefined && <span className="opacity-70">({counts[s] ?? 0})</span>}

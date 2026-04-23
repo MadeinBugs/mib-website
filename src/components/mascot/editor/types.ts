@@ -76,7 +76,6 @@ export const DEFAULT_LAYERS: LayerData[] = [
 ];
 
 // Asset paths for the PNG-based layer system
-// These will be placed in /public/assets/mascot/ by the artist
 export const MASCOT_ASSETS = {
 	body: '/assets/mascot/sisyphus-body.png',
 	back: '/assets/mascot/sisyphus-back.png',

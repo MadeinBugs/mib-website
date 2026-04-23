@@ -19,7 +19,7 @@ export default async function GalleryPage() {
 		.eq('id', user.id)
 		.single();
 
-	if (profile?.role !== 'artist') {
+	if (profile?.role !== 'admin') {
 		redirect('/mascot');
 	}
 

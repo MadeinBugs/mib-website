@@ -21,7 +21,7 @@ function MascotHeader({ displayName, userRole }: { displayName: string | null; u
 				/>
 			</a>
 			<div className="flex items-center gap-4">
-				{userRole === 'artist' && (
+				{userRole === 'admin' && (
 					<a
 						href="/mascot/gallery"
 						className="text-sm font-body text-amber-600 hover:text-amber-700 font-semibold transition-colors"

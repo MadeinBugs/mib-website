@@ -44,7 +44,7 @@ export default async function VotingPage({
 	// Fetch vote counts via SECURITY DEFINER function
 	const { data: voteCounts } = await supabase.rpc('get_vote_counts');
 
-	const voteMap = new Map(
+	const voteMap = new Map<number, number>(
 		(voteCounts ?? []).map((v: { picture_id: number; vote_count: number }) =>
 			[v.picture_id, Number(v.vote_count)]
 		)

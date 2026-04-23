@@ -68,8 +68,11 @@ export const pictureContestTranslations = {
 		noPicturesVoting: 'Ainda não há fotos para votar. Volte em breve!',
 		captchaTitle: 'Verificação',
 		captchaSubtitle: 'Complete para votar',
-		votingLinkText: 'Ir para a votação',
+		votingLinkText: 'Votar',
 		votingLinkPrompt: 'Quer votar nas suas fotos favoritas?',
+		alreadyVoted: 'Já votou',
+		votesCount: (count: number) => `${count} voto${count !== 1 ? 's' : ''}!`,
+		newLabel: 'NOVO',
 	},
 	en: {
 		// Login (admin)
@@ -138,8 +141,11 @@ export const pictureContestTranslations = {
 		noPicturesVoting: 'No photos to vote on yet. Check back soon!',
 		captchaTitle: 'Verification',
 		captchaSubtitle: 'Complete to vote',
-		votingLinkText: 'Go to voting',
+		votingLinkText: 'Vote',
 		votingLinkPrompt: 'Want to vote on your favorite photos?',
+		alreadyVoted: 'Already voted',
+		votesCount: (count: number) => `${count} vote${count !== 1 ? 's' : ''}!`,
+		newLabel: 'NEW',
 	},
 };
 

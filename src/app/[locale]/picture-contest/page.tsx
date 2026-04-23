@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { TbPhotoHeart } from 'react-icons/tb';
 import CodeEntryForm from '@/components/picture-contest/CodeEntryForm';
 import { pictureContestTranslations } from '@/lib/pictureContestI18n';
 
@@ -35,9 +36,9 @@ export default async function PictureContestEntryPage({
 						</p>
 						<Link
 							href={`/${locale}/picture-contest/voting`}
-							className="inline-flex items-center gap-2 text-amber-600 hover:text-amber-700 font-body font-semibold transition-colors"
+							className="inline-flex items-center gap-2 text-rose-500 hover:text-rose-600 font-body font-semibold transition-colors"
 						>
-							⭐ {t.votingLinkText}
+							<TbPhotoHeart className="text-xl" /> {t.votingLinkText}
 						</Link>
 					</div>
 				)}

@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
 				formData.append(
 					'payload_json',
 					JSON.stringify({
-						content: `📸 **${unique_id}** chose this photo for the contest!\nVote with ⭐ if you like it!`,
+						content: `📸 **Vote** with ⭐ if you like it!`,
 					})
 				);
 				formData.append(

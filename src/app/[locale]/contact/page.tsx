@@ -13,7 +13,7 @@ export default async function ContactPage({ params }: Props) {
 	const t = await getTranslations(locale);
 
 	return (
-		<ContentLayout translations={t} locale={locale} showServicesNav={process.env.SERVICES_FEATURE_LIVE === 'true'}>
+		<ContentLayout translations={t} locale={locale}>
 			<div className="space-y-16">
 				{/* Page Header */}
 				<div className="text-center space-y-6">

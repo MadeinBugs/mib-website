@@ -13,11 +13,9 @@ Obrigado por montar seu pacote de infraestrutura. Recebemos seu orçamento e nos
 **Estúdio:** {{studioName}}
 {{/studioName}}
 
-## Link do seu orçamento
-
 Você pode ver e compartilhar seu orçamento a qualquer momento por este link:
 
-[Ver seu orçamento]({{shareableUrl}})
+[Ver seu orçamento →]({{shareableUrl}})
 
 {{#hasPendingItems}}
 > **Nota:** Alguns itens do seu orçamento ({{pendingItemCount}}) precisam de análise antes de definirmos o preço final. Incluiremos esses valores na nossa resposta.
@@ -25,9 +23,9 @@ Você pode ver e compartilhar seu orçamento a qualquer momento por este link:
 
 ## Próximos passos
 
-1. Analisamos suas seleções e os campos de descrição que você preencheu
-2. Preparamos uma resposta com o preço final (incluindo itens marcados para revisão)
-3. Você recebe um email com nossa resposta e próximos passos
+1. Analisamos suas seleçÕes
+2. Preparamos o preço final
+3. Você recebe um email com os próximos passos
 
 Seu orçamento é válido até **{{expirationDate}}**.
 
@@ -35,5 +33,6 @@ Seu orçamento é válido até **{{expirationDate}}**.
 
 Dúvidas? Responda este email ou fale com a gente em [hello@madeinbugs.com.br](mailto:hello@madeinbugs.com.br).
 
-Abraços,
-**Made in Bugs**
+Até,
+
+Andress, **Made in Bugs**

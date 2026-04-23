@@ -17,9 +17,8 @@ You can view the full details of your original quote at any time:
 
 [View your quote →]({{shareableUrl}})
 
-If you have any questions or would like to adjust your package, just reply to this email — we're happy to help.
-
-Looking forward to working with you!
+If you have any questions or would like to adjust your package, just reply to this email.
 
 Best,
-**Made in Bugs**
+
+Andress, **Made in Bugs**

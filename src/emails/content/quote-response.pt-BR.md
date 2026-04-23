@@ -15,11 +15,10 @@ Obrigado pelo interesse nos nossos serviços de infraestrutura. Analisamos seu p
 
 Você pode visualizar os detalhes completos do seu orçamento a qualquer momento:
 
-[Ver seu orçamento →]({{shareableUrl}})
+[Orçamento →]({{shareableUrl}})
 
-Se tiver dúvidas ou quiser ajustar o pacote, é só responder este e-mail — teremos prazer em ajudar.
+Se tiver dúvidas ou quiser ajustar o pacote, é só responder este e-mail.
 
-Animados para trabalhar com você!
+Até,
 
-Abraços,
-**Made in Bugs**
+Andress, **Made in Bugs**

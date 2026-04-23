@@ -17,4 +17,4 @@ Thanks for subscribing to the Bugsletter! You'll be the first to know about new 
 [Check out our last trailer](https://www.youtube.com/watch?v=6QbVCweByhw&feature=youtube)
 
 See you soon,
-**Made in Bugs Team**
+Andress, **Made in Bugs**

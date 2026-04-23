@@ -17,4 +17,4 @@ Obrigado por se inscrever na Bugsletter! Você será o primeiro a saber de novid
 [Confira nosso último trailer](https://www.youtube.com/watch?v=6QbVCweByhw&feature=youtube)
 
 Até breve,
-**Equipe Made in Bugs**
+Andress, **Made in Bugs**

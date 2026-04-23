@@ -29,6 +29,7 @@ export async function middleware(request: NextRequest) {
 	const isAdminRoute = pathname.startsWith('/admin');
 	const isPictureContestRoute = /^\/(en|pt-BR)\/picture-contest/.test(pathname);
 	const isPictureContestAdmin = /^\/(en|pt-BR)\/picture-contest\/(gallery|login|logout)/.test(pathname);
+	const isPictureContestVoting = /^\/(en|pt-BR)\/picture-contest\/voting/.test(pathname);
 	const isMascotRoute = pathname.startsWith('/mascot');
 
 	// Choose which Supabase project to authenticate against
@@ -78,9 +79,9 @@ export async function middleware(request: NextRequest) {
 	}
 
 	// --- PICTURE_CONTEST_LIVE gate ---
-	// Public picture-contest routes (not admin) are blocked when not live,
+	// Public picture-contest routes (not admin, not voting) are blocked when not live,
 	// unless the user is an authenticated admin.
-	if (isPictureContestRoute && !isPictureContestAdmin) {
+	if (isPictureContestRoute && !isPictureContestAdmin && !isPictureContestVoting) {
 		const isLive = process.env.PICTURE_CONTEST_LIVE === 'true';
 
 		if (!isLive) {
@@ -107,6 +108,22 @@ export async function middleware(request: NextRequest) {
 			}
 		}
 
+		return supabaseResponse;
+	}
+
+	// --- Voting route gate ---
+	// Voting has its own VOTING_OPEN gate, independent of PICTURE_CONTEST_LIVE
+	if (isPictureContestVoting) {
+		const votingOpen = process.env.VOTING_OPEN === 'true';
+		const closesAt = process.env.VOTING_CLOSES_AT;
+		const isExpired = closesAt ? new Date() > new Date(closesAt) : false;
+		if (!votingOpen || isExpired) {
+			const localeMatch = pathname.match(/^\/(en|pt-BR)/);
+			const locale = localeMatch ? localeMatch[1] : 'pt-BR';
+			const url = request.nextUrl.clone();
+			url.pathname = `/${locale}/picture-contest`;
+			return NextResponse.redirect(url);
+		}
 		return supabaseResponse;
 	}
 

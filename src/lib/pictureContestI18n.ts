@@ -60,6 +60,16 @@ export const pictureContestTranslations = {
 
 		// Session detail (admin)
 		sessionTitle: (uniqueId: string) => `Sessão ${uniqueId}`,
+
+		// Voting
+		votingTitle: 'Votação',
+		votingSubtitle: (count: number) => `${count} foto${count !== 1 ? 's' : ''} concorrendo`,
+		votingClosed: 'A votação encerrou. Obrigado por participar!',
+		noPicturesVoting: 'Ainda não há fotos para votar. Volte em breve!',
+		captchaTitle: 'Verificação',
+		captchaSubtitle: 'Complete para votar',
+		votingLinkText: 'Ir para a votação',
+		votingLinkPrompt: 'Quer votar nas suas fotos favoritas?',
 	},
 	en: {
 		// Login (admin)
@@ -120,6 +130,16 @@ export const pictureContestTranslations = {
 
 		// Session detail (admin)
 		sessionTitle: (uniqueId: string) => `Session ${uniqueId}`,
+
+		// Voting
+		votingTitle: 'Voting',
+		votingSubtitle: (count: number) => `${count} photo${count !== 1 ? 's' : ''} competing`,
+		votingClosed: 'Voting has closed. Thank you for participating!',
+		noPicturesVoting: 'No photos to vote on yet. Check back soon!',
+		captchaTitle: 'Verification',
+		captchaSubtitle: 'Complete to vote',
+		votingLinkText: 'Go to voting',
+		votingLinkPrompt: 'Want to vote on your favorite photos?',
 	},
 };
 

@@ -2,6 +2,8 @@ import { createPictureContestServiceClient } from '@/lib/supabase/picture-contes
 import { orderPhotosForVoting } from '@/lib/contest/voting-algorithm';
 import VotingPageClient from '@/components/picture-contest/VotingPageClient';
 
+export const dynamic = 'force-dynamic';
+
 export default async function VotingPage({
 	params,
 }: {

@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 		'/about',
 		'/portfolio',
 		'/contact',
+		'/links',
 	];
 
 	const serviceRoutes = process.env.SERVICES_FEATURE_LIVE === 'true'

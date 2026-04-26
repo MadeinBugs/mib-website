@@ -22,6 +22,10 @@ export const pictureContestTranslations = {
 		sessionsCount: (count: number) => `${count} sessões`,
 		noSessions: 'Nenhuma sessão ainda',
 		booth: 'Booth',
+		galleryViewSessions: 'Sessões',
+		galleryViewAll: 'Todas as fotos',
+		downloadPicture: 'Baixar foto',
+		downloadPolaroid: 'Baixar polaroid',
 
 		// Entry page
 		entryTitle: 'Photo Contest',
@@ -95,6 +99,10 @@ export const pictureContestTranslations = {
 		sessionsCount: (count: number) => `${count} sessions`,
 		noSessions: 'No sessions yet',
 		booth: 'Booth',
+		galleryViewSessions: 'Sessions',
+		galleryViewAll: 'All photos',
+		downloadPicture: 'Download picture',
+		downloadPolaroid: 'Download polaroid',
 
 		// Entry page
 		entryTitle: 'Photo Contest',

@@ -1,5 +1,6 @@
 import { createPictureContestClient } from '@/lib/supabase/picture-contest-server';
 import AdminGallery from '@/components/picture-contest/AdminGallery';
+import GalleryPageClient from '@/components/picture-contest/GalleryPageClient';
 
 export const metadata = {
 	title: 'Admin Gallery — Photo Contest — Made in Bugs',
@@ -35,7 +36,14 @@ export default async function AdminGalleryPage({
 	if (!sessions || sessions.length === 0) {
 		return (
 			<div className="max-w-7xl mx-auto px-6 py-10">
-				<AdminGalleryHeader locale={locale} />
+				<div className="flex items-center justify-between mb-8">
+					<div role="heading" aria-level={1} style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(3rem, 4vw + 1rem, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+						{locale === 'en' ? 'Gallery' : 'Galeria'}
+					</div>
+					<a href={`/${locale}/picture-contest/logout`} className="text-sm font-body text-[#04c597] hover:text-[#36c8ab] font-semibold transition-colors">
+						{locale === 'en' ? 'Sign out' : 'Sair'}
+					</a>
+				</div>
 				<p className="text-neutral-500 font-body text-lg text-center py-20">
 					{locale === 'en' ? 'No sessions yet' : 'Nenhuma sessão ainda'}
 				</p>
@@ -91,26 +99,31 @@ export default async function AdminGalleryPage({
 		};
 	});
 
-	return (
-		<div className="max-w-7xl mx-auto px-6 py-10">
-			<AdminGalleryHeader locale={locale} />
-			<AdminGallery sessions={sessionData} locale={locale} />
-		</div>
-	);
-}
+	// Build flat list of ALL pictures with public URLs for the "all pictures" view
+	const allPictures = sessions.flatMap((session) => {
+		const pics = session.contest_pictures as {
+			id: number;
+			storage_path: string;
+			is_favorite_1: boolean;
+		}[];
+		return pics.map((pic) => {
+			const { data } = supabase.storage
+				.from('contest-pictures')
+				.getPublicUrl(pic.storage_path);
+			return {
+				id: pic.id,
+				imageUrl: data?.publicUrl ?? null,
+				sessionId: session.unique_id,
+				isFavorite: pic.is_favorite_1,
+			};
+		});
+	});
 
-function AdminGalleryHeader({ locale }: { locale: string }) {
 	return (
-		<div className="flex items-center justify-between mb-8">
-			<div role="heading" aria-level={1} style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(3rem, 4vw + 1rem, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
-				{locale === 'en' ? 'Gallery' : 'Galeria'}
-			</div>
-			<a
-				href={`/${locale}/picture-contest/logout`}
-				className="text-sm font-body text-[#04c597] hover:text-[#36c8ab] font-semibold transition-colors"
-			>
-				{locale === 'en' ? 'Sign out' : 'Sair'}
-			</a>
-		</div>
+		<GalleryPageClient
+			sessionData={sessionData}
+			allPictures={allPictures}
+			locale={locale}
+		/>
 	);
 }

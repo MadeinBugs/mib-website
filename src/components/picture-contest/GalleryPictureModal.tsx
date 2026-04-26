@@ -5,9 +5,9 @@ import Image from 'next/image';
 import type { AllPictureData } from './GalleryPageClient';
 import { usePictureContestLocale } from './PictureContestLocaleContext';
 
-const POLAROID_PADDING_TOP = 24;
-const POLAROID_PADDING_SIDE = 24;
-const POLAROID_PADDING_BOTTOM = 100;
+const POLAROID_PADDING_TOP = 0.04;    // 4% of image height
+const POLAROID_PADDING_SIDE = 0.04;   // 4% of image width
+const POLAROID_PADDING_BOTTOM = 0.15; // 15% of image height
 
 export default function GalleryPictureModal({
 	picture,
@@ -79,16 +79,12 @@ export default function GalleryPictureModal({
 				img.onerror = () => reject(new Error('Failed to load image'));
 			});
 
-			// Ensure Pangolin font is loaded before drawing
-			const fontSize = Math.max(24, Math.round(img.naturalWidth * 0.03));
-			try {
-				await document.fonts.load(`${fontSize}px Pangolin`);
-			} catch {
-				// Font may not be available; fallback will be used
-			}
+			const padTop = Math.round(img.naturalHeight * POLAROID_PADDING_TOP);
+			const padSide = Math.round(img.naturalWidth * POLAROID_PADDING_SIDE);
+			const padBottom = Math.round(img.naturalHeight * POLAROID_PADDING_BOTTOM);
 
-			const canvasWidth = img.naturalWidth + POLAROID_PADDING_SIDE * 2;
-			const canvasHeight = img.naturalHeight + POLAROID_PADDING_TOP + POLAROID_PADDING_BOTTOM;
+			const canvasWidth = img.naturalWidth + padSide * 2;
+			const canvasHeight = img.naturalHeight + padTop + padBottom;
 
 			const canvas = document.createElement('canvas');
 			canvas.width = canvasWidth;
@@ -101,17 +97,7 @@ export default function GalleryPictureModal({
 			ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
 			// Draw the photo
-			ctx.drawImage(img, POLAROID_PADDING_SIDE, POLAROID_PADDING_TOP);
-
-			// Session label text in the bottom area
-			ctx.fillStyle = '#525252';
-			ctx.font = `${fontSize}px Pangolin, cursive, sans-serif`;
-			ctx.textAlign = 'center';
-			ctx.fillText(
-				picture.sessionId,
-				canvasWidth / 2,
-				img.naturalHeight + POLAROID_PADDING_TOP + POLAROID_PADDING_BOTTOM * 0.6
-			);
+			ctx.drawImage(img, padSide, padTop);
 
 			canvas.toBlob((blob) => {
 				if (!blob) {
@@ -131,7 +117,7 @@ export default function GalleryPictureModal({
 		} catch {
 			window.open(picture.imageUrl, '_blank');
 		}
-	}, [picture.imageUrl, picture.id, picture.sessionId]);
+	}, [picture.imageUrl, picture.id]);
 
 	const hasPrev = currentIndex > 0;
 	const hasNext = currentIndex < totalCount - 1;

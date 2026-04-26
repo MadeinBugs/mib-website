@@ -26,15 +26,33 @@ type ViewMode = 'sessions' | 'all';
 
 export default function GalleryPageClient({
 	sessionData,
-	allPictures,
+	totalPictureCount,
 	locale,
 }: {
 	sessionData: AdminSessionData[];
-	allPictures: AllPictureData[];
+	totalPictureCount: number;
 	locale: string;
 }) {
 	const [view, setView] = useState<ViewMode>('sessions');
+	const [allPictures, setAllPictures] = useState<AllPictureData[] | null>(null);
+	const [loadingAll, setLoadingAll] = useState(false);
 	const { t } = usePictureContestLocale();
+
+	const handleViewChange = async (newView: ViewMode) => {
+		setView(newView);
+		if (newView === 'all' && allPictures === null) {
+			setLoadingAll(true);
+			try {
+				const res = await fetch('/api/contest/all-pictures');
+				if (res.ok) {
+					const data = await res.json();
+					setAllPictures(data);
+				}
+			} finally {
+				setLoadingAll(false);
+			}
+		}
+	};
 
 	return (
 		<div className="max-w-7xl mx-auto px-6 py-10">
@@ -64,7 +82,7 @@ export default function GalleryPageClient({
 			{/* View toggle */}
 			<div className="flex gap-2 mb-6">
 				<button
-					onClick={() => setView('sessions')}
+					onClick={() => handleViewChange('sessions')}
 					className={`px-4 py-2 rounded-full text-sm font-body font-semibold transition-colors ${view === 'sessions'
 							? 'bg-[#04c597] text-white'
 							: 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
@@ -73,21 +91,25 @@ export default function GalleryPageClient({
 					{t.galleryViewSessions}
 				</button>
 				<button
-					onClick={() => setView('all')}
+					onClick={() => handleViewChange('all')}
 					className={`px-4 py-2 rounded-full text-sm font-body font-semibold transition-colors ${view === 'all'
 							? 'bg-[#04c597] text-white'
 							: 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
 						}`}
 				>
-					{t.galleryViewAll} ({allPictures.length})
+					{t.galleryViewAll} ({totalPictureCount})
 				</button>
 			</div>
 
 			{/* Content */}
 			{view === 'sessions' ? (
 				<AdminGallery sessions={sessionData} locale={locale} />
+			) : loadingAll ? (
+				<div className="flex items-center justify-center py-20">
+					<div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#04c597]" />
+				</div>
 			) : (
-				<AllPicturesGrid pictures={allPictures} locale={locale} />
+				<AllPicturesGrid pictures={allPictures ?? []} locale={locale} />
 			)}
 		</div>
 	);

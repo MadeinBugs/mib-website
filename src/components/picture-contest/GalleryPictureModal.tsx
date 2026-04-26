@@ -11,22 +11,32 @@ const POLAROID_PADDING_BOTTOM = 100;
 
 export default function GalleryPictureModal({
 	picture,
+	currentIndex,
+	totalCount,
 	onClose,
+	onPrev,
+	onNext,
 }: {
 	picture: AllPictureData;
+	currentIndex: number;
+	totalCount: number;
 	onClose: () => void;
+	onPrev: () => void;
+	onNext: () => void;
 }) {
 	const { t } = usePictureContestLocale();
 	const backdropRef = useRef<HTMLDivElement>(null);
 
-	// Close on Escape
+	// Keyboard: Escape, ArrowLeft, ArrowRight
 	useEffect(() => {
 		const handler = (e: KeyboardEvent) => {
 			if (e.key === 'Escape') onClose();
+			if (e.key === 'ArrowLeft') onPrev();
+			if (e.key === 'ArrowRight') onNext();
 		};
 		document.addEventListener('keydown', handler);
 		return () => document.removeEventListener('keydown', handler);
-	}, [onClose]);
+	}, [onClose, onPrev, onNext]);
 
 	// Prevent body scroll while modal is open
 	useEffect(() => {
@@ -69,6 +79,14 @@ export default function GalleryPictureModal({
 				img.onerror = () => reject(new Error('Failed to load image'));
 			});
 
+			// Ensure Pangolin font is loaded before drawing
+			const fontSize = Math.max(24, Math.round(img.naturalWidth * 0.03));
+			try {
+				await document.fonts.load(`${fontSize}px Pangolin`);
+			} catch {
+				// Font may not be available; fallback will be used
+			}
+
 			const canvasWidth = img.naturalWidth + POLAROID_PADDING_SIDE * 2;
 			const canvasHeight = img.naturalHeight + POLAROID_PADDING_TOP + POLAROID_PADDING_BOTTOM;
 
@@ -87,7 +105,7 @@ export default function GalleryPictureModal({
 
 			// Session label text in the bottom area
 			ctx.fillStyle = '#525252';
-			ctx.font = `${Math.max(24, Math.round(img.naturalWidth * 0.03))}px Pangolin, cursive, sans-serif`;
+			ctx.font = `${fontSize}px Pangolin, cursive, sans-serif`;
 			ctx.textAlign = 'center';
 			ctx.fillText(
 				picture.sessionId,
@@ -96,7 +114,11 @@ export default function GalleryPictureModal({
 			);
 
 			canvas.toBlob((blob) => {
-				if (!blob) return;
+				if (!blob) {
+					// CORS tainted canvas — fallback to opening original image
+					window.open(picture.imageUrl!, '_blank');
+					return;
+				}
 				const url = URL.createObjectURL(blob);
 				const a = document.createElement('a');
 				a.href = url;
@@ -111,21 +133,47 @@ export default function GalleryPictureModal({
 		}
 	}, [picture.imageUrl, picture.id, picture.sessionId]);
 
+	const hasPrev = currentIndex > 0;
+	const hasNext = currentIndex < totalCount - 1;
+
 	return (
 		<div
 			ref={backdropRef}
 			onClick={handleBackdropClick}
+			role="dialog"
+			aria-modal="true"
+			aria-label="Picture preview"
 			className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
 		>
 			<div className="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center">
 				{/* Close button */}
 				<button
 					onClick={onClose}
-					className="absolute -top-2 -right-2 z-10 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-neutral-700 flex items-center justify-center text-xl font-bold shadow-lg transition-colors"
+					className="absolute top-2 right-2 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center text-xl font-bold shadow-lg transition-colors"
 					aria-label="Close"
 				>
 					×
 				</button>
+
+				{/* Prev / Next arrows */}
+				{hasPrev && (
+					<button
+						onClick={(e) => { e.stopPropagation(); onPrev(); }}
+						className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center text-xl shadow-lg transition-colors"
+						aria-label="Previous"
+					>
+						‹
+					</button>
+				)}
+				{hasNext && (
+					<button
+						onClick={(e) => { e.stopPropagation(); onNext(); }}
+						className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-black/50 hover:bg-black/70 text-white flex items-center justify-center text-xl shadow-lg transition-colors"
+						aria-label="Next"
+					>
+						›
+					</button>
+				)}
 
 				{/* Image */}
 				<div className="relative w-full aspect-[4/3] rounded-lg overflow-hidden bg-neutral-900">
@@ -145,9 +193,9 @@ export default function GalleryPictureModal({
 					)}
 				</div>
 
-				{/* Session ID badge */}
+				{/* Counter + Session ID */}
 				<p className="mt-3 text-sm text-neutral-400 font-body">
-					{t.booth}: {picture.sessionId}
+					{currentIndex + 1} / {totalCount} — {t.booth}: {picture.sessionId}
 					{picture.isFavorite && <span className="ml-2">⭐</span>}
 				</p>
 

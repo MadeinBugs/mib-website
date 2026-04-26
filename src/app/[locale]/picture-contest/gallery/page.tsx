@@ -1,5 +1,4 @@
 import { createPictureContestClient } from '@/lib/supabase/picture-contest-server';
-import AdminGallery from '@/components/picture-contest/AdminGallery';
 import GalleryPageClient from '@/components/picture-contest/GalleryPageClient';
 
 export const metadata = {
@@ -99,30 +98,16 @@ export default async function AdminGalleryPage({
 		};
 	});
 
-	// Build flat list of ALL pictures with public URLs for the "all pictures" view
-	const allPictures = sessions.flatMap((session) => {
-		const pics = session.contest_pictures as {
-			id: number;
-			storage_path: string;
-			is_favorite_1: boolean;
-		}[];
-		return pics.map((pic) => {
-			const { data } = supabase.storage
-				.from('contest-pictures')
-				.getPublicUrl(pic.storage_path);
-			return {
-				id: pic.id,
-				imageUrl: data?.publicUrl ?? null,
-				sessionId: session.unique_id,
-				isFavorite: pic.is_favorite_1,
-			};
-		});
-	});
+	// Count total pictures for the toggle button label
+	const totalPictureCount = sessions.reduce((sum, session) => {
+		const pics = session.contest_pictures as { id: number }[];
+		return sum + pics.length;
+	}, 0);
 
 	return (
 		<GalleryPageClient
 			sessionData={sessionData}
-			allPictures={allPictures}
+			totalPictureCount={totalPictureCount}
 			locale={locale}
 		/>
 	);

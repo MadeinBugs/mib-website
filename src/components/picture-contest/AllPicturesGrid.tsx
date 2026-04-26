@@ -6,15 +6,21 @@ import GalleryPictureModal from './GalleryPictureModal';
 import type { AllPictureData } from './GalleryPageClient';
 import { usePictureContestLocale } from './PictureContestLocaleContext';
 
-function LazyPicture({
+function getRotation(id: number): number {
+	const hash = String(id).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+	return (hash % 7) - 3; // -3 to +3
+}
+
+function LazyPolaroid({
 	pic,
 	onClick,
 }: {
 	pic: AllPictureData;
 	onClick: () => void;
 }) {
-	const ref = useRef<HTMLButtonElement>(null);
+	const ref = useRef<HTMLDivElement>(null);
 	const [shouldLoad, setShouldLoad] = useState(false);
+	const rotation = getRotation(pic.id);
 
 	useEffect(() => {
 		if (!ref.current) return;
@@ -32,28 +38,51 @@ function LazyPicture({
 	}, []);
 
 	return (
-		<button
+		<div
 			ref={ref}
 			onClick={onClick}
-			className="relative aspect-[4/3] overflow-hidden rounded-lg bg-neutral-200 group cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#04c597] focus:ring-offset-2"
+			className="group cursor-pointer transition-all duration-300 ease-out hover:scale-105 hover:z-10 relative"
+			style={{ transform: `rotate(${rotation}deg)` }}
+			onMouseEnter={(e) => {
+				e.currentTarget.style.transform = 'rotate(0deg) scale(1.05)';
+			}}
+			onMouseLeave={(e) => {
+				e.currentTarget.style.transform = `rotate(${rotation}deg)`;
+			}}
 		>
-			{shouldLoad && pic.imageUrl ? (
-				<Image
-					src={pic.imageUrl}
-					alt={`Photo ${pic.id}`}
-					fill
-					className="object-cover transition-transform duration-200 group-hover:scale-105"
-					sizes="(max-width: 640px) 200px, (max-width: 768px) 240px, 280px"
-				/>
-			) : (
-				<div className="w-full h-full bg-neutral-200 animate-pulse" />
-			)}
 			{pic.isFavorite && (
-				<div className="absolute top-2 right-2 bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow">
+				<div className="absolute top-1 right-1 z-10 bg-amber-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow">
 					⭐
 				</div>
 			)}
-		</button>
+			<div
+				className="bg-white shadow-md group-hover:shadow-xl transition-shadow duration-300"
+				style={{
+					padding: '8px 8px 40px 8px',
+					boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+				}}
+			>
+				<div className="relative w-full aspect-[4/3] overflow-hidden bg-neutral-100">
+					{shouldLoad && pic.imageUrl ? (
+						<Image
+							src={pic.imageUrl}
+							alt={`Photo ${pic.id}`}
+							fill
+							className="object-cover"
+							sizes="(max-width: 640px) 200px, (max-width: 768px) 240px, 280px"
+						/>
+					) : (
+						<div className="w-full h-full bg-neutral-200 animate-pulse" />
+					)}
+				</div>
+				<p
+					className="text-center text-neutral-600 mt-2 truncate"
+					style={{ fontFamily: "'Pangolin', cursive", fontSize: '0.75rem' }}
+				>
+					{pic.sessionId}
+				</p>
+			</div>
+		</div>
 	);
 }
 
@@ -107,11 +136,11 @@ export default function AllPicturesGrid({
 				style={{ scrollbarWidth: 'thin' }}
 			>
 				<div
-					className="grid grid-flow-col auto-cols-[200px] sm:auto-cols-[240px] md:auto-cols-[280px] gap-3"
-					style={{ gridTemplateRows: 'repeat(2, 1fr)' }}
+					className="grid grid-flow-col auto-cols-[200px] sm:auto-cols-[240px] md:auto-cols-[280px] gap-6"
+					style={{ gridTemplateRows: 'repeat(2, 1fr)', padding: '8px' }}
 				>
 					{pictures.map((pic, index) => (
-						<LazyPicture
+						<LazyPolaroid
 							key={pic.id}
 							pic={pic}
 							onClick={() => setSelectedIndex(index)}

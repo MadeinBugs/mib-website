@@ -58,7 +58,7 @@ function LazyPolaroid({
 			<div
 				className="bg-white shadow-md group-hover:shadow-xl transition-shadow duration-300"
 				style={{
-					padding: '8px 8px 40px 8px',
+					padding: '8px 8px 8px 8px',
 					boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
 				}}
 			>
@@ -75,12 +75,6 @@ function LazyPolaroid({
 						<div className="w-full h-full bg-neutral-200 animate-pulse" />
 					)}
 				</div>
-				<p
-					className="text-center text-neutral-600 mt-2 truncate"
-					style={{ fontFamily: "'Pangolin', cursive", fontSize: '0.75rem' }}
-				>
-					{pic.sessionId}
-				</p>
 			</div>
 		</div>
 	);

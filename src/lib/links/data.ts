@@ -51,7 +51,7 @@ export const links: LinkItem[] = [
 			'pt-BR': 'Entre na nossa comunidade',
 			en: 'Join our community',
 		},
-		url: 'https://go.madeinbugs.com.br/links-discord',
+		url: 'https://discord.gg/79ZbCKj2Z8',
 		iconName: 'discord',
 		variant: 'discord',
 		category: 'community',

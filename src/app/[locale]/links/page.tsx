@@ -21,10 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const isPt = locale === 'pt-BR';
 
 	return {
-		title: 'Links — Made in Bugs',
+		title: isPt
+			? 'Links Oficiais — Made in Bugs | Estúdio Indie de Games'
+			: 'Official Links — Made in Bugs | Indie Game Studio',
 		description: isPt
-			? 'Todos os links oficiais do estúdio Made in Bugs.'
-			: 'All official links from Made in Bugs studio.',
+			? 'Todos os links oficiais do estúdio Made in Bugs: Discord, newsletter Bugsletter, jogos, redes sociais e mais. Conecte-se com a gente!'
+			: 'All official links from Made in Bugs studio: Discord, Bugsletter newsletter, games, social media and more. Connect with us!',
 		alternates: {
 			canonical: `${SITE_URL}/${locale}/links`,
 			languages: {
@@ -34,6 +36,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		},
 		openGraph: {
 			type: 'website',
+			title: isPt
+				? 'Links Oficiais — Made in Bugs'
+				: 'Official Links — Made in Bugs',
+			description: isPt
+				? 'Jogos, Discord, newsletter e mais — todos os links do estúdio Made in Bugs em um só lugar.'
+				: 'Games, Discord, newsletter and more — all Made in Bugs studio links in one place.',
 			url: `${SITE_URL}/${locale}/links`,
 			siteName: 'Made in Bugs',
 			images: [
@@ -47,10 +55,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		},
 		twitter: {
 			card: 'summary_large_image',
-			title: 'Links — Made in Bugs',
+			title: isPt
+				? 'Links Oficiais — Made in Bugs'
+				: 'Official Links — Made in Bugs',
 			description: isPt
-				? 'Todos os links oficiais do estúdio Made in Bugs.'
-				: 'All official links from Made in Bugs studio.',
+				? 'Jogos, Discord, newsletter e mais — todos os links do estúdio Made in Bugs em um só lugar.'
+				: 'Games, Discord, newsletter and more — all Made in Bugs studio links in one place.',
 			images: [`${SITE_URL}${OG_IMAGE_PATH}`],
 		},
 	};

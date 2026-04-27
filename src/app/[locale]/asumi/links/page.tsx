@@ -21,10 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const isPt = locale === 'pt-BR';
 
 	return {
-		title: 'Asumi — Links',
+		title: isPt
+			? 'Asumi: Little Ones — Links Oficiais | Made in Bugs'
+			: 'Asumi: Little Ones — Official Links | Made in Bugs',
 		description: isPt
-			? 'Links oficiais do jogo Asumi.'
-			: 'Official links for the Asumi game.',
+			? 'Links oficiais do jogo Asumi: Little Ones — siga nas redes, entre no Discord e acompanhe as novidades do cozy game brasileiro.'
+			: 'Official Asumi: Little Ones links — follow on social media, join Discord, and stay updated on the Brazilian cozy game.',
 		robots: {
 			index: false,
 			follow: true,
@@ -37,6 +39,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		},
 		openGraph: {
 			type: 'website',
+			title: isPt
+				? 'Asumi: Little Ones — Links Oficiais'
+				: 'Asumi: Little Ones — Official Links',
+			description: isPt
+				? 'Todos os links do jogo Asumi: redes sociais, Discord, newsletter e mais.'
+				: 'All Asumi game links: social media, Discord, newsletter and more.',
 			url: `${SITE_URL}/${locale}/asumi/links`,
 			siteName: 'Made in Bugs',
 			images: [
@@ -50,10 +58,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 		},
 		twitter: {
 			card: 'summary_large_image',
-			title: 'Asumi — Links',
+			title: isPt
+				? 'Asumi: Little Ones — Links Oficiais'
+				: 'Asumi: Little Ones — Official Links',
 			description: isPt
-				? 'Links oficiais do jogo Asumi.'
-				: 'Official links for the Asumi game.',
+				? 'Todos os links do jogo Asumi: redes sociais, Discord, newsletter e mais.'
+				: 'All Asumi game links: social media, Discord, newsletter and more.',
 			images: [`${SITE_URL}${OG_IMAGE_PATH}`],
 		},
 	};

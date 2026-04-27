@@ -1,16 +1,15 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import Script from 'next/script';
-import { Amatic_SC, Inter, Fredoka, Nunito, Comfortaa, Pangolin } from 'next/font/google';
+import { Amatic_SC, Inter, Nunito, Comfortaa, Pangolin } from 'next/font/google';
 import { getMetadataAssetPath } from '../lib/metadataPaths';
 import { getVersionInfo } from '../lib/version';
 import VersionLogger from '../components/VersionLogger';
 
 const amatic = Amatic_SC({ subsets: ['latin'], weight: ['400', '700'], display: 'swap', variable: '--font-amatic' });
 const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600'], display: 'swap', variable: '--font-inter' });
-const fredoka = Fredoka({ subsets: ['latin'], weight: ['400', '500', '600'], display: 'swap', variable: '--font-fredoka' });
 const nunito = Nunito({ subsets: ['latin'], weight: ['400', '600', '700'], display: 'swap', variable: '--font-nunito' });
-const comfortaa = Comfortaa({ subsets: ['latin'], weight: ['300', '400', '500'], display: 'swap', variable: '--font-comfortaa' });
+const comfortaa = Comfortaa({ subsets: ['latin'], weight: ['400', '500'], display: 'swap', variable: '--font-comfortaa' });
 const pangolin = Pangolin({ subsets: ['latin'], weight: '400', display: 'swap', variable: '--font-pangolin' });
 
 const versionInfo = getVersionInfo();
@@ -66,7 +65,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR" className={`${amatic.variable} ${inter.variable} ${fredoka.variable} ${nunito.variable} ${comfortaa.variable} ${pangolin.variable}`}>
+    <html lang="pt-BR" className={`${amatic.variable} ${inter.variable} ${nunito.variable} ${comfortaa.variable} ${pangolin.variable}`}>
       <head>
         {/* Version info for debugging - check page source */}
         {/* Made in Bugs Version: {versionInfo.version} */}

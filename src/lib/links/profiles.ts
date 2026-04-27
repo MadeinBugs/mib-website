@@ -4,8 +4,8 @@ export const profiles = {
 	studio: {
 		name: { 'pt-BR': 'Made in Bugs', en: 'Made in Bugs' },
 		bio: {
-			'pt-BR': 'Estúdio indie de jogos fofos',
-			en: 'Cozy games indie studio',
+			'pt-BR': 'Links que talvez você goste...',
+			en: 'You might like these links...',
 		},
 		avatar: '/assets/links/mib-avatar.webp',
 		banner: '/assets/mail/MiB-Mail-Banner1.png',

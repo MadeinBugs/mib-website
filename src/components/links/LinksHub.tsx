@@ -3,7 +3,12 @@ import Link from 'next/link';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { iconMap } from '@/lib/links/icon-map';
 import { withUtm } from '@/lib/links/utm';
-import type { LinkItem, Profile } from '@/lib/links/types';
+import type { LinkItem, LocalizedString, Profile } from '@/lib/links/types';
+
+interface Announcement {
+	title: LocalizedString;
+	description: LocalizedString;
+}
 
 interface LinksHubProps {
 	locale: string;
@@ -11,6 +16,7 @@ interface LinksHubProps {
 	featured: LinkItem[];
 	regular: LinkItem[];
 	source: 'studio' | 'asumi';
+	announcement?: Announcement;
 }
 
 const BACK_LABEL = {
@@ -35,10 +41,41 @@ function LinkEntry({ link, locale, source }: { link: LinkItem; locale: string; s
 	const external = isExternal(href);
 	const Icon = iconMap[link.iconName];
 	const isFeatured = link.featured;
+	const variant = link.variant;
 
-	return (
+	const base = 'flex items-center gap-4 w-full min-h-[56px] px-5 py-3 font-body text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors';
+
+	const variantClasses: Record<string, { container: string; icon: string }> = {
+		rainbow: {
+			container: `${base} rounded-[6px] bg-white/95 hover:bg-white text-[#1a3a34] font-semibold`,
+			icon: 'w-5 h-5 shrink-0 text-pink-500',
+		},
+		discord: {
+			container: `${base} rounded-lg border-2 border-[#5865F2] bg-[rgba(88,101,242,0.08)] text-[#1a3a34] hover:bg-[rgba(88,101,242,0.18)] focus-visible:ring-[#5865F2]`,
+			icon: 'w-5 h-5 shrink-0 text-[#5865F2]',
+		},
+		buzzy: {
+			container: `${base} rounded-lg border-2 border-amber-400 bg-[rgba(251,191,36,0.08)] text-[#1a3a34] hover:bg-[rgba(251,191,36,0.18)] focus-visible:ring-amber-400`,
+			icon: 'w-5 h-5 shrink-0 text-amber-500',
+		},
+		featured: {
+			container: `${base} rounded-lg border-2 border-[#36c8ab] bg-[rgba(54,200,171,0.08)] text-[#1a3a34] hover:bg-[rgba(54,200,171,0.18)] focus-visible:ring-[#36c8ab]`,
+			icon: 'w-5 h-5 shrink-0 text-[#04c597]',
+		},
+		default: {
+			container: `${base} rounded-lg border border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50 focus-visible:ring-neutral-300`,
+			icon: 'w-5 h-5 shrink-0 text-neutral-400',
+		},
+	};
+
+	const style = variant && variantClasses[variant]
+		? variantClasses[variant]
+		: isFeatured
+			? variantClasses.featured
+			: variantClasses.default;
+
+	const anchor = (
 		<a
-			key={link.id}
 			href={href}
 			target={external ? '_blank' : undefined}
 			rel={external ? 'noopener noreferrer' : undefined}
@@ -47,15 +84,11 @@ function LinkEntry({ link, locale, source }: { link: LinkItem; locale: string; s
 					? `Abrir ${link.title[loc]} em nova aba`
 					: `Open ${link.title[loc]} in new tab`,
 			})}
-			className={
-				isFeatured
-					? 'flex items-center gap-4 w-full min-h-[56px] px-5 py-3 rounded-lg border-2 border-[#36c8ab] bg-[rgba(54,200,171,0.08)] text-[#1a3a34] font-body text-base hover:bg-[rgba(54,200,171,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#36c8ab] focus-visible:ring-offset-2 transition-colors'
-					: 'flex items-center gap-4 w-full min-h-[56px] px-5 py-3 rounded-lg border border-neutral-200 bg-white text-neutral-700 font-body text-base hover:bg-neutral-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-300 focus-visible:ring-offset-2 transition-colors'
-			}
+			className={style.container}
 		>
 			<Icon
 				aria-hidden="true"
-				className={isFeatured ? 'w-5 h-5 shrink-0 text-[#04c597]' : 'w-5 h-5 shrink-0 text-neutral-400'}
+				className={style.icon}
 			/>
 			<div className="flex-1">
 				<span>{link.title[loc]}</span>
@@ -67,6 +100,16 @@ function LinkEntry({ link, locale, source }: { link: LinkItem; locale: string; s
 			</div>
 		</a>
 	);
+
+	if (variant === 'rainbow') {
+		return (
+			<div className="rounded-lg p-[2px] bg-gradient-to-r from-pink-400 via-yellow-400 to-cyan-400">
+				{anchor}
+			</div>
+		);
+	}
+
+	return anchor;
 }
 
 export default function LinksHub({
@@ -75,6 +118,7 @@ export default function LinksHub({
 	featured,
 	regular,
 	source,
+	announcement,
 }: LinksHubProps) {
 	const loc = locale as 'pt-BR' | 'en';
 
@@ -98,49 +142,65 @@ export default function LinksHub({
 				className="w-full max-w-[480px] mx-4 mt-16 mb-8 rounded-lg overflow-hidden shadow-lg"
 				style={{ borderColor: '#1e6259', borderWidth: '2px', borderStyle: 'solid' }}
 			>
-				{/* Banner */}
+				{/* Banner — decorative, alt="" so screen readers skip it */}
 				{profile.banner && (
-					<img
+					<Image
 						src={profile.banner}
-						alt={profile.name[loc]}
-						className="w-full block"
+						alt=""
+						width={960}
+						height={320}
+						className="w-full h-auto block"
 					/>
 				)}
 
 				{/* Card body */}
 				<div className="p-6" style={{ backgroundColor: '#f7fff0' }}>
-					{/* Avatar */}
-					<div className="flex justify-center mb-4">
-						<Image
-							src={profile.avatar}
-							alt={profile.name[loc]}
-							width={96}
-							height={96}
-							priority
-							className="rounded-full object-cover"
-						/>
-					</div>
+					<header className="text-center mb-6">
+						{/* Avatar */}
+						<div className="flex justify-center mb-4">
+							<Image
+								src={profile.avatar}
+								alt={profile.name[loc]}
+								width={96}
+								height={96}
+								priority
+								className="rounded-full object-cover"
+							/>
+						</div>
 
-					{/* Title — avoids h1 global !important override, same approach as bugsletter */}
-					<div
-						role="heading"
-						aria-level={1}
-						className="text-center mb-2"
-						style={{
-							fontFamily: "'Amatic SC', cursive",
-							fontSize: 'clamp(2.5rem, 3vw + 1rem, 3.5rem)',
-							fontWeight: 700,
-							color: '#04c597',
-							textShadow: '-1px 1px 0px #016a50',
-						}}
-					>
-						{profile.name[loc]}
-					</div>
+						{/* Title — avoids h1 global !important override, same approach as bugsletter */}
+						<div
+							role="heading"
+							aria-level={1}
+							id="profile-name"
+							style={{
+								fontFamily: "'Amatic SC', cursive",
+								fontSize: 'clamp(2.5rem, 3vw + 1rem, 3.5rem)',
+								fontWeight: 700,
+								color: '#04c597',
+								textShadow: '-1px 1px 0px #016a50',
+							}}
+						>
+							{profile.name[loc]}
+						</div>
 
-					{/* Bio */}
-					<p className="font-body text-sm text-neutral-600 text-center mb-6">
-						{profile.bio[loc]}
-					</p>
+						{/* Bio */}
+						<p className="font-body text-sm text-neutral-600 mt-1">
+							{profile.bio[loc]}
+						</p>
+					</header>
+
+					{/* Announcement */}
+					{announcement && (
+						<div className="text-center mb-4 px-3 py-3 rounded-lg bg-[#fff8e1] border border-amber-300">
+							<div className="font-body font-semibold text-[#1a3a34] text-sm">
+								{announcement.title[loc]}
+							</div>
+							<p className="font-body text-xs text-neutral-600 mt-1">
+								{announcement.description[loc]}
+							</p>
+						</div>
+					)}
 
 					{/* Featured links */}
 					{featured.length > 0 && (

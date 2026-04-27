@@ -22,7 +22,8 @@ export type IconName =
 	| 'newsletter'
 	| 'gamepad'
 	| 'globe'
-	| 'mail';
+	| 'mail'
+	| 'camera';
 
 export type LinkScope = 'studio' | 'asumi' | 'both';
 
@@ -33,6 +34,7 @@ export type LinkItem = {
 	url: string;
 	iconName: IconName;
 	featured?: boolean;
+	variant?: 'rainbow' | 'discord' | 'buzzy';
 	category?: LinkCategory;
 	scope: LinkScope;
 };

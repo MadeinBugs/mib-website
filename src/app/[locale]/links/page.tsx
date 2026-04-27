@@ -73,6 +73,14 @@ export default async function LinksPage({ params }: Props) {
 			featured={featured}
 			regular={regular}
 			source="studio"
+			announcement={{
+				title: { 'pt-BR': 'Gamescom Latam', en: 'Gamescom Latam' },
+				description: {
+					'pt-BR':
+						'Nos dias 30/04 a 03/05 no stand da Sebrae, e dias 01/05 e 03/05 no stand da Sampa Games também.',
+					en: 'April 30 – May 3 at the Sebrae booth, and May 1 & 3 at the Sampa Games booth too.',
+				},
+			}}
 		/>
 	);
 }

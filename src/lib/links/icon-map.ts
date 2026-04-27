@@ -5,6 +5,7 @@ import {
 	FaEnvelope,
 	FaGlobe,
 	FaGamepad,
+	FaCameraRetro,
 } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import { SiTiktok, SiBluesky } from 'react-icons/si';
@@ -22,4 +23,5 @@ export const iconMap: Record<IconName, IconType> = {
 	mail: FaEnvelope,
 	globe: FaGlobe,
 	gamepad: FaGamepad,
+	camera: FaCameraRetro,
 };

@@ -147,8 +147,8 @@ export default function LinksHub({
 					<Image
 						src={profile.banner}
 						alt=""
-						width={960}
-						height={320}
+						width={480}
+						height={120}
 						priority
 						sizes="(max-width: 480px) 100vw, 480px"
 						className="w-full h-auto block"

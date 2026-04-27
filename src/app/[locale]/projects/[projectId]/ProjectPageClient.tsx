@@ -9,6 +9,7 @@ import { getGalleryImages, getTopGalleryImages } from '../../../../lib/projects'
 import { getImagePath } from '../../../../lib/imagePaths';
 import type { ProjectData } from '../../../../lib/projects';
 import LiteYouTube from '../../../../components/LiteYouTube';
+import LazyVideo from '../../../../components/LazyVideo';
 import {
 	FaGlobe,
 	FaGithub,
@@ -35,7 +36,7 @@ interface ProjectPageClientProps {
 }
 
 export default function ProjectPageClient({ project, locale, translations }: ProjectPageClientProps) {
-	const [selectedImage, setSelectedImage] = useState<{ src: string; caption?: string } | null>(null);
+	const [selectedImage, setSelectedImage] = useState<{ src: string; caption?: string; video?: { webm: string; mp4: string } } | null>(null);
 	const [hoveredPlatform, setHoveredPlatform] = useState<string | null>(null);
 
 	const localizedTitle = project.title[locale as 'en' | 'pt-BR'];
@@ -150,20 +151,18 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 								{/* Images */}
 								{topGalleryImages.map((image, index) => (
 									image.video ? (
-										<div key={index} className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-lg">
-											<video
-												autoPlay
-												loop
-												muted
-												playsInline
-												poster={image.video.poster}
-												className="absolute inset-0 w-full h-full object-cover"
-												aria-label={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
-											>
-												<source src={image.video.webm} type="video/webm" />
-												<source src={image.video.mp4} type="video/mp4" />
-											</video>
-										</div>
+										<LazyVideo
+											key={index}
+											webm={image.video.webm}
+											mp4={image.video.mp4}
+											poster={image.video.poster}
+											ariaLabel={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
+											onClick={() => setSelectedImage({
+												src: image.src,
+												caption: image.caption?.[locale as 'en' | 'pt-BR'],
+												video: { webm: image.video!.webm, mp4: image.video!.mp4 },
+											})}
+										/>
 									) : (
 										<button
 											key={index}
@@ -486,20 +485,18 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 								<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 									{galleryImages.map((image, index) => (
 										image.video ? (
-											<div key={index} className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-lg">
-												<video
-													autoPlay
-													loop
-													muted
-													playsInline
-													poster={image.video.poster}
-													className="absolute inset-0 w-full h-full object-cover"
-													aria-label={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
-												>
-													<source src={image.video.webm} type="video/webm" />
-													<source src={image.video.mp4} type="video/mp4" />
-												</video>
-											</div>
+											<LazyVideo
+												key={index}
+												webm={image.video.webm}
+												mp4={image.video.mp4}
+												poster={image.video.poster}
+												ariaLabel={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
+												onClick={() => setSelectedImage({
+													src: image.src,
+													caption: image.caption?.[locale as 'en' | 'pt-BR'],
+													video: { webm: image.video!.webm, mp4: image.video!.mp4 },
+												})}
+											/>
 										) : (
 											<button
 												key={index}
@@ -540,6 +537,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 			<ProjectImageVisualization
 				imageSrc={selectedImage?.src || ''}
 				imageCaption={selectedImage?.caption}
+				video={selectedImage?.video}
 				isOpen={selectedImage !== null}
 				onClose={() => setSelectedImage(null)}
 			/>

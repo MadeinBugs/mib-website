@@ -8,6 +8,10 @@ import { getImagePath } from '../lib/imagePaths';
 interface ProjectImageVisualizationProps {
 	imageSrc: string;
 	imageCaption?: string; // Localized caption text
+	video?: {
+		webm: string;
+		mp4: string;
+	};
 	isOpen: boolean;
 	onClose: () => void;
 }
@@ -15,6 +19,7 @@ interface ProjectImageVisualizationProps {
 export default function ProjectImageVisualization({
 	imageSrc,
 	imageCaption,
+	video,
 	isOpen,
 	onClose
 }: ProjectImageVisualizationProps) {
@@ -85,27 +90,41 @@ export default function ProjectImageVisualization({
 						onClick={(e) => e.stopPropagation()}
 					>
 						{/* Loading spinner */}
-						{!imageLoaded && (
+						{!video && !imageLoaded && (
 							<div className="absolute inset-0 flex items-center justify-center">
 								<div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
 							</div>
 						)}
 
-						{/* Main image */}
-						<Image
-							src={getImagePath(imageSrc)}
-							alt={imageCaption || "Project image"}
-							width={1200}
-							height={800}
-							className={`
+						{/* Main content — video or image */}
+						{video ? (
+							<video
+								autoPlay
+								loop
+								muted
+								playsInline
+								className="max-w-[70vw] max-h-[65vh] w-auto h-auto object-contain shadow-2xl rounded-lg"
+								aria-label={imageCaption || "Project video"}
+							>
+								<source src={video.webm} type="video/webm" />
+								<source src={video.mp4} type="video/mp4" />
+							</video>
+						) : (
+							<Image
+								src={getImagePath(imageSrc)}
+								alt={imageCaption || "Project image"}
+								width={1200}
+								height={800}
+								className={`
 								max-w-[70vw] max-h-[65vh] w-auto h-auto object-contain
 								shadow-2xl rounded-lg transition-opacity duration-300
 								${imageLoaded ? 'opacity-100' : 'opacity-0'}
 							`}
-							onLoad={() => setImageLoaded(true)}
-							unoptimized={imageSrc.endsWith('.gif')}
-							priority
-						/>
+								onLoad={() => setImageLoaded(true)}
+								unoptimized={imageSrc.endsWith('.gif')}
+								priority
+							/>
+						)}
 
 						{/* Image caption */}
 						{imageLoaded && imageCaption && (

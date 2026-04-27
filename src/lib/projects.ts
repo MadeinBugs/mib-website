@@ -247,7 +247,7 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 				video: {
 					webm: '/assets/projects/asumi/asumi-tome-flip.webm',
 					mp4: '/assets/projects/asumi/asumi-tome-flip.mp4',
-					poster: '/assets/projects/asumi/asumi-tome-flip-poster.jpg',
+					poster: '/assets/projects/asumi/asumi-tome-flip-poster.webp',
 				},
 			},
 			{
@@ -261,7 +261,7 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 				video: {
 					webm: '/assets/projects/asumi/capivara-interactions.webm',
 					mp4: '/assets/projects/asumi/capivara-interactions.mp4',
-					poster: '/assets/projects/asumi/capivara-interactions-poster.jpg',
+					poster: '/assets/projects/asumi/capivara-interactions-poster.webp',
 				},
 			},
 			{
@@ -275,7 +275,7 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 				video: {
 					webm: '/assets/projects/asumi/animal-models.webm',
 					mp4: '/assets/projects/asumi/animal-models.mp4',
-					poster: '/assets/projects/asumi/animal-models-poster.jpg',
+					poster: '/assets/projects/asumi/animal-models-poster.webp',
 				},
 			},
 			{

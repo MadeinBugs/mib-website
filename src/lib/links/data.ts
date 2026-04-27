@@ -11,7 +11,7 @@ export const links: LinkItem[] = [
 			'pt-BR': 'Vote nas melhores fotos!',
 			en: 'Vote on the best pictures!',
 		},
-		url: '/picture-contest',
+		url: '/picture-contest/voting',
 		iconName: 'camera',
 		featured: true,
 		variant: 'rainbow',

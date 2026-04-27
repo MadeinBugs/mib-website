@@ -144,6 +144,7 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 											<LiteYouTube
 												videoId={videoId}
 												title={`${localizedTitle} - Video ${index + 1}`}
+												priority={index === 0}
 											/>
 										</div>
 									) : null;

@@ -56,7 +56,7 @@ export default async function JobDetailPage({ params }: Props) {
 
 				{/* Job Header */}
 				<div className="content-card mb-8">
-					<div className="text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'Nunito', fontWeight: 700 }}>{title}</div>
+					<div className="text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'var(--font-nunito)', fontWeight: 700 }}>{title}</div>
 					<div className="text-gray-700">
 						<MarkdownContent content={description} />
 					</div>

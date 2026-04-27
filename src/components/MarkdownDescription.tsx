@@ -101,13 +101,13 @@ export default function MarkdownDescription({ content, projectId }: MarkdownDesc
 						remarkPlugins={[remarkGfm]}
 						components={{
 							h1: ({ children }) => (
-								<h1 className="text-3xl font-bold mb-4 mt-8 first:mt-0" style={{ fontFamily: 'Nunito, sans-serif' }}>{children}</h1>
+								<h1 className="text-3xl font-bold mb-4 mt-8 first:mt-0" style={{ fontFamily: 'var(--font-nunito), sans-serif' }}>{children}</h1>
 							),
 							h2: ({ children }) => (
-								<h2 className="text-2xl font-bold mb-3 mt-6 first:mt-0" style={{ fontFamily: 'Nunito, sans-serif' }}>{children}</h2>
+								<h2 className="text-2xl font-bold mb-3 mt-6 first:mt-0" style={{ fontFamily: 'var(--font-nunito), sans-serif' }}>{children}</h2>
 							),
 							h3: ({ children }) => (
-								<h3 className="text-xl font-bold mb-2 mt-4" style={{ fontFamily: 'Nunito, sans-serif' }}>{children}</h3>
+								<h3 className="text-xl font-bold mb-2 mt-4" style={{ fontFamily: 'var(--font-nunito), sans-serif' }}>{children}</h3>
 							),
 							p: ({ children }) => (
 								<p className="font-body text-gray-600 leading-relaxed mb-4">{children}</p>
@@ -184,13 +184,13 @@ export default function MarkdownDescription({ content, projectId }: MarkdownDesc
 					remarkPlugins={[remarkGfm]}
 					components={{
 						h1: ({ children }) => (
-							<h1 className="text-3xl font-bold mb-4 mt-8 first:mt-0" style={{ fontFamily: 'Nunito, sans-serif' }}>{children}</h1>
+							<h1 className="text-3xl font-bold mb-4 mt-8 first:mt-0" style={{ fontFamily: 'var(--font-nunito), sans-serif' }}>{children}</h1>
 						),
 						h2: ({ children }) => (
-							<h2 className="text-2xl font-bold mb-3 mt-6 first:mt-0" style={{ fontFamily: 'Nunito, sans-serif' }}>{children}</h2>
+							<h2 className="text-2xl font-bold mb-3 mt-6 first:mt-0" style={{ fontFamily: 'var(--font-nunito), sans-serif' }}>{children}</h2>
 						),
 						h3: ({ children }) => (
-							<h3 className="text-xl font-bold mb-2 mt-4" style={{ fontFamily: 'Nunito, sans-serif' }}>{children}</h3>
+							<h3 className="text-xl font-bold mb-2 mt-4" style={{ fontFamily: 'var(--font-nunito), sans-serif' }}>{children}</h3>
 						),
 						p: ({ children }) => (
 							<p className="font-body text-gray-600 leading-relaxed mb-4">{children}</p>

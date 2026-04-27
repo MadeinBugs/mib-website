@@ -1,6 +1,8 @@
 import '../globals.css';
 import type { Metadata } from 'next';
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return [
     { locale: 'en' },
@@ -15,7 +17,7 @@ interface Props {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  
+
   return {
     title: 'Made in Bugs - Indie Game Studio',
     description: 'Embracing the chaotic nature of game development with perseverance and creativity.',

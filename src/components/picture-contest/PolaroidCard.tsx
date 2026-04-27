@@ -62,7 +62,7 @@ export default function PolaroidCard({ imageUrl, label, id, onClick, overlay }: 
 				<p
 					className="text-center text-neutral-600 mt-3 truncate"
 					style={{
-						fontFamily: "'Pangolin', cursive",
+						fontFamily: "var(--font-pangolin), cursive",
 						fontSize: '0.85rem',
 					}}
 				>

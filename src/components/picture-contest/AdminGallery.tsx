@@ -64,7 +64,7 @@ export default function AdminGallery({
 										<div className="w-full aspect-[4/3] bg-neutral-200 flex items-center justify-center">
 											<span className="text-neutral-400 text-4xl">📷</span>
 										</div>
-										<p className="text-center text-neutral-600 mt-3" style={{ fontFamily: "'Pangolin', cursive", fontSize: '0.85rem' }}>
+										<p className="text-center text-neutral-600 mt-3" style={{ fontFamily: "var(--font-pangolin), cursive", fontSize: '0.85rem' }}>
 											{session.unique_id}
 										</p>
 									</div>

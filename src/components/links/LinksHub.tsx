@@ -81,8 +81,8 @@ function LinkEntry({ link, locale, source }: { link: LinkItem; locale: string; s
 			rel={external ? 'noopener noreferrer' : undefined}
 			{...(external && {
 				'aria-label': loc === 'pt-BR'
-					? `Abrir ${link.title[loc]} em nova aba`
-					: `Open ${link.title[loc]} in new tab`,
+					? `${link.title[loc]} — abrir em nova aba`
+					: `${link.title[loc]} — open in new tab`,
 			})}
 			className={style.container}
 		>
@@ -93,7 +93,7 @@ function LinkEntry({ link, locale, source }: { link: LinkItem; locale: string; s
 			<div className="flex-1">
 				<span>{link.title[loc]}</span>
 				{link.description?.[loc] && (
-					<span className="block text-xs text-neutral-500 mt-0.5">
+					<span className="block text-xs text-neutral-600 mt-0.5">
 						{link.description[loc]}
 					</span>
 				)}
@@ -149,6 +149,7 @@ export default function LinksHub({
 						alt=""
 						width={960}
 						height={320}
+						priority
 						className="w-full h-auto block"
 					/>
 				)}
@@ -174,7 +175,7 @@ export default function LinksHub({
 							aria-level={1}
 							id="profile-name"
 							style={{
-								fontFamily: "'Amatic SC', cursive",
+								fontFamily: "var(--font-amatic), cursive",
 								fontSize: 'clamp(2.5rem, 3vw + 1rem, 3.5rem)',
 								fontWeight: 700,
 								color: '#04c597',

@@ -160,7 +160,7 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 					aria-level={1}
 					className="text-center sm:text-left"
 					style={{
-						fontFamily: "'Amatic SC', cursive",
+						fontFamily: "var(--font-amatic), cursive",
 						fontSize: 'clamp(3rem, 4vw + 1rem, 4rem)',
 						fontWeight: 700,
 						color: '#04c597',
@@ -230,7 +230,7 @@ function CaptchaModal({
 				<div
 					className="text-center mb-2"
 					style={{
-						fontFamily: "'Amatic SC', cursive",
+						fontFamily: "var(--font-amatic), cursive",
 						fontSize: 'clamp(1.5rem, 3vw, 2rem)',
 						fontWeight: 700,
 						color: '#04c597',

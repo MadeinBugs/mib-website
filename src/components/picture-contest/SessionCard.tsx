@@ -46,7 +46,7 @@ export default function SessionCard({ session, locale }: { session: SessionCardD
 						<p
 							className="text-center text-neutral-600 mt-3"
 							style={{
-								fontFamily: "'Pangolin', cursive",
+								fontFamily: "var(--font-pangolin), cursive",
 								fontSize: '0.85rem',
 							}}
 						>

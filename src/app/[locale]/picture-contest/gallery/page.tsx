@@ -36,7 +36,7 @@ export default async function AdminGalleryPage({
 		return (
 			<div className="max-w-7xl mx-auto px-6 py-10">
 				<div className="flex items-center justify-between mb-8">
-					<div role="heading" aria-level={1} style={{ fontFamily: "'Amatic SC', cursive", fontSize: 'clamp(3rem, 4vw + 1rem, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
+					<div role="heading" aria-level={1} style={{ fontFamily: "var(--font-amatic), cursive", fontSize: 'clamp(3rem, 4vw + 1rem, 4rem)', fontWeight: 700, color: '#04c597', textShadow: '-1px 1px 0px #016a50' }}>
 						{locale === 'en' ? 'Gallery' : 'Galeria'}
 					</div>
 					<a href={`/${locale}/picture-contest/logout`} className="text-sm font-body text-[#04c597] hover:text-[#36c8ab] font-semibold transition-colors">

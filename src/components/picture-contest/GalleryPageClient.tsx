@@ -62,7 +62,7 @@ export default function GalleryPageClient({
 					role="heading"
 					aria-level={1}
 					style={{
-						fontFamily: "'Amatic SC', cursive",
+						fontFamily: "var(--font-amatic), cursive",
 						fontSize: 'clamp(3rem, 4vw + 1rem, 4rem)',
 						fontWeight: 700,
 						color: '#04c597',
@@ -84,8 +84,8 @@ export default function GalleryPageClient({
 				<button
 					onClick={() => handleViewChange('sessions')}
 					className={`px-4 py-2 rounded-full text-sm font-body font-semibold transition-colors ${view === 'sessions'
-							? 'bg-[#04c597] text-white'
-							: 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
+						? 'bg-[#04c597] text-white'
+						: 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
 						}`}
 				>
 					{t.galleryViewSessions}
@@ -93,8 +93,8 @@ export default function GalleryPageClient({
 				<button
 					onClick={() => handleViewChange('all')}
 					className={`px-4 py-2 rounded-full text-sm font-body font-semibold transition-colors ${view === 'all'
-							? 'bg-[#04c597] text-white'
-							: 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
+						? 'bg-[#04c597] text-white'
+						: 'bg-neutral-200 text-neutral-600 hover:bg-neutral-300'
 						}`}
 				>
 					{t.galleryViewAll} ({totalPictureCount})

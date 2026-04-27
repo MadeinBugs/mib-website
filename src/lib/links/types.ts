@@ -41,4 +41,5 @@ export type Profile = {
 	name: LocalizedString;
 	bio: LocalizedString;
 	avatar: string;
+	banner?: string;
 };

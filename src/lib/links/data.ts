@@ -16,7 +16,7 @@ export const links: LinkItem[] = [
 	},
 	{
 		id: 'newsletter',
-		title: { 'pt-BR': 'Newsletter (Bugsletter)', en: 'Newsletter (Bugsletter)' },
+		title: { 'pt-BR': 'Bugsletter', en: 'Bugsletter' },
 		description: {
 			'pt-BR': 'Novidades do estúdio direto no seu e-mail',
 			en: 'Studio updates straight to your inbox',

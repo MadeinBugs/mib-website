@@ -69,12 +69,10 @@ export default async function LinksPage({ params }: Props) {
 	return (
 		<LinksHub
 			locale={locale}
-			rawLocale={rawLocale}
 			profile={profiles.studio}
 			featured={featured}
 			regular={regular}
 			source="studio"
-			backLabel={{ 'pt-BR': '← Voltar ao site', en: '← Back to site' }}
 		/>
 	);
 }

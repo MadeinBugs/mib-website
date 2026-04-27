@@ -72,12 +72,10 @@ export default async function AsumiLinksPage({ params }: Props) {
 	return (
 		<LinksHub
 			locale={locale}
-			rawLocale={rawLocale}
 			profile={profiles.asumi}
 			featured={featured}
 			regular={regular}
 			source="asumi"
-			backLabel={{ 'pt-BR': '← Voltar ao site', en: '← Back to site' }}
 		/>
 	);
 }

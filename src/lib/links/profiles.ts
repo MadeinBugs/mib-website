@@ -4,10 +4,11 @@ export const profiles = {
 	studio: {
 		name: { 'pt-BR': 'Made in Bugs', en: 'Made in Bugs' },
 		bio: {
-			'pt-BR': 'Estúdio indie brasileiro de jogos 🪲',
-			en: 'Brazilian indie game studio 🪲',
+			'pt-BR': 'Estúdio indie de jogos fofos',
+			en: 'Cozy games indie studio',
 		},
 		avatar: '/assets/links/mib-avatar.webp',
+		banner: '/assets/mail/MiB-Mail-Banner1.png',
 	},
 	asumi: {
 		name: { 'pt-BR': 'Asumi', en: 'Asumi' },

@@ -150,6 +150,7 @@ export default function LinksHub({
 						width={960}
 						height={320}
 						priority
+						sizes="(max-width: 480px) 100vw, 480px"
 						className="w-full h-auto block"
 					/>
 				)}
@@ -165,6 +166,7 @@ export default function LinksHub({
 								width={96}
 								height={96}
 								priority
+								sizes="96px"
 								className="rounded-full object-cover"
 							/>
 						</div>

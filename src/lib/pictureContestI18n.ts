@@ -77,6 +77,9 @@ export const pictureContestTranslations = {
 		alreadyVoted: 'Já votou',
 		votesCount: (count: number) => `${count} voto${count !== 1 ? 's' : ''}!`,
 		newLabel: 'NOVO',
+		toastVoted: 'Votou na foto!',
+		toastUnvoted: 'Removeu o voto!',
+		toastVoteFailed: 'Falha ao votar, tente novamente',
 	},
 	en: {
 		// Login (admin)
@@ -154,6 +157,9 @@ export const pictureContestTranslations = {
 		alreadyVoted: 'Already voted',
 		votesCount: (count: number) => `${count} vote${count !== 1 ? 's' : ''}!`,
 		newLabel: 'NEW',
+		toastVoted: 'Voted on picture!',
+		toastUnvoted: 'Unvoted picture!',
+		toastVoteFailed: 'Failed to vote, try again',
 	},
 };
 

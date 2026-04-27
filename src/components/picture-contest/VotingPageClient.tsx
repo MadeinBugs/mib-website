@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import VotingCard from './VotingCard';
+import VotingToaster from './VotingToaster';
 import { PictureContestLocaleProvider } from './PictureContestLocaleContext';
 import { usePictureContestLocale } from './PictureContestLocaleContext';
+import { toastVoted, toastUnvoted, toastVoteFailed } from '@/lib/contest/voting-toast';
 import type { PictureContestLocale } from '@/lib/pictureContestI18n';
 import type { VotingPhoto } from '@/lib/contest/voting-algorithm';
 
@@ -60,6 +62,7 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 					return next;
 				});
 				sessionStorage.setItem('contest_hasVotedBefore', 'true');
+				toastVoted(t.toastVoted);
 			} else if (res.status === 409) {
 				// Already voted — sync local state
 				setVotedIds((s) => {
@@ -73,8 +76,14 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 					// Need captcha — show it
 					setPendingVoteId(pictureId);
 					setShowCaptcha(true);
+				} else {
+					toastVoteFailed(t.toastVoteFailed);
 				}
+			} else {
+				toastVoteFailed(t.toastVoteFailed);
 			}
+		} catch {
+			toastVoteFailed(t.toastVoteFailed);
 		} finally {
 			setPendingIds((s) => {
 				const next = new Set(s);
@@ -106,7 +115,12 @@ function VotingContent({ photos, isActive, closesAt }: Omit<VotingPageClientProp
 					next.set(pictureId, Math.max(0, (next.get(pictureId) ?? 1) - 1));
 					return next;
 				});
+				toastUnvoted(t.toastUnvoted);
+			} else {
+				toastVoteFailed(t.toastVoteFailed);
 			}
+		} catch {
+			toastVoteFailed(t.toastVoteFailed);
 		} finally {
 			setPendingIds((s) => {
 				const next = new Set(s);
@@ -278,6 +292,7 @@ export default function VotingPageClient(props: VotingPageClientProps) {
 
 	return (
 		<PictureContestLocaleProvider locale={validLocale}>
+			<VotingToaster />
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 				<VotingContent
 					photos={props.photos}

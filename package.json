@@ -16,6 +16,7 @@
     "framer-motion": "^12.23.1",
     "isomorphic-dompurify": "^3.10.0",
     "konva": "^10.2.3",
+    "lite-youtube-embed": "^0.3.4",
     "marked": "^18.0.0",
     "next": "^15.5.9",
     "react": "^19.0.0",

@@ -8,6 +8,7 @@ import MarkdownDescription from '../../../../components/MarkdownDescription';
 import { getGalleryImages, getTopGalleryImages } from '../../../../lib/projects';
 import { getImagePath } from '../../../../lib/imagePaths';
 import type { ProjectData } from '../../../../lib/projects';
+import LiteYouTube from '../../../../components/LiteYouTube';
 import {
 	FaGlobe,
 	FaGithub,
@@ -127,53 +128,70 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 
 						if (!hasVideos && topGalleryImages.length === 0) return null;
 
-						const getYouTubeEmbedUrl = (url: string) => {
+						const getYouTubeVideoId = (url: string) => {
 							const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
-							return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+							return match ? match[1] : null;
 						};
 
 						return (
 							<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 								{/* Video embeds - same size as images, appear first */}
-								{hasVideos && project.videos!.map((videoUrl, index) => (
-									<div key={`video-${index}`} className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-lg">
-										<iframe
-											src={getYouTubeEmbedUrl(videoUrl)}
-											title={`${localizedTitle} - Video ${index + 1}`}
-											allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-											allowFullScreen
-											className="absolute inset-0 w-full h-full"
-										/>
-									</div>
-								))}
+								{hasVideos && project.videos!.map((videoUrl, index) => {
+									const videoId = getYouTubeVideoId(videoUrl);
+									return videoId ? (
+										<div key={`video-${index}`} className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-lg">
+											<LiteYouTube
+												videoId={videoId}
+												title={`${localizedTitle} - Video ${index + 1}`}
+											/>
+										</div>
+									) : null;
+								})}
 								{/* Images */}
 								{topGalleryImages.map((image, index) => (
-									<button
-										key={index}
-										onClick={() => setSelectedImage({
-											src: image.src,
-											caption: image.caption?.[locale as 'en' | 'pt-BR']
-										})}
-										className="aspect-[4/3] relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
-									>
-										<Image
-											src={getImagePath(image.src)}
-											alt={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
-											fill
-											className="object-cover group-hover:scale-105 transition-transform duration-300"
-											style={{ objectPosition: image.position || 'center' }}
-											sizes="(max-width: 768px) 100vw, 33vw"
-											unoptimized={image.src.endsWith('.gif')}
-										/>
-										{/* Hover overlay */}
-										<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-											<div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
-												<svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-													<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-												</svg>
-											</div>
+									image.video ? (
+										<div key={index} className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-lg">
+											<video
+												autoPlay
+												loop
+												muted
+												playsInline
+												poster={image.video.poster}
+												className="absolute inset-0 w-full h-full object-cover"
+												aria-label={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
+											>
+												<source src={image.video.webm} type="video/webm" />
+												<source src={image.video.mp4} type="video/mp4" />
+											</video>
 										</div>
-									</button>
+									) : (
+										<button
+											key={index}
+											onClick={() => setSelectedImage({
+												src: image.src,
+												caption: image.caption?.[locale as 'en' | 'pt-BR']
+											})}
+											className="aspect-[4/3] relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
+										>
+											<Image
+												src={getImagePath(image.src)}
+												alt={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
+												fill
+												className="object-cover group-hover:scale-105 transition-transform duration-300"
+												style={{ objectPosition: image.position || 'center' }}
+												sizes="(max-width: 768px) 100vw, 33vw"
+												unoptimized={image.src.endsWith('.gif')}
+											/>
+											{/* Hover overlay */}
+											<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+												<div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
+													<svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+													</svg>
+												</div>
+											</div>
+										</button>
+									)
 								))}
 							</div>
 						);
@@ -467,32 +485,49 @@ export default function ProjectPageClient({ project, locale, translations }: Pro
 							<div className="space-y-4">
 								<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 									{galleryImages.map((image, index) => (
-										<button
-											key={index}
-											onClick={() => setSelectedImage({
-												src: image.src,
-												caption: image.caption?.[locale as 'en' | 'pt-BR']
-											})}
-											className="aspect-[4/3] relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
-										>
-											<Image
-												src={getImagePath(image.src)}
-												alt={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
-												fill
-												className="object-cover group-hover:scale-105 transition-transform duration-300"
-												style={{ objectPosition: image.position || 'center' }}
-												sizes="(max-width: 768px) 100vw, 33vw"
-												unoptimized={image.src.endsWith('.gif')}
-											/>
-											{/* Hover overlay */}
-											<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-												<div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
-													<svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-														<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
-													</svg>
-												</div>
+										image.video ? (
+											<div key={index} className="aspect-[4/3] relative overflow-hidden rounded-lg shadow-lg">
+												<video
+													autoPlay
+													loop
+													muted
+													playsInline
+													poster={image.video.poster}
+													className="absolute inset-0 w-full h-full object-cover"
+													aria-label={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
+												>
+													<source src={image.video.webm} type="video/webm" />
+													<source src={image.video.mp4} type="video/mp4" />
+												</video>
 											</div>
-										</button>
+										) : (
+											<button
+												key={index}
+												onClick={() => setSelectedImage({
+													src: image.src,
+													caption: image.caption?.[locale as 'en' | 'pt-BR']
+												})}
+												className="aspect-[4/3] relative overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group"
+											>
+												<Image
+													src={getImagePath(image.src)}
+													alt={image.caption?.[locale as 'en' | 'pt-BR'] || `${localizedTitle} - Gallery ${index + 1}`}
+													fill
+													className="object-cover group-hover:scale-105 transition-transform duration-300"
+													style={{ objectPosition: image.position || 'center' }}
+													sizes="(max-width: 768px) 100vw, 33vw"
+													unoptimized={image.src.endsWith('.gif')}
+												/>
+												{/* Hover overlay */}
+												<div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+													<div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white/90 rounded-full p-3">
+														<svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+															<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+														</svg>
+													</div>
+												</div>
+											</button>
+										)
 									))}
 								</div>
 							</div>

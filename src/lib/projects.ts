@@ -7,6 +7,11 @@ interface ProjectImage {
 		en: string;
 		'pt-BR': string;
 	}; // Optional localized caption for full-screen viewer
+	video?: {
+		webm: string;
+		mp4: string;
+		poster: string;
+	};
 }
 
 export interface ProjectData {
@@ -238,7 +243,12 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 				caption: {
 					en: 'The tome that holds all of the player\'s knowledge',
 					'pt-BR': 'O tomo que guarda todo o conhecimento do jogador'
-				}
+				},
+				video: {
+					webm: '/assets/projects/asumi/asumi-tome-flip.webm',
+					mp4: '/assets/projects/asumi/asumi-tome-flip.mp4',
+					poster: '/assets/projects/asumi/asumi-tome-flip-poster.jpg',
+				},
 			},
 			{
 				src: '/assets/projects/asumi/capivara-interactions.gif',
@@ -247,7 +257,12 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 				caption: {
 					en: 'Player attempting to feed the Capybara',
 					'pt-BR': 'Jogador tentando alimentar a Capivara'
-				}
+				},
+				video: {
+					webm: '/assets/projects/asumi/capivara-interactions.webm',
+					mp4: '/assets/projects/asumi/capivara-interactions.mp4',
+					poster: '/assets/projects/asumi/capivara-interactions-poster.jpg',
+				},
 			},
 			{
 				src: '/assets/projects/asumi/animal-models.gif',
@@ -256,7 +271,12 @@ Ganhe emblemas especiais para cada animal ao completar suas descrições e ganha
 				caption: {
 					en: '3D models of some of the animals in the game',
 					'pt-BR': 'Modelos 3D de alguns dos animais no jogo'
-				}
+				},
+				video: {
+					webm: '/assets/projects/asumi/animal-models.webm',
+					mp4: '/assets/projects/asumi/animal-models.mp4',
+					poster: '/assets/projects/asumi/animal-models-poster.jpg',
+				},
 			},
 			{
 				src: '/assets/projects/asumi/asumi-9.png',
